@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 (2026-10-16)
+
+- README en pakketbeschrijving in de eerste persoon.
+
 ## 0.2.0 (2026-10-16)
 
 - Nieuw: Select, RadioGroup, Tooltip, Menu, ToastProvider en useToast, Table, Skeleton, Sheet, Stack, Container, Avatar en Spinner. Samen 30 componenten.
