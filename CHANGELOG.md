@@ -20,7 +20,7 @@
 - Fix: `asChild` overschreef een prop van het kind met `undefined` (bijvoorbeeld `href` van
   een routerlink die `to` gebruikt). Papier zet nu alleen props die een waarde hebben.
 
-## 0.3.0 (nog niet uitgebracht)
+## 0.3.0 (2026-10-16)
 
 - Router-links: `asChild` op Button, IconButton en Link rendert het kind (bv. de Link van
   Next.js of React Router) met de Papier-stijl. Klasse, ARIA, handlers en ref worden samengevoegd.
