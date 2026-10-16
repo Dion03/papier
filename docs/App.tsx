@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Papier, SegmentedControl, Slider, Surface, Switch, Tag, Text, icons, type PapierTheme } from '@dionbm/papier';
+import { Link, Papier, ToastProvider, SegmentedControl, Slider, Surface, Switch, Tag, Text, icons, type PapierTheme } from '@dionbm/papier';
 import { Foundations } from './Foundations';
 import { Components } from './Components';
 
@@ -46,7 +46,7 @@ function Constellation() {
         <Slider label="Volume" value={vol} onValueChange={setVol} formatValue={(v) => `${v}%`} />
       </Surface>
       <Surface material="ink" elevation="object" className="doc-obj doc-obj--d">
-        <span className="doc-obj__count">16</span>
+        <span className="doc-obj__count">30</span>
         <Text variant="small" as="p">componenten, getest met axe in licht en donker</Text>
       </Surface>
       <div className="doc-obj doc-obj--e doc-disc" aria-hidden="true"><span /></div>
@@ -67,6 +67,7 @@ export function App() {
 
   return (
     <Papier theme={resolved} motion={reduced ? 'reduced' : 'full'} className="doc">
+      <ToastProvider>
       <a className="doc-skip" href="#inhoud">Naar de inhoud</a>
       <header className="doc-header">
         <a href="#top" className="doc-wordmark">papier<span>.</span><span className="pp-visually-hidden"> naar boven</span></a>
@@ -84,10 +85,10 @@ export function App() {
       <main id="inhoud" tabIndex={-1}>
         <section id="top" className="doc-hero" aria-labelledby="hero-title">
           <div className="doc-hero__copy">
-            <Tag tone="outline">v0.1 · React · MIT</Tag>
+            <Tag tone="outline">v0.2 · React · MIT</Tag>
             <Text variant="display" id="hero-title">Papier<span className="doc-accent">.</span></Text>
             <Text variant="body-lg" tone="muted" className="doc-hero__lead">
-              Het design system achter mijn portfolio en apps. Warm papier, inkt, vermiljoen en salie als zestien toegankelijke React-componenten, met tokens die zichzelf controleren.
+              Het design system achter mijn portfolio en apps. Warm papier, inkt, vermiljoen en salie als 30 toegankelijke React-componenten, met tokens die zichzelf controleren.
             </Text>
             <div className="doc-row">
               <a className="pp-button" data-variant="ink" data-size="lg" href="#componenten"><span className="pp-button__label">Bekijk de componenten</span><span className="pp-button__end"><icons.ArrowRight /></span></a>
@@ -137,7 +138,7 @@ export function App() {
             <div className="doc-stack">
               <Text variant="subtitle" as="h3">Wat je krijgt</Text>
               <ul className="doc-list">
-                <li><code>papier.css</code>: tokens, basis en alle componenten, 5 kB gzip.</li>
+                <li><code>papier.css</code>: tokens, basis en alle componenten, 7 kB gzip.</li>
                 <li><code>tokens.css</code> en <code>tokens.json</code> voor wie alleen de waarden wil, ook buiten React.</li>
                 <li><code>fonts.css</code>: Manrope en DM Sans als variabele fonts.</li>
                 <li>ES- en CommonJS-builds met typedefinities. React is een peer dependency.</li>
@@ -157,6 +158,7 @@ export function App() {
         <Text variant="small" tone="muted">Papier is gemaakt door Dion Meijboom en draagt de identiteit van zijn portfolio. Fonts onder de SIL Open Font License.</Text>
         <a href="#top" className="doc-wordmark doc-wordmark--small">papier<span>.</span><span className="pp-visually-hidden"> terug naar boven</span></a>
       </footer>
+      </ToastProvider>
     </Papier>
   );
 }

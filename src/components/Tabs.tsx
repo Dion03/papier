@@ -1,5 +1,6 @@
-import { createContext, useContext, useId, useLayoutEffect, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { createContext, useContext, useId, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
+import { useIsoLayoutEffect } from '../lib/useIsoLayoutEffect';
 import { useControllable } from '../lib/useControllable';
 
 interface TabsCtx { value: string; select: (v: string) => void; base: string }
@@ -20,7 +21,7 @@ export function TabList({ label, children, className }: { label: string; childre
   const { value } = useTabs();
   const ref = useRef<HTMLDivElement>(null);
   const [bar, setBar] = useState<{ x: number; w: number } | null>(null);
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const measure = () => {
       const el = ref.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
       if (el) setBar({ x: el.offsetLeft, w: el.offsetWidth });

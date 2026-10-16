@@ -48,3 +48,4 @@
 .pp-icon-button[data-variant="disc"] { border-color: transparent; background: var(--papier-color-action-strong); color: var(--papier-color-on-action-strong); }
 .pp-icon-button[data-variant="disc"]:hover { background: var(--papier-color-accent); color: var(--papier-color-on-action-strong); }
 .pp-icon-button:disabled { opacity: 0.45; cursor: not-allowed; }
+.pp-spinner-wrap { display: inline-flex; color: var(--papier-color-accent); }

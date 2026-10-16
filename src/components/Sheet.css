@@ -1,0 +1,23 @@
+.pp-sheet {
+  position: fixed; inset: 0 0 0 auto; width: min(420px, 100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; padding: 0;
+  border: 0; background: var(--papier-color-bg); color: var(--papier-color-text); box-shadow: var(--papier-shadow-object); font-family: var(--papier-font-body);
+}
+.pp-sheet[data-side="left"] { inset: 0 auto 0 0; }
+.pp-sheet[data-side="bottom"], .pp-sheet[data-side="top"] { width: 100vw; height: auto; max-height: 85dvh; }
+.pp-sheet[data-side="bottom"] { inset: auto 0 0 0; border-radius: var(--papier-radius-xl) var(--papier-radius-xl) 0 0; }
+.pp-sheet[data-side="top"] { inset: 0 0 auto 0; border-radius: 0 0 var(--papier-radius-xl) var(--papier-radius-xl); }
+.pp-sheet::backdrop { background: var(--papier-color-overlay); }
+.pp-sheet[open] { animation: pp-sheet-right var(--papier-dur-open) var(--papier-ease-arrive); }
+.pp-sheet[data-side="left"][open] { animation-name: pp-sheet-left; }
+.pp-sheet[data-side="bottom"][open] { animation-name: pp-sheet-bottom; }
+.pp-sheet[data-side="top"][open] { animation-name: pp-sheet-top; }
+.pp-sheet[open]::backdrop { animation: pp-fade-in var(--papier-dur-open) var(--papier-ease-arrive); }
+@keyframes pp-sheet-right { from { transform: translateX(100%); } }
+@keyframes pp-sheet-left { from { transform: translateX(-100%); } }
+@keyframes pp-sheet-bottom { from { transform: translateY(100%); } }
+@keyframes pp-sheet-top { from { transform: translateY(-100%); } }
+@media (prefers-reduced-motion: reduce) { .pp-sheet[open], .pp-sheet[open]::backdrop { animation: none; } }
+.pp-sheet__panel { display: flex; flex-direction: column; height: 100%; padding: var(--papier-space-5) var(--papier-space-5) max(var(--papier-space-5), env(safe-area-inset-bottom)); }
+.pp-sheet__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: var(--papier-hit-target); }
+.pp-sheet__header:has(.pp-visually-hidden) { justify-content: flex-end; }
+.pp-sheet__body { flex: 1; overflow-y: auto; margin-top: var(--papier-space-4); }
