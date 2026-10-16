@@ -1,5 +1,6 @@
-import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
+import { useIsoLayoutEffect } from '../lib/useIsoLayoutEffect';
 import { useControllable } from '../lib/useControllable';
 
 export interface SegmentOption<T extends string> { value: T; label: ReactNode; disabled?: boolean }
@@ -27,7 +28,7 @@ export function SegmentedControl<T extends string>({ label, options, value, defa
   const name = useId();
   const index = Math.max(0, options.findIndex((o) => o.value === current));
 
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const measure = () => {
       const el = refs.current[index];
       if (el) setIndicator({ x: el.offsetLeft, w: el.offsetWidth });

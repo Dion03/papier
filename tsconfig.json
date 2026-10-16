@@ -34,6 +34,8 @@
     "tests",
     "docs",
     "vite.config.ts",
-    "vitest.setup.ts"
+    "vitest.setup.ts",
+    "e2e",
+    "playwright.config.ts"
   ]
 }

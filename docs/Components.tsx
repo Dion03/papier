@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Avatar, Container, Menu, RadioGroup, Select, Sheet, Skeleton, Spinner, Stack, Table, Tooltip, useToast,
   Button, Checkbox, Dialog, Disclosure, IconButton, Link, Notice, Progress, SegmentedControl, Slider, Surface,
   Switch, Tab, TabList, TabPanel, Tabs, Tag, Text, TextArea, TextField, icons,
 } from '@dionbm/papier';
@@ -139,6 +140,86 @@ function SurfaceDemo() {
   );
 }
 
+
+function SelectRadioDemo() {
+  return (
+    <div className="doc-stack doc-narrow">
+      <Select label="Sorteer de bak op" defaultValue="artist" options={[{ value: 'artist', label: 'Artiest' }, { value: 'year', label: 'Jaar' }, { value: 'plays', label: 'Meest gedraaid' }]} hint="Native: op je telefoon opent de eigen kiezer." />
+      <RadioGroup legend="Snelheid" orientation="horizontal" defaultValue="33" options={[{ value: '33', label: '33⅓' }, { value: '45', label: '45' }, { value: '78', label: '78' }]} />
+      <RadioGroup legend="Weergave" appearance="card" defaultValue="bak" options={[
+        { value: 'bak', label: 'Platenbak', description: 'Blader door hoezen zoals in een winkel.' },
+        { value: 'lijst', label: 'Lijst', description: 'Sneller zoeken op titel en jaar.' },
+      ]} />
+    </div>
+  );
+}
+
+function OverlayDemo() {
+  const [sheet, setSheet] = useState(false);
+  const [last, setLast] = useState('');
+  return (
+    <div className="doc-stack">
+      <div className="doc-row">
+        <Tooltip content="Zet de plaat terug in de hoes"><IconButton label="Opbergen" icon={<icons.Close />} /></Tooltip>
+        <Tooltip content="Kopieer de link naar deze plaat"><IconButton label="Delen" icon={<icons.Copy />} /></Tooltip>
+        <Menu trigger={<>Acties <icons.ChevronDown /></>} items={[
+          { label: 'Afspelen', icon: <icons.Play />, onSelect: () => setLast('Afspelen gekozen.') },
+          { label: 'Naar Discogs', icon: <icons.External />, onSelect: () => setLast('Discogs gekozen.') },
+          { label: 'Kopiëren', icon: <icons.Copy />, onSelect: () => {}, disabled: true },
+          { label: 'Uit collectie halen', tone: 'danger', onSelect: () => setLast('Verwijderen gekozen.') },
+        ]} />
+        <Button variant="secondary" iconStart={<icons.Menu />} onClick={() => setSheet(true)}>Navigatie</Button>
+      </div>
+      <Text variant="small" tone="muted" role="status">{last}</Text>
+      <Sheet open={sheet} onClose={() => setSheet(false)} title="Navigatie" hideTitle>
+        <nav aria-label="Voorbeeldnavigatie" className="doc-sheet-nav">
+          {['Werk', 'Over mij', 'Luisterkamer', 'Contact'].map((l) => <a key={l} href="#overlays" onClick={() => setSheet(false)}>{l}</a>)}
+        </nav>
+      </Sheet>
+    </div>
+  );
+}
+
+function ToastDemo() {
+  const { toast } = useToast();
+  return (
+    <div className="doc-row">
+      <Button onClick={() => toast({ title: 'Plaat toegevoegd', description: 'Uitzinnig staat nu in je collectie.' })}>Toevoegen</Button>
+      <Button variant="secondary" onClick={() => toast({ tone: 'danger', title: 'Discogs niet bereikbaar', description: 'Blijft staan tot je hem sluit.' })}>Fout tonen</Button>
+    </div>
+  );
+}
+
+function DataDemo() {
+  const [loading, setLoading] = useState(true);
+  const rows: Array<[string, string, number]> = [['Uitzinnig', 'Froukje', 42], ['Zachte Landing', 'Lieve Kamer', 17], ['Kleine Uren', 'Het Noordlicht', 9]];
+  return (
+    <div className="doc-stack">
+      <Table caption="Meest gedraaid deze maand (voorbeelddata)" showCaption>
+        <thead><tr><th scope="col">Plaat</th><th scope="col">Artiest</th><th scope="col" className="pp-num">Keer</th></tr></thead>
+        <tbody>{rows.map(([t, a, n]) => <tr key={t}><th scope="row"><Stack direction="row" gap={3} align="center"><Avatar name={a} size="sm" shape="square" decorative />{t}</Stack></th><td>{a}</td><td className="pp-num">{n}</td></tr>)}</tbody>
+      </Table>
+      <div className="doc-row"><Button size="sm" variant="secondary" onClick={() => setLoading((l) => !l)}>{loading ? 'Laad inhoud' : 'Toon skelet'}</Button>{loading && <Spinner label="Hoezen laden" />}</div>
+      <div aria-busy={loading} aria-live="polite" className="doc-skeleton-card">
+        {loading
+          ? <Stack direction="row" gap={4} align="center"><Skeleton shape="circle" /><div style={{ flex: 1 }}><Skeleton lines={2} /></div></Stack>
+          : <Stack direction="row" gap={4} align="center"><Avatar name="Froukje Veenstra" /><div><Text as="p">Froukje</Text><Text variant="small" tone="muted" as="p">42 keer gedraaid</Text></div></Stack>}
+      </div>
+    </div>
+  );
+}
+
+function LayoutDemo() {
+  return (
+    <Container size="sm" className="doc-layout-demo">
+      <Stack gap={3}>
+        {['Stack gap 3', 'Container sm', 'Native flow'].map((l) => <div key={l} className="doc-layout-box">{l}</div>)}
+        <Stack direction="row" gap={2} wrap>{['row', 'gap 2', 'wrap'].map((l) => <div key={l} className="doc-layout-box doc-layout-box--sage">{l}</div>)}</Stack>
+      </Stack>
+    </Container>
+  );
+}
+
 export function Components() {
   return (
     <section id="componenten" className="doc-section" aria-labelledby="componenten-title">
@@ -244,6 +325,57 @@ export function Components() {
 <Link href="https://discogs.com" external>Discogs</Link>`}
         a11y={['De tekstkleur volgt het materiaal en haalt op elk materiaal minimaal 4,5:1.', 'Externe links krijgen rel="noopener noreferrer" en een voorgelezen hint "opent in een nieuw tabblad".', 'Prose blijft vlak: de objectschaduw is alleen voor bedienbare objecten.']}>
         <SurfaceDemo />
+      </Example>
+
+      <Example id="select" name="Select en RadioGroup" intro="Een gestijlde native select en een fieldset met keuzerondjes, als lijst of als tegels."
+        code={`<Select label="Sorteer de bak op" options={[{ value: 'artist', label: 'Artiest' }]} />
+<RadioGroup legend="Weergave" appearance="card" options={[
+  { value: 'bak', label: 'Platenbak', description: 'Blader door hoezen.' },
+]} />`}
+        a11y={['Select blijft een native element: telefoons tonen hun eigen kiezer, typen springt naar een optie.', 'RadioGroup is een fieldset met legend; pijltjes en formulieren werken native.', 'Fout en hint hangen aan de groep via aria-describedby.']}>
+        <SelectRadioDemo />
+      </Example>
+
+      <Example id="overlays" name="Tooltip, Menu en Sheet" intro="Een hint op hover of focus, een actiemenu en een paneel vanaf de rand, zoals het mobiele navigatieblad van het portfolio."
+        code={`<Tooltip content="Zet de plaat terug">
+  <IconButton label="Opbergen" icon={<icons.Close />} />
+</Tooltip>
+<Menu trigger="Acties" items={[{ label: 'Afspelen', onSelect: play }]} />
+<Sheet open={open} onClose={close} title="Navigatie" hideTitle>…</Sheet>`}
+        a11y={['Tooltip voegt een beschrijving toe, nooit de naam; hij blijft staan als je erop beweegt en Escape sluit hem (WCAG 1.4.13).', 'Menu volgt het menu-button-patroon: pijl omlaag opent, Escape en Tab sluiten, focus keert terug.', 'Sheet is een native modale dialog met een verborgen maar voorgelezen titel.']}>
+        <OverlayDemo />
+      </Example>
+
+      <Example id="toast" name="Toast" intro="Korte bevestigingen rechtsonder. Ze pauzeren als je erop wijst of focust; fouten blijven staan tot je ze sluit."
+        code={`<ToastProvider>
+  <App />
+</ToastProvider>
+
+const { toast } = useToast();
+toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`}
+        a11y={['De live region bestaat altijd, dus schermlezers missen geen nieuwe melding.', 'Tijd pauzeert bij hover en focus (WCAG 2.2.1); foutmeldingen verdwijnen niet vanzelf.', 'Maximaal drie tegelijk, de oudste gaat eerst.']}>
+        <ToastDemo />
+      </Example>
+
+      <Example id="data" name="Table, Avatar, Skeleton en Spinner" intro="Gegevens in een native tabel, hoezen of personen als avatar, en plaatshouders terwijl iets laadt."
+        code={`<Table caption="Meest gedraaid" showCaption>
+  <thead>…</thead>
+  <tbody><tr><th scope="row">Uitzinnig</th><td className="pp-num">42</td></tr></tbody>
+</Table>
+<div aria-busy={loading}>{loading ? <Skeleton lines={2} /> : content}</div>`}
+        a11y={['Table vraagt een caption; die benoemt ook het scrollbare, focusbare gebied.', 'Skeleton is decoratief; het gebied zelf krijgt aria-busy en kondigt het resultaat aan.', 'Avatar valt terug op initialen met de naam als toegankelijke naam, of is decoratief als de naam ernaast staat.']}>
+        <DataDemo />
+      </Example>
+
+      <Example id="layout" name="Stack en Container" intro="Twee kleine layoutbouwstenen: een flexstapel op de ruimteschaal en een container met de goot van het portfolio."
+        code={`<Container size="md">
+  <Stack gap={5}>
+    <Text variant="title">Kop</Text>
+    <Stack direction="row" gap={2} wrap>…</Stack>
+  </Stack>
+</Container>`}
+        a11y={['Alleen visuele volgorde via flex, nooit een andere leesvolgorde dan de DOM.', 'Container houdt minimaal 18 px goot op de smalste schermen.']}>
+        <LayoutDemo />
       </Example>
     </section>
   );

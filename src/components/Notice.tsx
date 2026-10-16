@@ -1,6 +1,7 @@
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
 import { Check, Close } from './icons';
+import { useLabels } from '../lib/labels';
 
 export type NoticeTone = 'info' | 'success' | 'warning' | 'danger';
 
@@ -20,6 +21,7 @@ const glyph: Record<NoticeTone, string> = { info: 'i', success: '', warning: '!'
 export const Notice = forwardRef<HTMLDivElement, NoticeProps>(function Notice(
   { tone = 'info', title, live, action, onDismiss, className, children, ...rest }, ref,
 ) {
+  const labels = useLabels();
   const mode = live ?? (tone === 'danger' ? 'assertive' : 'polite');
   return (
     <div
@@ -36,7 +38,7 @@ export const Notice = forwardRef<HTMLDivElement, NoticeProps>(function Notice(
         {action && <div className="pp-notice__action">{action}</div>}
       </div>
       {onDismiss && (
-        <button type="button" className="pp-notice__dismiss" onClick={onDismiss} aria-label="Melding sluiten"><Close width={16} height={16} /></button>
+        <button type="button" className="pp-notice__dismiss" onClick={onDismiss} aria-label={labels.dismiss}><Close width={16} height={16} /></button>
       )}
     </div>
   );

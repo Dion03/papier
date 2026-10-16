@@ -1,0 +1,14 @@
+.pp-tooltip { position: relative; display: inline-flex; }
+.pp-tooltip__bubble {
+  position: absolute; left: 50%; z-index: 50; width: max-content; max-width: 260px; padding: 7px 11px;
+  border-radius: var(--papier-radius-sm); background: var(--papier-color-action-strong); color: var(--papier-color-on-action-strong);
+  font: 500 var(--papier-type-small-size)/1.35 var(--papier-font-body); text-align: center; box-shadow: var(--papier-shadow-md);
+  translate: -50% 0; animation: pp-tip-in var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-tooltip__bubble[data-side="top"] { bottom: calc(100% + 8px); }
+.pp-tooltip__bubble[data-side="bottom"] { top: calc(100% + 8px); }
+/* Bridge the gap so the pointer can move onto the bubble without closing it. */
+.pp-tooltip__bubble::before { content: ''; position: absolute; left: 0; right: 0; height: 10px; }
+.pp-tooltip__bubble[data-side="top"]::before { top: 100%; }
+.pp-tooltip__bubble[data-side="bottom"]::before { bottom: 100%; }
+@keyframes pp-tip-in { from { opacity: 0; transform: translateY(3px); } }

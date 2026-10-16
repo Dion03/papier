@@ -1,0 +1,7 @@
+.pp-stack { display: flex; flex-direction: column; min-width: 0; }
+.pp-stack[data-direction="row"] { flex-direction: row; }
+.pp-container { --pp-max: 1300px; width: 100%; max-width: calc(var(--pp-max) + 2 * var(--pp-gutter, clamp(24px, 5vw, 72px))); margin-inline: auto; padding-inline: clamp(24px, 5vw, 72px); }
+.pp-container[data-size="sm"] { --pp-max: 720px; }
+.pp-container[data-size="md"] { --pp-max: 1040px; }
+.pp-container[data-size="full"] { max-width: none; }
+@media (max-width: 380px) { .pp-container { padding-inline: 18px; } }

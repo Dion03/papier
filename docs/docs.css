@@ -184,3 +184,11 @@ body { margin: 0; background: #f2efe7; }
   .doc-controls { flex-wrap: wrap; gap: 10px 16px; }
   .doc-footer { flex-direction: column; align-items: flex-start; }
 }
+
+.doc-sheet-nav { display: grid; gap: 4px; }
+.doc-sheet-nav a { padding: 14px 4px; border-bottom: 1px solid var(--papier-color-line); color: var(--papier-color-text); text-decoration: none; font: 500 26px/1.2 var(--papier-font-display); letter-spacing: -0.03em; }
+.doc-sheet-nav a:hover { color: var(--papier-color-accent-text); }
+.doc-skeleton-card { padding: 16px; border-radius: var(--papier-radius-lg); background: var(--papier-color-bg); }
+.doc-layout-demo { padding-inline: 0; }
+.doc-layout-box { padding: 12px 14px; border-radius: var(--papier-radius-md); background: var(--papier-color-bg); border: 1px dashed var(--papier-color-line-strong); font-size: 13px; }
+.doc-layout-box--sage { background: var(--papier-color-sage-soft); color: var(--papier-color-on-sage); }

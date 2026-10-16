@@ -1,0 +1,31 @@
+/* Windows high contrast / forced colours: backgrounds and shadows disappear, so every
+   state that relied on fill gets a border or system colour instead. */
+@media (forced-colors: active) {
+  .papier :focus-visible { outline: 3px solid Highlight; }
+  .pp-button, .pp-icon-button, .pp-segmented__option, .pp-tab, .pp-menu__item, .pp-notice__dismiss, .pp-dialog__close { border: 1px solid ButtonText; }
+  .pp-button[aria-disabled="true"], .pp-icon-button:disabled { border-color: GrayText; color: GrayText; }
+  .pp-surface, .pp-tag, .pp-notice, .pp-dialog, .pp-sheet, .pp-menu__list, .pp-table-wrap, .pp-tooltip__bubble, .pp-toasts__item .pp-notice { border: 1px solid CanvasText; }
+  .pp-segmented { border: 1px solid CanvasText; }
+  .pp-segmented__indicator { background: Highlight; forced-color-adjust: none; }
+  .pp-segmented__option[aria-checked="true"] { color: HighlightText; forced-color-adjust: none; }
+  .pp-tablist__bar { background: Highlight; forced-color-adjust: none; }
+  .pp-tab[aria-selected="true"] { text-decoration: underline 2px; text-underline-offset: 8px; }
+  .pp-switch__track { border-color: ButtonText; }
+  .pp-switch__thumb { background: ButtonText; forced-color-adjust: none; }
+  .pp-switch__track[aria-checked="true"] { background: Highlight; forced-color-adjust: none; }
+  .pp-switch__track[aria-checked="true"] .pp-switch__thumb { background: HighlightText; }
+  .pp-check__input, .pp-radio__input { border-color: ButtonText; }
+  .pp-check__input:checked { background: Highlight; border-color: Highlight; forced-color-adjust: none; }
+  .pp-check__mark { color: HighlightText; }
+  .pp-radio__input:checked { border-color: Highlight; forced-color-adjust: none; }
+  .pp-progress__track { border: 1px solid CanvasText; }
+  .pp-progress__bar { background: Highlight; forced-color-adjust: none; }
+  .pp-skeleton { border: 1px dashed GrayText; background: none; }
+  .pp-field__control { border-bottom-color: CanvasText; }
+  .pp-field[data-invalid] .pp-field__control { border-bottom-style: double; border-bottom-width: 4px; }
+  .pp-slider__input::-webkit-slider-runnable-track { border: 1px solid CanvasText; background: linear-gradient(90deg, Highlight var(--pp-fill), Canvas var(--pp-fill)); forced-color-adjust: none; }
+  .pp-slider__input::-moz-range-track { border: 1px solid CanvasText; }
+  .pp-slider__input::-moz-range-progress { background: Highlight; }
+  .pp-slider__input::-webkit-slider-thumb { background: Canvas; border-color: CanvasText; forced-color-adjust: none; }
+  .pp-notice__icon { border: 1px solid CanvasText; forced-color-adjust: none; background: Canvas; color: CanvasText; }
+}

@@ -1,6 +1,7 @@
 import { forwardRef, type AnchorHTMLAttributes } from 'react';
 import { cx } from '../lib/cx';
 import { ArrowUpRight } from './icons';
+import { useLabels } from '../lib/labels';
 
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** `underline`: a resting line that darkens on hover. `quiet`: the line rises only on hover. `arrow`: label with a thin arrow that nudges up-right. */
@@ -12,6 +13,7 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   { variant = 'underline', external, className, children, target, rel, ...rest }, ref,
 ) {
+  const labels = useLabels();
   return (
     <a
       ref={ref}
@@ -23,7 +25,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     >
       <span className="pp-link__label">{children}</span>
       {variant === 'arrow' && <ArrowUpRight className="pp-link__arrow" />}
-      {external && <span className="pp-visually-hidden"> (opent in een nieuw tabblad)</span>}
+      {external && <span className="pp-visually-hidden"> {labels.externalLink}</span>}
     </a>
   );
 });
