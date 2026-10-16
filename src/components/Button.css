@@ -1,3 +1,4 @@
+@layer papier {
 .pp-button {
   --pp-bg: var(--papier-color-action);
   --pp-fg: var(--papier-color-on-action);
@@ -49,3 +50,4 @@
 .pp-icon-button[data-variant="disc"]:hover { background: var(--papier-color-accent); color: var(--papier-color-on-action-strong); }
 .pp-icon-button:disabled { opacity: 0.45; cursor: not-allowed; }
 .pp-spinner-wrap { display: inline-flex; color: var(--papier-color-accent); }
+}

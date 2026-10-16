@@ -1,3 +1,4 @@
+@layer papier {
 .pp-tablist { position: relative; display: flex; gap: 22px; border-bottom: 1px solid var(--papier-color-line); overflow-x: auto; scrollbar-width: none; }
 .pp-tab {
   position: relative; min-height: var(--papier-hit-target); padding: 0 2px; border: 0; background: transparent; cursor: pointer; white-space: nowrap;
@@ -13,3 +14,4 @@
 .pp-tabpanel { padding-top: var(--papier-space-5); }
 .papier .pp-tabpanel:focus-visible { outline-offset: 6px; border-radius: 4px; }
 .papier .pp-tab:focus-visible { outline-offset: -2px; border-radius: 6px; }
+}

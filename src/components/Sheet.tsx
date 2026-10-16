@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { forwardRef, useEffect, useId, useRef, type ReactNode } from 'react';
+import { useMergedRefs } from '../lib/slot';
 import { cx } from '../lib/cx';
 import { useLabels } from '../lib/labels';
 import { Close } from './icons';
@@ -19,9 +20,10 @@ export interface SheetProps {
  * A panel that slides in from an edge: the mobile navigation sheet, filters, details.
  * Built on the native modal <dialog>, like Dialog.
  */
-export function Sheet({ open, onClose, title, hideTitle, side = 'right', children, footer, className }: SheetProps) {
+export const Sheet = forwardRef<HTMLDialogElement, SheetProps>(function Sheet({ open, onClose, title, hideTitle, side = 'right', children, footer, className }, forwardedRef) {
   const labels = useLabels();
   const ref = useRef<HTMLDialogElement>(null);
+  const dialogRef = useMergedRefs(ref, forwardedRef);
   const opener = useRef<HTMLElement | null>(null);
   const id = useId();
   useEffect(() => {
@@ -38,7 +40,7 @@ export function Sheet({ open, onClose, title, hideTitle, side = 'right', childre
     return () => d.removeEventListener('close', onNativeClose);
   }, [open, onClose]);
   return (
-    <dialog ref={ref} className={cx('pp-sheet', className)} data-side={side} aria-labelledby={`${id}-title`}
+    <dialog ref={dialogRef} className={cx('pp-sheet', className)} data-side={side} aria-labelledby={`${id}-title`}
       onCancel={(e) => { e.preventDefault(); onClose(); }} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="pp-sheet__panel">
         <header className="pp-sheet__header">
@@ -50,4 +52,4 @@ export function Sheet({ open, onClose, title, hideTitle, side = 'right', childre
       </div>
     </dialog>
   );
-}
+});

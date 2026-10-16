@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { forwardRef, useEffect, useId, useRef, type ReactNode } from 'react';
+import { useMergedRefs } from '../lib/slot';
 import { cx } from '../lib/cx';
 import { Close } from './icons';
 import { useLabels } from '../lib/labels';
@@ -22,9 +23,10 @@ export interface DialogProps {
  * A modal on the native <dialog> element: real focus trap, Escape, inert background,
  * and focus returns to whatever opened it.
  */
-export function Dialog({ open, onClose, title, description, children, footer, closeLabel, dismissOnBackdrop = true, size = 'md', className }: DialogProps) {
+export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(function Dialog({ open, onClose, title, description, children, footer, closeLabel, dismissOnBackdrop = true, size = 'md', className }, forwardedRef) {
   const labels = useLabels();
   const ref = useRef<HTMLDialogElement>(null);
+  const dialogRef = useMergedRefs(ref, forwardedRef);
   const opener = useRef<HTMLElement | null>(null);
   const id = useId();
 
@@ -49,7 +51,7 @@ export function Dialog({ open, onClose, title, description, children, footer, cl
 
   return (
     <dialog
-      ref={ref}
+      ref={dialogRef}
       className={cx('pp-dialog', className)}
       data-size={size}
       aria-labelledby={`${id}-title`}
@@ -68,4 +70,4 @@ export function Dialog({ open, onClose, title, description, children, footer, cl
       </div>
     </dialog>
   );
-}
+});

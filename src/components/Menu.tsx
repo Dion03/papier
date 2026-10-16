@@ -1,5 +1,7 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { forwardRef, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
+import { useMergedRefs } from '../lib/slot';
+import { supportsPopover, useAnchoredPopover, type Align, type Side } from '../lib/position';
 
 export interface MenuItem { label: ReactNode; onSelect: () => void; icon?: ReactNode; disabled?: boolean; tone?: 'default' | 'danger' }
 
@@ -9,7 +11,9 @@ export interface MenuProps {
   /** Accessible name when the trigger is only an icon. */
   triggerLabel?: string;
   items: MenuItem[];
-  align?: 'start' | 'end';
+  /** Preferred side of the trigger; flips when there is no room. */
+  side?: Side;
+  align?: Align;
   triggerVariant?: 'secondary' | 'ghost' | 'icon';
   className?: string;
 }
@@ -17,15 +21,21 @@ export interface MenuProps {
 /**
  * An action menu (WAI-ARIA menu button): Enter, Space or ArrowDown opens and focuses
  * the first item; arrows, Home and End move; Escape and Tab close and return focus.
+ * The list opens in the top layer, so overflow:hidden parents never clip it.
+ * The ref points at the trigger button.
  */
-export function Menu({ trigger, triggerLabel, items, align = 'start', triggerVariant = 'secondary', className }: MenuProps) {
+export const Menu = forwardRef<HTMLButtonElement, MenuProps>(function Menu(
+  { trigger, triggerLabel, items, side = 'bottom', align = 'start', triggerVariant = 'secondary', className }, ref,
+) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const btn = useRef<HTMLButtonElement>(null);
+  const btnRef = useMergedRefs(btn, ref);
   const list = useRef<HTMLUListElement>(null);
   const focusAt = useRef<number | 'last'>(0);
   const enabled = () => Array.from(list.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not(:disabled)') ?? []);
 
+  useAnchoredPopover(open, btn, list, side, align, 6);
   useEffect(() => {
     if (!open) return;
     const els = enabled();
@@ -57,9 +67,9 @@ export function Menu({ trigger, triggerLabel, items, align = 'start', triggerVar
   };
 
   return (
-    <div className={cx('pp-menu', className)} data-align={align}>
+    <div className={cx('pp-menu', className)}>
       <button
-        ref={btn}
+        ref={btnRef}
         type="button"
         className={triggerVariant === 'icon' ? 'pp-icon-button' : 'pp-button'}
         data-variant={triggerVariant === 'icon' ? 'ghost' : triggerVariant}
@@ -74,7 +84,8 @@ export function Menu({ trigger, triggerLabel, items, align = 'start', triggerVar
         {trigger}
       </button>
       {open && (
-        <ul ref={list} id={`${id}-menu`} role="menu" aria-label={triggerLabel} className="pp-menu__list" onKeyDown={onListKey}>
+        <ul ref={list} id={`${id}-menu`} role="menu" aria-label={triggerLabel} className="pp-menu__list" data-align={align}
+          popover={supportsPopover() ? 'manual' : undefined} onKeyDown={onListKey}>
           {items.map((item, i) => (
             <li key={i} role="none">
               <button type="button" role="menuitem" tabIndex={-1} disabled={item.disabled} className="pp-menu__item" data-tone={item.tone}
@@ -88,4 +99,4 @@ export function Menu({ trigger, triggerLabel, items, align = 'start', triggerVar
       )}
     </div>
   );
-}
+});

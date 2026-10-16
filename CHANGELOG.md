@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.0 (nog niet uitgebracht)
+
+- Router-links: `asChild` op Button, IconButton en Link rendert het kind (bv. de Link van
+  Next.js of React Router) met de Papier-stijl. Klasse, ARIA, handlers en ref worden samengevoegd.
+- Veldbouwstenen: `Field`, `FieldLabel`, `FieldHint`, `FieldError`, `useField` en
+  `useFieldControl` voor eigen en externe inputs. TextField, TextArea en Select gebruiken ze
+  zelf; Select heeft geen eigen kopie van de veldlogica meer.
+- TextField: `prefix` en `suffix` voor een icoon of eenheid.
+- Een eigen `aria-describedby` op TextField, TextArea en Select wordt nu toegevoegd aan
+  fout en hint in plaats van ze te vervangen.
+- Menu en Tooltip openen in de top layer (Popover API, met een vast paneel als terugval),
+  dus `overflow: hidden` knipt ze niet meer af. Ze klappen om aan de rand van het scherm.
+  Nieuw: `side` en `align: 'center'` op Menu, `placement: 'left' | 'right'` op Tooltip.
+- Alle CSS, ook `tokens.css`, staat in `@layer papier`: CSS van je app wint zonder
+  specificiteitsgevecht. Let op: een eigen reset zoals `button { color: inherit }` wint nu
+  ook; zet die in een laag vóór Papier (zie README).
+- Refs op Dialog, Sheet, Menu (triggerknop), Tabs, TabList, Tab, TabPanel, RadioGroup,
+  SegmentedControl, Avatar en Skeleton.
+- Nieuwe types: `TabListProps`, `TabProps`, `TabPanelProps`, `FieldProps` en verwante.
+- Docs: sectie voor velden, een actiemenu per tabelrij, de hero-knop via `asChild` en
+  uitleg voor gebruik in je eigen app.
+
 ## 0.2.1 (2026-10-16)
 
 - README en pakketbeschrijving in de eerste persoon.

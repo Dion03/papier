@@ -1,3 +1,4 @@
+@layer papier {
 .pp-sheet {
   position: fixed; inset: 0 0 0 auto; width: min(420px, 100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; padding: 0;
   border: 0; background: var(--papier-color-bg); color: var(--papier-color-text); box-shadow: var(--papier-shadow-object); font-family: var(--papier-font-body);
@@ -21,3 +22,4 @@
 .pp-sheet__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: var(--papier-hit-target); }
 .pp-sheet__header:has(.pp-visually-hidden) { justify-content: flex-end; }
 .pp-sheet__body { flex: 1; overflow-y: auto; margin-top: var(--papier-space-4); }
+}

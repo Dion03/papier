@@ -1,3 +1,4 @@
+@layer papier {
 .pp-check, .pp-switch { display: flex; gap: 12px; align-items: flex-start; }
 .pp-switch { justify-content: space-between; align-items: center; }
 .pp-check__box { position: relative; flex: none; width: 24px; height: 24px; margin-top: 1px; }
@@ -35,3 +36,4 @@
 .pp-switch__track:active .pp-switch__thumb { width: 25px; }
 .pp-switch__track[aria-checked="true"]:active .pp-switch__thumb { transform: translateX(18px); }
 .pp-switch__track:disabled { opacity: 0.45; cursor: not-allowed; }
+}

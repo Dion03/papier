@@ -1,3 +1,4 @@
+@layer papier {
 .pp-notice {
   --pp-tone: var(--papier-color-text); --pp-tone-bg: var(--papier-color-surface-sunken);
   display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px;
@@ -20,3 +21,4 @@
   border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer;
 }
 .pp-notice__dismiss:hover { background: rgb(0 0 0 / 0.06); }
+}

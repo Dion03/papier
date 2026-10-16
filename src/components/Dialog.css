@@ -1,3 +1,4 @@
+@layer papier {
 .pp-dialog {
   width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 0; margin: auto;
   border: 0; border-radius: var(--papier-radius-xl); background: var(--papier-color-surface); color: var(--papier-color-text);
@@ -25,3 +26,4 @@
 .pp-dialog__body { margin-top: var(--papier-space-5); }
 .pp-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: var(--papier-space-6); }
 @media (max-width: 480px) { .pp-dialog__panel { padding: var(--papier-space-5); } .pp-dialog__footer > * { flex: 1; } }
+}

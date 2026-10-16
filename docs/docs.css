@@ -191,3 +191,5 @@ body { margin: 0; background: #f2efe7; }
 .doc-layout-demo { padding-inline: 0; }
 .doc-layout-box { padding: 12px 14px; border-radius: var(--papier-radius-md); background: var(--papier-color-bg); border: 1px dashed var(--papier-color-line-strong); font-size: 13px; }
 .doc-layout-box--sage { background: var(--papier-color-sage-soft); color: var(--papier-color-on-sage); }
+.doc-row-actions { width: 1%; }
+.doc .pp-table .doc-row-actions { padding-block: 2px; text-align: right; }
