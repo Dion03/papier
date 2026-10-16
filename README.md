@@ -4,6 +4,8 @@ Het design system van Dion: warm papier, inkt, vermiljoen en salie uit
 [portfolio.dionbm.nl](https://portfolio.dionbm.nl) als toegankelijke React-componenten,
 met tokens voor web en Android.
 
+Documentatie en voorbeelden: [papier.dionbm.nl](https://papier.dionbm.nl).
+
 ```bash
 npm install @dionbm/papier
 ```
@@ -87,8 +89,11 @@ Nog niet gedaan: een handmatige test met VoiceOver en NVDA.
 
 1. Werk `CHANGELOG.md` bij.
 2. `npm run release:patch` of `npm run release:minor` (draait de check en maakt een versietag).
-3. `git push --follow-tags`: de workflow publiceert naar npm (secret `NPM_TOKEN`) en maakt
-   een GitHub-release met de changelog.
+3. `git push --follow-tags`: de workflow publiceert naar npm via Trusted Publishing (geen
+   token nodig) en maakt een GitHub-release met de changelog.
+
+Elke push naar `main` zet de docs opnieuw op [papier.dionbm.nl](https://papier.dionbm.nl)
+(GitHub Pages, workflow `pages.yml`).
 
 ## Afwijkingen van het portfolio
 
