@@ -81,7 +81,9 @@ test('menu in een tabel opent in de top layer en wordt niet afgeknipt', async ({
 test('menu klapt omhoog onderaan het scherm', async ({ page }) => {
   await open(page, 'light');
   const trigger = page.getByRole('button', { name: 'Acties', exact: true });
-  await trigger.evaluate((el) => { el.scrollIntoView({ block: 'end' }); window.scrollBy(0, -4); });
+  // Firefox's scrollIntoView({ block: 'end' }) can leave the button a few px below the
+  // viewport, so the click would scroll it to the centre first. Place it exactly instead.
+  await trigger.evaluate((el) => window.scrollBy({ top: el.getBoundingClientRect().bottom - window.innerHeight + 8, behavior: 'instant' }));
   await trigger.click();
   const menu = page.getByRole('menu');
   await expect(menu).toHaveAttribute('data-side', 'top');
