@@ -1,0 +1,12 @@
+.pp-progress { display: grid; gap: 8px; }
+.pp-progress__head { display: flex; justify-content: space-between; gap: 12px; font-size: var(--papier-type-small-size); }
+.pp-progress__value { color: var(--papier-color-text-muted); font-variant-numeric: tabular-nums; }
+.pp-progress__track { position: relative; height: 8px; overflow: hidden; border-radius: var(--papier-radius-pill); background: var(--papier-color-surface-sunken); }
+.pp-progress__bar {
+  position: absolute; inset: 0; border-radius: inherit; background: var(--papier-color-action);
+  transform-origin: left; transition: transform var(--papier-dur-open) var(--papier-ease-arrive);
+}
+.pp-progress[data-tone="accent"] .pp-progress__bar { background: var(--papier-color-accent); }
+.pp-progress__track[data-indeterminate] .pp-progress__bar { width: 38%; animation: pp-indeterminate 1.4s var(--papier-ease-arrive) infinite; }
+@keyframes pp-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(270%); } }
+@media (prefers-reduced-motion: reduce) { .pp-progress__track[data-indeterminate] .pp-progress__bar { animation: none; width: 100%; opacity: 0.45; } }

@@ -1,0 +1,64 @@
+{
+  "name": "@dionbm/papier",
+  "version": "0.1.0",
+  "description": "Papier: het design system van Dion. Warm papier, inkt, vermiljoen en salie als toegankelijke React-componenten.",
+  "license": "MIT",
+  "author": "Dion Meijboom",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/papier.cjs",
+  "module": "./dist/papier.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/papier.js",
+      "require": "./dist/papier.cjs"
+    },
+    "./papier.css": "./dist/papier.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json",
+    "./fonts.css": "./dist/fonts.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "vite --config docs/vite.config.ts",
+    "build": "vite build && tsc -p tsconfig.build.json && node scripts/build-tokens.mjs",
+    "build:docs": "vite build --config docs/vite.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:contrast": "node scripts/contrast.mjs",
+    "check": "npm run typecheck && npm run test:contrast && npm test && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "axe-core": "^4.14.0",
+    "jsdom": "^26.1.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "5.9",
+    "vite": "^7.3.7",
+    "vitest": "^3.2.7",
+    "vitest-axe": "^0.1.0"
+  }
+}
