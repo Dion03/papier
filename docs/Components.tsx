@@ -224,7 +224,6 @@ export function Components() {
   return (
     <section id="componenten" className="doc-section" aria-labelledby="componenten-title">
       <div className="doc-section__head">
-        <Text variant="label" as="p" tone="accent">03 · Componenten</Text>
         <Text variant="headline" as="h2" id="componenten-title">Onderdelen die je kunt aanraken.</Text>
         <Text variant="body-lg" tone="muted">Elk onderdeel is gebouwd op een native element waar dat kan. Papier voegt materiaal en beweging toe, nooit een eigen versie van wat de browser al goed doet.</Text>
       </div>

@@ -1,4 +1,4 @@
-.pp-surface { background: var(--papier-color-surface); color: var(--papier-color-text); border-radius: var(--papier-radius-lg); }
+.pp-surface { min-width: 0; overflow-wrap: break-word; background: var(--papier-color-surface); color: var(--papier-color-text); border-radius: var(--papier-radius-lg); }
 .pp-surface[data-radius="md"] { border-radius: var(--papier-radius-md); }
 .pp-surface[data-radius="xl"] { border-radius: var(--papier-radius-xl); }
 .pp-surface[data-padding="sm"] { padding: var(--papier-space-4); }
