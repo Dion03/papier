@@ -33,3 +33,17 @@
 .pp-field__hint { color: var(--papier-color-text-muted); }
 .pp-field__error { color: var(--papier-color-danger); font-weight: 500; }
 }
+@layer papier {
+.pp-password__toggle {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px; margin-inline-end: -8px;
+  border: 0; border-radius: 50%; background: transparent; color: var(--papier-color-text-muted); cursor: pointer;
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive), color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-password__toggle:hover { background: var(--papier-color-surface-sunken); color: var(--papier-color-text); }
+.pp-password__toggle[aria-pressed="true"] { color: var(--papier-color-accent-text); }
+.papier .pp-password__toggle:focus-visible { outline-offset: -2px; }
+.pp-password__toggle:disabled { cursor: not-allowed; }
+/* The group shows the focus line only for the input itself, not for the toggle. */
+.papier .pp-password .pp-field__group:has(.pp-password__toggle:focus-visible):not(:has(input:focus-visible)) { border-bottom-color: var(--papier-color-line-strong); box-shadow: none; }
+.pp-field__control--area[data-autoresize] { resize: none; overflow-y: hidden; }
+}

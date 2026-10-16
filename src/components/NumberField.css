@@ -1,0 +1,20 @@
+@layer papier {
+.pp-number__input { font-variant-numeric: tabular-nums; }
+.pp-number__group { gap: 6px; }
+.pp-number__step {
+  flex: none; display: grid; place-items: center; width: 36px; height: 36px;
+  border: 1.5px solid var(--papier-color-line); border-radius: 50%; background: transparent; color: var(--papier-color-text); cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive), border-color var(--papier-dur-color) var(--papier-ease-arrive), transform var(--papier-dur-press) var(--papier-ease-arrive);
+}
+/* Reach 44px without growing the drawn circle. */
+.pp-number__step { position: relative; }
+.pp-number__step::before { content: ''; position: absolute; inset: -4px; }
+.pp-number__step:hover:not(:disabled) { background: var(--papier-color-surface-sunken); border-color: var(--papier-color-line-strong); }
+.pp-number__step:active:not(:disabled) { transform: scale(0.92); }
+.pp-number__step:disabled { opacity: 0.35; cursor: not-allowed; }
+.pp-number__step:first-child { margin-inline-end: 4px; }
+.pp-number__step:last-child { margin-inline-start: 4px; }
+.pp-number__input { text-align: center; }
+.pp-number__group:not(:has(.pp-number__step)) .pp-number__input { text-align: start; }
+}

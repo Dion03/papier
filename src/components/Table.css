@@ -9,4 +9,16 @@
 .pp-table tbody tr { transition: background-color var(--papier-dur-color) var(--papier-ease-arrive); }
 .pp-table tbody tr:hover { background: var(--papier-color-surface-sunken); }
 .pp-table .pp-num { text-align: end; font-variant-numeric: tabular-nums; }
+.pp-table th.pp-sort-header { padding-block: 4px; padding-inline: 8px; }
+.pp-sort {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 36px; margin: 0; padding: 0 8px;
+  border: 0; border-radius: var(--papier-radius-sm); background: transparent; color: inherit; cursor: pointer; font: inherit; white-space: nowrap;
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive), color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-sort:hover { background: var(--papier-color-surface-sunken); color: var(--papier-color-text); }
+.pp-sort[data-sorted] { color: var(--papier-color-text); }
+.pp-sort__icon { flex: none; opacity: 0.55; transition: opacity var(--papier-dur-color) var(--papier-ease-arrive); }
+.pp-sort[data-sorted] .pp-sort__icon { opacity: 1; color: var(--papier-color-accent-text); }
+.pp-num > .pp-sort { flex-direction: row-reverse; }
+.papier .pp-sort:focus-visible { outline-offset: 0; }
 }

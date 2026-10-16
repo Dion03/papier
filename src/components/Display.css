@@ -1,0 +1,32 @@
+@layer papier {
+.pp-separator { flex: none; border: 0; margin: 0; }
+.pp-separator[data-orientation="horizontal"]:not([data-label]) { width: 100%; border-top: 1px solid var(--papier-color-line); }
+.pp-separator[data-orientation="vertical"] { align-self: stretch; min-height: 1em; border-inline-start: 1px solid var(--papier-color-line); }
+.pp-separator[data-label] {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  color: var(--papier-color-text-muted); font: var(--papier-type-label-weight) var(--papier-type-label-size)/1 var(--papier-font-body); letter-spacing: var(--papier-type-label-tracking);
+}
+.pp-separator[data-label]::before, .pp-separator[data-label]::after { content: ''; flex: 1; border-top: 1px solid var(--papier-color-line); }
+
+.pp-kbd {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 1.7em; height: 1.7em; padding: 0 0.45em;
+  border: 1px solid var(--papier-color-line); border-bottom-width: 2px; border-radius: 6px;
+  background: var(--papier-color-surface); color: var(--papier-color-text);
+  font: 600 0.8em/1 var(--papier-font-body); letter-spacing: 0.02em; white-space: nowrap; vertical-align: 0.1em;
+}
+
+.pp-empty {
+  display: grid; justify-items: center; gap: 8px; padding: var(--papier-space-7) var(--papier-space-5); text-align: center;
+  border: 1.5px dashed var(--papier-color-line); border-radius: var(--papier-radius-lg);
+}
+.pp-empty[data-size="sm"] { padding: var(--papier-space-6) var(--papier-space-4); }
+.pp-empty__icon {
+  display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: 6px; border-radius: 50%;
+  background: var(--papier-color-sage-soft); color: var(--papier-color-on-sage);
+}
+.pp-empty__icon svg { width: 24px; height: 24px; }
+.pp-empty__title { margin: 0; font: 500 var(--papier-type-subtitle-size)/1.3 var(--papier-font-display); letter-spacing: var(--papier-type-subtitle-tracking); text-wrap: balance; }
+.pp-empty[data-size="sm"] .pp-empty__title { font-size: var(--papier-type-body-lg-size); }
+.pp-empty__desc { max-width: 42ch; margin: 0; color: var(--papier-color-text-muted); text-wrap: pretty; }
+.pp-empty__action { margin-top: 10px; }
+}

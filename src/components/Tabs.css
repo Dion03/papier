@@ -14,4 +14,10 @@
 .pp-tabpanel { padding-top: var(--papier-space-5); }
 .papier .pp-tabpanel:focus-visible { outline-offset: 6px; border-radius: 4px; }
 .papier .pp-tab:focus-visible { outline-offset: -2px; border-radius: 6px; }
+.pp-tabs[data-orientation="vertical"] { display: grid; grid-template-columns: minmax(160px, max-content) 1fr; gap: var(--papier-space-6); align-items: start; }
+.pp-tabs[data-orientation="vertical"] .pp-tablist { flex-direction: column; gap: 2px; border-bottom: 0; border-inline-start: 1px solid var(--papier-color-line); overflow: visible; }
+.pp-tabs[data-orientation="vertical"] .pp-tab { padding: 0 16px; text-align: start; }
+.pp-tabs[data-orientation="vertical"] .pp-tablist__bar { top: 0; bottom: auto; left: auto; inset-inline-start: -1px; width: 2px; transition: transform var(--papier-dur-open) var(--papier-ease-arrive), height var(--papier-dur-open) var(--papier-ease-arrive); }
+.pp-tabs[data-orientation="vertical"] .pp-tabpanel { padding-top: 0; }
+@media (max-width: 560px) { .pp-tabs[data-orientation="vertical"] { grid-template-columns: 1fr; gap: var(--papier-space-4); } }
 }

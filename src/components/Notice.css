@@ -21,4 +21,5 @@
   border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer;
 }
 .pp-notice__dismiss:hover { background: rgb(0 0 0 / 0.06); }
+.pp-notice__icon[data-custom] { background: transparent; color: var(--pp-tone); }
 }

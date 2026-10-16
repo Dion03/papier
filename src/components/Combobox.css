@@ -30,3 +30,32 @@
 @media (prefers-reduced-motion: reduce) { .pp-combobox__popup { animation: none; } }
 .pp-combobox__option:dir(rtl)[data-active] { box-shadow: inset -2px 0 0 var(--papier-color-focus); }
 }
+@layer papier {
+/* MultiCombobox: chosen items as tags inside the underlined field, wrapping onto new lines. */
+.pp-multi__group { align-items: flex-start; gap: 6px; padding: 6px 0; min-height: var(--papier-hit-target); }
+.pp-multi__values { display: flex; flex: 1; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+/* Centred on the first row of tags (32px), whatever the number of rows below it. */
+.pp-multi__group > .pp-combobox__toggle { margin-block: -2px; }
+.pp-multi__input { flex: 1 0 120px; min-height: 32px; padding-block: 4px; }
+.pp-multi__tag {
+  display: inline-flex; align-items: center; gap: 2px; min-height: 30px; padding-inline: 11px 3px;
+  border-radius: var(--papier-radius-pill); background: var(--papier-color-sage-soft); color: var(--papier-color-on-sage);
+  font: var(--papier-type-label-weight) var(--papier-type-label-size)/1.2 var(--papier-font-body);
+  animation: pp-menu-in var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-multi__remove {
+  display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 50%;
+  background: transparent; color: inherit; cursor: pointer;
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-multi__remove:hover { background: rgb(0 0 0 / 0.08); }
+.pp-multi__group[data-disabled] { opacity: 0.5; }
+.pp-multi__option { justify-content: flex-start; }
+.pp-multi__box {
+  flex: none; display: grid; place-items: center; width: 18px; height: 18px;
+  border: 1.5px solid var(--papier-color-line-strong); border-radius: 5px; color: var(--papier-color-on-action);
+}
+.pp-multi__option[aria-selected="true"] .pp-multi__box { background: var(--papier-color-action); border-color: var(--papier-color-action); }
+.pp-multi__option[aria-selected="true"] { font-weight: 400; }
+@media (prefers-reduced-motion: reduce) { .pp-multi__tag { animation: none; } }
+}

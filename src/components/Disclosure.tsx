@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
+import { createContext, forwardRef, useContext, useImperativeHandle, useRef, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
 import { prefersReducedMotion } from '../lib/motion';
 import { ChevronDown } from './icons';
@@ -8,6 +8,8 @@ export interface DisclosureProps extends Omit<HTMLAttributes<HTMLDetailsElement>
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
+
+const AccordionContext = createContext<{ type: 'single' | 'multiple' } | null>(null);
 
 const OPEN_MS = 420;
 const CLOSE_MS = 290;
@@ -21,6 +23,7 @@ const EASE = 'cubic-bezier(.16, 1, .3, 1)';
 export const Disclosure = forwardRef<HTMLDetailsElement, DisclosureProps>(function Disclosure(
   { summary, defaultOpen, onOpenChange, className, children, ...rest }, ref,
 ) {
+  const accordion = useContext(AccordionContext);
   const el = useRef<HTMLDetailsElement>(null);
   const anim = useRef<Animation | null>(null);
   useImperativeHandle(ref, () => el.current!);
@@ -54,7 +57,17 @@ export const Disclosure = forwardRef<HTMLDetailsElement, DisclosureProps>(functi
       ref={el}
       open={defaultOpen}
       className={cx('pp-disclosure', className)}
-      onToggle={(e) => onOpenChange?.((e.currentTarget as HTMLDetailsElement).open)}
+      onToggle={(e) => {
+        const d = e.currentTarget as HTMLDetailsElement;
+        onOpenChange?.(d.open);
+        // In a single Accordion, opening one folds the others, with the same animation as a click.
+        if (accordion?.type === 'single' && d.open && !d.dataset.closing) {
+          const root = d.closest('.pp-accordion');
+          root?.querySelectorAll<HTMLDetailsElement>('details.pp-disclosure[open]').forEach((other) => {
+            if (other !== d && other.closest('.pp-accordion') === root && !other.dataset.closing) other.querySelector('summary')?.click();
+          });
+        }
+      }}
       {...rest}
     >
       <summary className="pp-disclosure__summary" onClick={onSummaryClick}>
@@ -63,5 +76,25 @@ export const Disclosure = forwardRef<HTMLDetailsElement, DisclosureProps>(functi
       </summary>
       <div className="pp-disclosure__content">{children}</div>
     </details>
+  );
+});
+
+export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
+  /** `single`: opening one section folds the open one. `multiple`: each opens on its own. */
+  type?: 'single' | 'multiple';
+  /** Disclosure elements. */
+  children: ReactNode;
+}
+
+/**
+ * A stack of Disclosures, e.g. questions and answers. Each section stays a native
+ * <details>, so find-in-page, the keyboard and screen readers work as they do for one.
+ * Open a section from the start with `defaultOpen` on its Disclosure.
+ */
+export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion({ type = 'multiple', className, children, ...rest }, ref) {
+  return (
+    <AccordionContext.Provider value={{ type }}>
+      <div ref={ref} className={cx('pp-accordion', className)} data-type={type} {...rest}>{children}</div>
+    </AccordionContext.Provider>
   );
 });

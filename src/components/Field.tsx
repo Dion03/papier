@@ -1,8 +1,10 @@
 import {
-  createContext, forwardRef, useContext, useId,
+  createContext, forwardRef, useContext, useId, useRef,
   type HTMLAttributes, type InputHTMLAttributes, type LabelHTMLAttributes, type PointerEvent, type ReactNode, type TextareaHTMLAttributes,
 } from 'react';
 import { cx } from '../lib/cx';
+import { useMergedRefs } from '../lib/slot';
+import { useIsoLayoutEffect } from '../lib/useIsoLayoutEffect';
 
 export interface UseFieldOptions {
   /** Id for the control; generated when left out. */
@@ -140,7 +142,13 @@ export type TextFieldProps = FieldBase & Omit<InputHTMLAttributes<HTMLInputEleme
   /** After the value: an icon or a unit such as kg. Decorative, so name the unit in the label or hint too. */
   suffix?: ReactNode;
 };
-export type TextAreaProps = FieldBase & TextareaHTMLAttributes<HTMLTextAreaElement> & { multiline: true };
+export type TextAreaProps = FieldBase & TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  multiline: true;
+  /** Grows with its content instead of scrolling, from `rows` up to `maxRows`. */
+  autoResize?: boolean;
+  /** With autoResize: the height at which it stops growing and scrolls. */
+  maxRows?: number;
+};
 
 /** A pointer down on a prefix or suffix focuses the input, like a click on the field would. */
 const focusInput = (e: PointerEvent<HTMLSpanElement>) => {
@@ -170,12 +178,28 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
 });
 
 export const TextArea = forwardRef<HTMLTextAreaElement, Omit<TextAreaProps, 'multiline'>>(function TextArea(
-  { label, hint, error, hideLabel, id, className, required, rows = 4, 'aria-describedby': describedBy, ...rest }, ref,
+  { label, hint, error, hideLabel, id, className, required, rows = 4, autoResize, maxRows, onInput, 'aria-describedby': describedBy, ...rest }, ref,
 ) {
+  const area = useRef<HTMLTextAreaElement>(null);
+  const areaRef = useMergedRefs(area, ref);
+  const resize = () => {
+    const t = area.current;
+    if (!t || !autoResize) return;
+    const cs = getComputedStyle(t);
+    const px = (v: string) => parseFloat(v) || 0;
+    const border = px(cs.borderTopWidth) + px(cs.borderBottomWidth);
+    const max = maxRows ? (px(cs.lineHeight) || 24) * maxRows + px(cs.paddingTop) + px(cs.paddingBottom) + border : Infinity;
+    t.style.height = 'auto';
+    const needed = t.scrollHeight + border;
+    t.style.height = `${Math.min(needed, max)}px`;
+    t.style.overflowY = needed > max ? 'auto' : 'hidden';
+  };
+  useIsoLayoutEffect(resize, [rest.value, autoResize, maxRows]);
   return (
     <Field {...{ label, hint, error, hideLabel, required, id, describedBy }}>
       {(control) => (
-        <textarea ref={ref} rows={rows} className={cx('pp-field__control', 'pp-field__control--area', className)} required={required} {...control} {...rest} />
+        <textarea ref={areaRef} rows={rows} className={cx('pp-field__control', 'pp-field__control--area', className)} required={required}
+          data-autoresize={autoResize || undefined} onInput={(e) => { resize(); onInput?.(e); }} {...control} {...rest} />
       )}
     </Field>
   );

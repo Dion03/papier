@@ -25,6 +25,12 @@ import './components/Avatar.css';
 import './components/Combobox.css';
 import './components/Breadcrumb.css';
 import './components/Pagination.css';
+import './components/Popover.css';
+import './components/NumberField.css';
+import './components/FileField.css';
+import './components/ToggleGroup.css';
+import './components/Display.css';
+import './components/Calendar.css';
 // Last, so its overrides win over the component rules at equal specificity.
 import './styles/forced-colors.css';
 
@@ -41,18 +47,18 @@ export {
   Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl, TextField, TextArea,
   type FieldProps, type FieldLabelProps, type FieldControlProps, type FieldState, type UseFieldOptions, type TextFieldProps, type TextAreaProps,
 } from './components/Field';
-export { Checkbox, type CheckboxProps } from './components/Checkbox';
+export { Checkbox, CheckboxGroup, type CheckboxProps, type CheckboxGroupProps, type CheckboxOption } from './components/Checkbox';
 export { Switch, type SwitchProps } from './components/Switch';
 export { Slider, type SliderProps } from './components/Slider';
 export { SegmentedControl, type SegmentedControlProps, type SegmentOption } from './components/SegmentedControl';
 export { Tabs, TabList, Tab, TabPanel, type TabsProps, type TabListProps, type TabProps, type TabPanelProps } from './components/Tabs';
-export { Disclosure, type DisclosureProps } from './components/Disclosure';
+export { Disclosure, Accordion, type DisclosureProps, type AccordionProps } from './components/Disclosure';
 export { Dialog, type DialogProps } from './components/Dialog';
 export { Select, type SelectProps, type SelectOption } from './components/Select';
 export { RadioGroup, type RadioGroupProps, type RadioOption } from './components/RadioGroup';
 export { Tooltip, type TooltipProps } from './components/Tooltip';
-export { Menu, type MenuProps, type MenuItem } from './components/Menu';
-export { ToastProvider, useToast, type ToastOptions } from './components/Toast';
+export { Menu, type MenuProps, type MenuItem, type MenuEntry, type MenuSeparator, type MenuLabel } from './components/Menu';
+export { ToastProvider, useToast, type ToastOptions, type ToastApi, type ToastPromiseMessages } from './components/Toast';
 export { Table, type TableProps } from './components/Table';
 export { Skeleton, type SkeletonProps } from './components/Skeleton';
 export { Sheet, type SheetProps } from './components/Sheet';
@@ -63,6 +69,20 @@ export { AlertDialog, type AlertDialogProps } from './components/AlertDialog';
 export { Combobox, defaultComboboxFilter, type ComboboxProps, type ComboboxOption } from './components/Combobox';
 export { Breadcrumb, BreadcrumbItem, type BreadcrumbProps, type BreadcrumbItemProps } from './components/Breadcrumb';
 export { Pagination, paginationRange, type PaginationProps } from './components/Pagination';
+export { Popover, type PopoverProps } from './components/Popover';
+export { NumberField, parseNumber, type NumberFieldProps } from './components/NumberField';
+export { PasswordField, type PasswordFieldProps } from './components/PasswordField';
+export { FileField, acceptsFile, formatFileSize, type FileFieldProps, type FileRejection } from './components/FileField';
+export { Toggle, ToggleGroup, type ToggleProps, type ToggleGroupProps, type ToggleOption } from './components/ToggleGroup';
+export { SortHeader, useTableSort, type SortHeaderProps, type SortDirection, type TableSortState } from './components/SortHeader';
+export { MultiCombobox, type MultiComboboxProps } from './components/MultiCombobox';
+export { RangeSlider, type RangeSliderProps, type RangeValue } from './components/RangeSlider';
+export { Calendar, RangeCalendar, type CalendarProps, type RangeCalendarProps, type DateRange } from './components/Calendar';
+export { DatePicker, DateRangePicker, type DatePickerProps, type DateRangePickerProps } from './components/DatePicker';
+export { parseTypedDate, formatNumericDate, type ISODate } from './lib/date';
+export { Separator, type SeparatorProps } from './components/Separator';
+export { Kbd } from './components/Kbd';
+export { EmptyState, type EmptyStateProps } from './components/EmptyState';
 export { dutchLabels, englishLabels, type PapierLabels } from './lib/labels';
 export * as icons from './components/icons';
 export { themeStyle, checkTheme, themeColors, colorRoles, type ColorRole, type ThemeColors, type ContrastResult } from './lib/theme';

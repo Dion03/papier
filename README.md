@@ -28,21 +28,24 @@ export function App() {
 
 Werkt in Vite en in Next.js (App Router), met React 18 of 19. Alles rendert op de server.
 
-## Componenten (34)
+## Componenten (52)
 
 | Groep | Componenten |
 |---|---|
-| Basis | Papier, Text, VisuallyHidden, Stack, Container |
-| Acties | Button, IconButton, Link, Menu |
-| Formulieren | TextField, TextArea, Select, Combobox, Checkbox, RadioGroup, Switch, Slider, SegmentedControl |
+| Basis | Papier, Text, VisuallyHidden, Stack, Container, Separator, Kbd |
+| Acties | Button, IconButton, Link, Menu, Toggle, ToggleGroup |
+| Formulieren | TextField, TextArea, PasswordField, NumberField, FileField, DatePicker, DateRangePicker, Calendar, RangeCalendar, Select, Combobox, MultiCombobox, Checkbox, CheckboxGroup, RadioGroup, Switch, Slider, RangeSlider, SegmentedControl |
 | Veldbouwstenen | Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl |
 | Navigatie | Breadcrumb (BreadcrumbItem), Pagination |
-| Structuur | Tabs (TabList, Tab, TabPanel), Disclosure, Table |
-| Overlays | Dialog, AlertDialog, Sheet, Tooltip |
-| Feedback | Notice, ToastProvider en useToast, Progress, Spinner, Skeleton |
+| Structuur | Tabs (TabList, Tab, TabPanel), Disclosure, Accordion, Table, SortHeader en useTableSort |
+| Overlays | Dialog, AlertDialog, Sheet, Popover, Tooltip |
+| Feedback | Notice, ToastProvider en useToast, Progress, Spinner, Skeleton, EmptyState |
 | Materiaal | Surface, Tag, Avatar |
 
-Plus 21 lijniconen onder `icons`.
+Plus 30 lijniconen onder `icons`.
+
+Hoe Papier zich verhoudt tot shadcn/ui, Radix, Mantine, Chakra en HeroUI, en wat nog op de
+lijst staat: [docs/gap-analysis.md](docs/gap-analysis.md).
 
 ## In je eigen app
 
@@ -100,6 +103,83 @@ TextField heeft `prefix` en `suffix` voor een icoon of eenheid:
 Prefix en suffix zijn decoratief (`aria-hidden`), net als bij GOV.UK. Zet de eenheid daarom
 ook in het label of de hint.
 
+### Popover en menu's met keuzes
+
+Popover is een niet-modaal paneel naast een knop, voor filters, een kort formulier of uitleg.
+De focus gaat erin bij openen en terug naar de knop bij Escape:
+
+```tsx
+<Popover title="Filter de bak" trigger={<Button variant="secondary">Filters</Button>}>
+  {({ close }) => <Button onClick={() => { apply(); close(); }}>Toepassen</Button>}
+</Popover>
+```
+
+Menu kent naast acties ook kopjes, scheidingslijnen, keuzes, links en sneltoetsen. Oude
+`items` werken ongewijzigd:
+
+```tsx
+<Menu trigger="Weergave" items={[
+  { type: 'label', label: 'Sorteren op' },
+  { type: 'radio', label: 'Artiest', checked: sort === 'artiest', onSelect: () => setSort('artiest') },
+  { type: 'separator' },
+  { type: 'checkbox', label: 'Hoezen', checked: covers, keepOpen: true, onSelect: toggleCovers },
+  { label: 'Bekijk op Discogs', href: 'https://www.discogs.com', target: '_blank' },
+]} />
+```
+
+### Getallen, wachtwoorden en bestanden
+
+```tsx
+<NumberField label="Prijs" formatOptions={{ style: 'currency', currency: 'EUR' }} min={0} step={0.5} />
+<PasswordField label="Wachtwoord" autoComplete="current-password" />
+<TextArea label="Notities" autoResize maxRows={8} />
+<FileField label="Hoezen" accept="image/*" multiple maxFiles={4} maxSize={5_000_000} />
+```
+
+NumberField leest en schrijft getallen in de taal van de app (`24,95` in het Nederlands). Die
+komt uit `labels.locale` (`nl-NL` in `dutchLabels`, `en-US` in `englishLabels`), of geef
+`locale` mee. FileField schrijft gesleepte en verwijderde bestanden terug naar de echte
+`<input type="file">`, dus een gewoon formulier stuurt wat je ziet.
+
+### Datums, meerdere keuzes en bereiken
+
+```tsx
+<DatePicker label="Bezorgdatum" value={date} onValueChange={setDate} min="2026-10-20" isDateUnavailable={isWeekend} />
+<Calendar value={date} onValueChange={setDate} />
+<DateRangePicker label="Verblijf" value={stay} onValueChange={setStay} startName="aankomst" endName="vertrek" />
+<MultiCombobox label="Genres" options={genres} value={chosen} onChange={setChosen} max={5} />
+<RangeSlider label="Jaar" min={1950} max={2025} value={years} onValueChange={setYears} marks={[1960, 1980, 2000]} />
+```
+
+Datums zijn tekst in de vorm `"2024-03-15"`, net als bij `<input type="date">`; er schuift dus
+geen dag door een tijdzone. DatePicker leest getypte datums in de volgorde van `locale`
+(`15-3-2024` in het Nederlands, `3/15/2024` in het Amerikaans) en de kalender begint de week
+op de eerste dag van die taal.
+
+### Sorteerbare tabellen
+
+```tsx
+const sort = useTableSort<'titel' | 'jaar'>();
+<thead><tr>
+  <SortHeader {...sort.headerProps('titel')}>Titel</SortHeader>
+  <SortHeader {...sort.headerProps('jaar')} align="end">Jaar</SortHeader>
+</tr></thead>
+<tbody>{sort.sortRows(rows, (row, key) => row[key]).map(renderRow)}</tbody>
+```
+
+### Toasts die meelopen met werk
+
+```tsx
+const { promise } = useToast();
+promise(save(), {
+  loading: { title: 'Opslaan…' },
+  success: { title: 'Opgeslagen' },
+  error: (e) => ({ title: 'Opslaan mislukt', description: String(e) }),
+});
+```
+
+`update(id, opties)` past een bestaande toast aan; zijn tijd begint dan opnieuw.
+
 ### Overlays in de top layer
 
 Menu en Tooltip openen met de Popover API in de top layer. Ze vallen niet weg in een
@@ -133,7 +213,7 @@ winnen daardoor altijd, ongeacht specificiteit:
 
 De build heeft één bestand per module. Alleen modules met hooks, context of events
 beginnen met `'use client'`; Text, VisuallyHidden, Stack, Container, Surface, Tag, Table,
-Skeleton, de iconen en de themafuncties blijven server components en voegen geen
+Skeleton, Separator, Kbd, EmptyState, de iconen en de themafuncties blijven server components en voegen geen
 JavaScript aan je pagina toe. Welke modules dat zijn staat in
 `scripts/server-modules.mjs`; een test controleert dat ze geen client-code bevatten, en
 `scripts/check-build.mjs` dat de build het goed doet.
@@ -179,7 +259,8 @@ vóór het renderen: wie `dir` later wisselt, moet de pagina opnieuw renderen.
 ### Refs
 
 Elk component met een eigen element geeft `ref` door: Dialog en Sheet naar het
-`<dialog>`, Menu naar de triggerknop, Tabs, TabList, Tab en TabPanel, RadioGroup naar de
+`<dialog>`, Menu naar de triggerknop, Popover naar het paneel, NumberField, PasswordField
+en FileField naar de input, Tabs, TabList, Tab en TabPanel, RadioGroup naar de
 fieldset, SegmentedControl, Avatar, Skeleton, Field en alle invoervelden. Tooltip heeft
 geen eigen element; de ref van zijn kind blijft gewoon werken.
 
@@ -204,7 +285,9 @@ import { Papier, englishLabels } from '@dionbm/papier';
 <Papier labels={englishLabels}>…</Papier>
 ```
 
-Teksten met een getal, zoals "Pagina 3 van 12" en "4 resultaten", zijn functies:
+Teksten met een getal of naam, zoals "Pagina 3 van 12", "4 resultaten" en "hoes.jpg
+verwijderen", zijn functies. `locale` bepaalt hoe NumberField, FileField, DatePicker, Calendar en
+`useTableSort` getallen en datums opmaken en tekst sorteren:
 
 ```tsx
 <Papier labels={{ pageOf: (p, n) => `${p} / ${n}` }}>…</Papier>

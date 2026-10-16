@@ -1,7 +1,7 @@
 @layer papier {
 .pp-check, .pp-switch { display: flex; gap: 12px; align-items: flex-start; }
 .pp-switch { justify-content: space-between; align-items: center; }
-.pp-check__box { position: relative; flex: none; width: 24px; height: 24px; margin-top: 1px; }
+.pp-check__box { position: relative; flex: none; cursor: pointer; width: 24px; height: 24px; margin-top: 1px; }
 .pp-check__input {
   appearance: none; margin: 0; width: 24px; height: 24px; cursor: pointer;
   border: 1.5px solid var(--papier-color-line-strong); border-radius: var(--papier-radius-sm); background: var(--papier-color-surface);
@@ -9,13 +9,32 @@
 }
 /* Enlarge the touch target to 44px without changing the drawn box. */
 .pp-check__box::before { content: ''; position: absolute; inset: -10px; }
+/* The input sits above the touch area and the marks above the input; the marks let clicks through. */
+.pp-check__input { position: relative; z-index: 1; }
+.pp-check__mark, .pp-check__dash { z-index: 2; }
 .pp-check__input:checked { background: var(--papier-color-action); border-color: var(--papier-color-action); }
 .pp-check__input:disabled { opacity: 0.45; cursor: not-allowed; }
+.pp-check__box:has(:disabled) { cursor: not-allowed; }
 .pp-check__mark {
   position: absolute; inset: 5px; color: var(--papier-color-on-action); pointer-events: none;
   stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset var(--papier-dur-color) var(--papier-ease-arrive);
 }
 .pp-check__input:checked + .pp-check__mark { stroke-dashoffset: 0; }
+/* Indeterminate: a dash instead of the tick, on the same filled box. */
+.pp-check__dash { position: absolute; inset: 5px; color: var(--papier-color-on-action); pointer-events: none; opacity: 0; transition: opacity var(--papier-dur-color) var(--papier-ease-arrive); }
+.pp-check__input:indeterminate { background: var(--papier-color-action); border-color: var(--papier-color-action); }
+.pp-check__input:indeterminate + .pp-check__mark { stroke-dashoffset: 24; }
+.pp-check__input:indeterminate ~ .pp-check__dash { opacity: 1; }
+.pp-check[data-invalid] .pp-check__input:not(:checked):not(:indeterminate) { border-color: var(--papier-color-danger); }
+.pp-check__text .pp-field__error { margin-top: 4px; }
+/* CheckboxGroup as tiles, like RadioGroup appearance="card". */
+.pp-checkbox-group[data-appearance="card"] .pp-check {
+  position: relative; padding: 14px 16px; border: 1.5px solid var(--papier-color-line); border-radius: var(--papier-radius-md); background: var(--papier-color-surface);
+  transition: border-color var(--papier-dur-color) var(--papier-ease-arrive), background-color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-checkbox-group[data-appearance="card"] .pp-check:has(:checked) { border-color: var(--papier-color-action); background: var(--papier-color-sage-soft); }
+.pp-checkbox-group[data-appearance="card"] .pp-check__label::after { content: ''; position: absolute; inset: 0; }
+.pp-checkbox-group[aria-invalid="true"] .pp-check__input:not(:checked) { border-color: var(--papier-color-danger); }
 .pp-check__text { display: grid; gap: 2px; padding-top: 2px; }
 .pp-check__label { cursor: pointer; font-weight: 500; }
 .pp-check__desc { color: var(--papier-color-text-muted); font-size: var(--papier-type-small-size); line-height: var(--papier-type-small-line); }

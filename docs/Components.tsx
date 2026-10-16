@@ -6,6 +6,7 @@ import {
   AlertDialog, Breadcrumb, BreadcrumbItem, Combobox, Pagination, type ComboboxOption,
 } from '@dionbm/papier';
 import { Example } from './Example';
+import { ExtendedExamples } from './Extended';
 
 const time = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
@@ -540,6 +541,8 @@ toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`
         a11y={['Alleen visuele volgorde via flex, nooit een andere leesvolgorde dan de DOM.', 'Container houdt minimaal 18 px goot op de smalste schermen.']}>
         <LayoutDemo />
       </Example>
+
+      <ExtendedExamples />
     </section>
   );
 }

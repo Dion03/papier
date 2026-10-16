@@ -1,0 +1,27 @@
+@layer papier {
+.pp-popover { position: relative; display: inline-flex; }
+/* Opens in the top layer (Popover API) or, without it, as a fixed panel; JS sets top and left. */
+.pp-popover__panel {
+  position: fixed; inset: auto; z-index: 45; width: max-content; max-width: min(360px, calc(100vw - 16px)); min-width: 220px;
+  max-height: calc(100dvh - 32px); margin: 0; padding: var(--papier-space-4); overflow: auto;
+  border: 1px solid var(--papier-color-line); border-radius: var(--papier-radius-lg);
+  background: var(--papier-color-surface); color: var(--papier-color-text); box-shadow: var(--papier-shadow-object);
+  font: 400 var(--papier-type-body-size)/var(--papier-type-body-line) var(--papier-font-body); text-align: start;
+  transform-origin: top left; animation: pp-menu-in var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-popover__panel[data-side="top"] { transform-origin: bottom left; --pp-menu-from: 4px; }
+.pp-popover__panel[data-side="left"], .pp-popover__panel[data-side="right"] { --pp-menu-from: 0px; }
+.papier .pp-popover__panel:focus-visible { outline-offset: -3px; }
+.pp-popover__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: var(--papier-space-3); }
+.pp-popover__header:not(:has(.pp-popover__title)) { position: absolute; top: 8px; inset-inline-end: 8px; margin: 0; }
+.pp-popover__title { margin: 2px 0 0; font: 500 var(--papier-type-subtitle-size)/1.3 var(--papier-font-display); letter-spacing: var(--papier-type-subtitle-tracking); }
+.pp-popover__close {
+  flex: none; display: grid; place-items: center; width: 36px; height: 36px; margin: -6px; margin-inline-start: 0;
+  border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer;
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-popover__close:hover { background: var(--papier-color-surface-sunken); }
+.pp-popover__header:not(:has(.pp-popover__title)) + .pp-popover__body { padding-inline-end: 32px; }
+@media (prefers-reduced-motion: reduce) { .pp-popover__panel { animation: none; } }
+.pp-popover__panel:dir(rtl) { transform-origin: top right; }
+}

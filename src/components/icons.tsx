@@ -26,3 +26,13 @@ export const Moon = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path 
 export const Spinner = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base} {...p} className="pp-spinner"><path d="M12 3a9 9 0 1 0 9 9" /></svg>
 );
+export const ChevronUp = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="m6 15 6-6 6 6" /></svg>;
+export const ArrowUp = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="M12 20V5M6 11l6-6 6 6" /></svg>;
+export const ArrowDown = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="M12 4v15M6 13l6 6 6-6" /></svg>;
+/** Up and down chevrons: a column that can be sorted but is not yet. */
+export const Sort = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="m8 9 4-4 4 4M8 15l4 4 4-4" /></svg>;
+export const Eye = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" /></svg>;
+export const EyeOff = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="M10.6 5.6A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-2.6 3.4M6.6 6.6C3.9 8.3 2.5 12 2.5 12S6 18.5 12 18.5c1.9 0 3.5-.6 4.9-1.5M9.9 9.9a3 3 0 0 0 4.2 4.2M4 4l16 16" /></svg>;
+export const Upload = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="M12 15V4M7 9l5-5 5 5M5 15v3.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V15" /></svg>;
+export const File = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><path d="M13.5 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10a1.5 1.5 0 0 0 1.5-1.5V8.5z" /><path d="M13.5 3.5v5h5" /></svg>;
+export const Calendar = (p: SVGProps<SVGSVGElement>) => <svg {...base} {...p}><rect x="4" y="5.5" width="16" height="14.5" rx="2.5" /><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" /></svg>;
