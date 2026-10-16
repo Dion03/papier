@@ -14,6 +14,9 @@
   `showOptions` en `noResults`, en de functies `page`, `pageOf` en `results`.
 - Contrastcheck: twee nieuwe paren (focus op verdiept vlak, tekst op de gevarenknop), samen 26.
 - Hoogcontrastmodus: de actieve optie en de huidige pagina blijven zichtbaar.
+- Dialog, AlertDialog en Sheet geven de focus na sluiten ook in Safari terug aan de knop
+  die ze opende. Safari focust een knop niet bij een klik; Papier onthoudt daarom de laatst
+  gebruikte knop. Nieuw: `returnFocusTo` om zelf te kiezen waar de focus heen gaat.
 - Fix: `asChild` overschreef een prop van het kind met `undefined` (bijvoorbeeld `href` van
   een routerlink die `to` gebruikt). Papier zet nu alleen props die een waarde hebben.
 

@@ -1,7 +1,7 @@
-import { createRef, forwardRef, useState, type AnchorHTMLAttributes } from 'react';
-import { render, screen, act } from '@testing-library/react';
+import { createRef, forwardRef, useRef, useState, type AnchorHTMLAttributes } from 'react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AlertDialog, Breadcrumb, BreadcrumbItem, Button, Combobox, Pagination, Papier, englishLabels, paginationRange } from '../src';
+import { AlertDialog, Breadcrumb, BreadcrumbItem, Button, Combobox, Dialog, Pagination, Papier, Sheet, englishLabels, paginationRange } from '../src';
 
 const platen = [
   { value: 'uitzinnig', label: 'Uitzinnig', description: 'Froukje' },
@@ -216,4 +216,52 @@ describe('Button blijft werken naast AlertDialog', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Annuleren' }));
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
+});
+
+describe('focus terug na sluiten (Dialog, AlertDialog, Sheet)', () => {
+  function Demo({ kind, withTarget = false }: { kind: 'dialog' | 'alert' | 'sheet'; withTarget?: boolean }) {
+    const [open, setOpen] = useState(false);
+    const target = useRef<HTMLInputElement>(null);
+    const close = () => setOpen(false);
+    const back = withTarget ? target : undefined;
+    return (
+      <>
+        <button onClick={() => setOpen(true)}>Open</button>
+        <input ref={target} aria-label="Doel" />
+        {kind === 'dialog' && <Dialog open={open} onClose={close} title="D" returnFocusTo={back} footer={<button onClick={close}>Klaar</button>} />}
+        {kind === 'alert' && <AlertDialog open={open} onClose={close} onConfirm={() => {}} title="A" confirmLabel="Klaar" returnFocusTo={back} />}
+        {kind === 'sheet' && <Sheet open={open} onClose={close} title="S" returnFocusTo={back} footer={<button onClick={close}>Klaar</button>} />}
+      </>
+    );
+  }
+
+  for (const kind of ['dialog', 'alert', 'sheet'] as const) {
+    it(`${kind}: terug naar de opener, ook als een klik hem niet focuste (Safari)`, async () => {
+      render(<Demo kind={kind} />);
+      const opener = screen.getByRole('button', { name: 'Open' });
+      // Safari: a click does not focus the button, so activeElement stays <body>.
+      fireEvent.pointerDown(opener);
+      opener.click();
+      expect(document.activeElement).not.toBe(opener);
+      await userEvent.click(screen.getByRole('button', { name: 'Klaar', hidden: true }));
+      expect(opener).toHaveFocus();
+    });
+
+    it(`${kind}: terug naar de opener als de klik een container focuste (WebKit)`, async () => {
+      render(<main tabIndex={-1}><Demo kind={kind} /></main>);
+      const opener = screen.getByRole('button', { name: 'Open' });
+      fireEvent.pointerDown(opener);
+      screen.getByRole('main').focus();
+      opener.click();
+      await userEvent.click(screen.getByRole('button', { name: 'Klaar', hidden: true }));
+      expect(opener).toHaveFocus();
+    });
+
+    it(`${kind}: returnFocusTo wint`, async () => {
+      render(<Demo kind={kind} withTarget />);
+      await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Klaar', hidden: true }));
+      expect(screen.getByRole('textbox', { name: 'Doel' })).toHaveFocus();
+    });
+  }
 });

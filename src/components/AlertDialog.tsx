@@ -1,4 +1,5 @@
-import { forwardRef, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { forwardRef, useEffect, useId, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useModalDialog } from '../lib/useModalDialog';
 import { useMergedRefs } from '../lib/slot';
 import { cx } from '../lib/cx';
 import { useLabels } from '../lib/labels';
@@ -22,6 +23,8 @@ export interface AlertDialogProps {
   cancelLabel?: string;
   /** `danger` for actions that delete or cannot be undone. */
   tone?: 'default' | 'danger';
+  /** Where focus goes after closing. Defaults to the element that opened it. */
+  returnFocusTo?: RefObject<HTMLElement | null>;
   className?: string;
 }
 
@@ -31,35 +34,15 @@ export interface AlertDialogProps {
  * on Cancel so Enter never triggers a destructive action by accident.
  */
 export const AlertDialog = forwardRef<HTMLDialogElement, AlertDialogProps>(function AlertDialog(
-  { open, onClose, onConfirm, title, description, children, confirmLabel, cancelLabel, tone = 'default', className }, forwardedRef,
+  { open, onClose, onConfirm, title, description, children, confirmLabel, cancelLabel, tone = 'default', returnFocusTo, className }, forwardedRef,
 ) {
   const labels = useLabels();
   const ref = useRef<HTMLDialogElement>(null);
   const dialogRef = useMergedRefs(ref, forwardedRef);
   const cancel = useRef<HTMLButtonElement>(null);
-  const opener = useRef<HTMLElement | null>(null);
   const [busy, setBusy] = useState(false);
   const id = useId();
-
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    if (open && !d.open) {
-      opener.current = document.activeElement as HTMLElement | null;
-      d.showModal();
-      cancel.current?.focus();
-    } else if (!open && d.open) {
-      d.close();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    const onNativeClose = () => { opener.current?.focus?.(); if (open) onClose(); };
-    d.addEventListener('close', onNativeClose);
-    return () => d.removeEventListener('close', onNativeClose);
-  }, [open, onClose]);
+  useModalDialog(ref, open, onClose, { returnFocusTo, onOpen: () => cancel.current?.focus() });
 
   useEffect(() => { if (!open) setBusy(false); }, [open]);
 
