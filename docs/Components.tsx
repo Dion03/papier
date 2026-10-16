@@ -401,7 +401,7 @@ const f = useField({ hint, error });
   title="Plaat terug in de hoes?"
   footer={<Button onClick={store}>Opbergen</Button>}
 />`}
-        a11y={['showModal() geeft een echte focusval en maakt de achtergrond inert.', 'De titel is de toegankelijke naam, de beschrijving staat in aria-describedby.', 'Na sluiten keert de focus terug naar de knop die het venster opende.']}>
+        a11y={['showModal() geeft een echte focusval en maakt de achtergrond inert.', 'De titel is de toegankelijke naam, de beschrijving staat in aria-describedby.', 'Na sluiten keert de focus terug naar de knop die het venster opende, ook in Safari, waar een klik een knop niet focust. Met returnFocusTo kies je zelf een doel.']}>
         <DialogDemo />
       </Example>
 
@@ -450,6 +450,7 @@ const f = useField({ hint, error });
           { name: 'Menu align', type: "'start' | 'center' | 'end'", note: 'Uitlijning langs de knop.' },
           { name: 'Tooltip placement', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Voorkeurskant; klapt om aan de rand. Standaard top.' },
           { name: 'ref', type: 'Ref', note: 'Menu: de triggerknop. Dialog en Sheet: het dialog-element.' },
+          { name: 'Sheet returnFocusTo', type: 'RefObject<HTMLElement>', note: 'Waar de focus na sluiten heen gaat; standaard de opener. Ook op Dialog en AlertDialog.' },
         ]}>
         <OverlayDemo />
       </Example>

@@ -1,4 +1,5 @@
-import { forwardRef, useEffect, useId, useRef, type ReactNode } from 'react';
+import { forwardRef, useId, useRef, type ReactNode, type RefObject } from 'react';
+import { useModalDialog } from '../lib/useModalDialog';
 import { useMergedRefs } from '../lib/slot';
 import { cx } from '../lib/cx';
 import { Close } from './icons';
@@ -16,6 +17,8 @@ export interface DialogProps {
   closeLabel?: string;
   dismissOnBackdrop?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  /** Where focus goes after closing. Defaults to the element that opened it. */
+  returnFocusTo?: RefObject<HTMLElement | null>;
   className?: string;
 }
 
@@ -23,31 +26,12 @@ export interface DialogProps {
  * A modal on the native <dialog> element: real focus trap, Escape, inert background,
  * and focus returns to whatever opened it.
  */
-export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(function Dialog({ open, onClose, title, description, children, footer, closeLabel, dismissOnBackdrop = true, size = 'md', className }, forwardedRef) {
+export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(function Dialog({ open, onClose, title, description, children, footer, closeLabel, dismissOnBackdrop = true, size = 'md', returnFocusTo, className }, forwardedRef) {
   const labels = useLabels();
   const ref = useRef<HTMLDialogElement>(null);
   const dialogRef = useMergedRefs(ref, forwardedRef);
-  const opener = useRef<HTMLElement | null>(null);
   const id = useId();
-
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    if (open && !d.open) {
-      opener.current = document.activeElement as HTMLElement | null;
-      d.showModal();
-    } else if (!open && d.open) {
-      d.close();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    const onNativeClose = () => { opener.current?.focus?.(); if (open) onClose(); };
-    d.addEventListener('close', onNativeClose);
-    return () => d.removeEventListener('close', onNativeClose);
-  }, [open, onClose]);
+  useModalDialog(ref, open, onClose, { returnFocusTo });
 
   return (
     <dialog

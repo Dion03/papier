@@ -1,4 +1,5 @@
-import { forwardRef, useEffect, useId, useRef, type ReactNode } from 'react';
+import { forwardRef, useId, useRef, type ReactNode, type RefObject } from 'react';
+import { useModalDialog } from '../lib/useModalDialog';
 import { useMergedRefs } from '../lib/slot';
 import { cx } from '../lib/cx';
 import { useLabels } from '../lib/labels';
@@ -13,6 +14,8 @@ export interface SheetProps {
   side?: 'right' | 'left' | 'bottom' | 'top';
   children?: ReactNode;
   footer?: ReactNode;
+  /** Where focus goes after closing. Defaults to the element that opened it. */
+  returnFocusTo?: RefObject<HTMLElement | null>;
   className?: string;
 }
 
@@ -20,25 +23,12 @@ export interface SheetProps {
  * A panel that slides in from an edge: the mobile navigation sheet, filters, details.
  * Built on the native modal <dialog>, like Dialog.
  */
-export const Sheet = forwardRef<HTMLDialogElement, SheetProps>(function Sheet({ open, onClose, title, hideTitle, side = 'right', children, footer, className }, forwardedRef) {
+export const Sheet = forwardRef<HTMLDialogElement, SheetProps>(function Sheet({ open, onClose, title, hideTitle, side = 'right', children, footer, returnFocusTo, className }, forwardedRef) {
   const labels = useLabels();
   const ref = useRef<HTMLDialogElement>(null);
   const dialogRef = useMergedRefs(ref, forwardedRef);
-  const opener = useRef<HTMLElement | null>(null);
   const id = useId();
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    if (open && !d.open) { opener.current = document.activeElement as HTMLElement | null; d.showModal(); }
-    else if (!open && d.open) d.close();
-  }, [open]);
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    const onNativeClose = () => { opener.current?.focus?.(); if (open) onClose(); };
-    d.addEventListener('close', onNativeClose);
-    return () => d.removeEventListener('close', onNativeClose);
-  }, [open, onClose]);
+  useModalDialog(ref, open, onClose, { returnFocusTo });
   return (
     <dialog ref={dialogRef} className={cx('pp-sheet', className)} data-side={side} aria-labelledby={`${id}-title`}
       onCancel={(e) => { e.preventDefault(); onClose(); }} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
