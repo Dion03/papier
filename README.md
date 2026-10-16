@@ -26,8 +26,7 @@ export function App() {
 }
 ```
 
-Werkt in Vite en in Next.js (App Router): de build is een client-module en alles
-rendert op de server.
+Werkt in Vite en in Next.js (App Router), met React 18 of 19. Alles rendert op de server.
 
 ## Componenten (34)
 
@@ -130,6 +129,53 @@ winnen daardoor altijd, ongeacht specificiteit:
   Laad de preflight in een laag (`@import 'tailwindcss/base' layer(reset);` met
   postcss-import) of zet `corePlugins.preflight` uit.
 
+### Next.js en server components
+
+De build heeft één bestand per module. Alleen modules met hooks, context of events
+beginnen met `'use client'`; Text, VisuallyHidden, Stack, Container, Surface, Tag, Table,
+Skeleton, de iconen en de themafuncties blijven server components en voegen geen
+JavaScript aan je pagina toe. Welke modules dat zijn staat in
+`scripts/server-modules.mjs`; een test controleert dat ze geen client-code bevatten, en
+`scripts/check-build.mjs` dat de build het goed doet.
+
+### Eigen thema
+
+Componenten gebruiken alleen kleurrollen (`--papier-color-*`). Een merk is dus een
+andere waarde voor een paar rollen:
+
+```tsx
+import { Papier, themeStyle, checkTheme } from '@dionbm/papier';
+
+const merk = { action: '#1f4e8c', 'action-hover': '#183d6e', 'on-action': '#ffffff' };
+
+<Papier theme="light" style={themeStyle(merk)}>…</Papier>
+```
+
+`checkTheme(merk, 'light')` legt de kleuren langs dezelfde 26 contrastparen als de build
+en geeft per paar de verhouding terug. Zet het in een test, dan kan geen merkkleur tekst
+onleesbaar maken:
+
+```ts
+expect(checkTheme(merk).filter((r) => !r.ok)).toEqual([]);
+```
+
+Alle rollen staan in `colorRoles`, de ingebouwde waarden in `themeColors('light')` en
+`themeColors('dark')`. Voor licht én donker zet je de variabelen in je eigen CSS:
+
+```css
+[data-papier-theme="light"] { --papier-color-action: #1f4e8c; }
+[data-papier-theme="dark"] { --papier-color-action: #9cc0ff; }
+```
+
+### Van rechts naar links
+
+Zet `dir="rtl"` op `<html>` (of op `<Papier>`). Papier gebruikt logische CSS
+(`inset-inline-start`, `text-align: start`), dus uitlijning, tabellen, toasts en velden
+draaien mee. Menu's lijnen `align="start"` uit op de rechterkant van de knop, en pijlen
+in Link, Breadcrumb en Pagination spiegelen. Geef je eigen richtingsiconen
+`className="pp-flip-rtl"`, bijvoorbeeld in `iconEnd` van een Button. Zet de richting
+vóór het renderen: wie `dir` later wisselt, moet de pagina opnieuw renderen.
+
 ### Refs
 
 Elk component met een eigen element geeft `ref` door: Dialog en Sheet naar het
@@ -143,6 +189,9 @@ geen eigen element; de ref van zijn kind blijft gewoon werken.
 
 - `tokens.css`: CSS-variabelen (`--papier-*`), thema's `light`, `dark` en `system`;
 - `tokens.json`: alle waarden voor andere tools;
+- `tokens.dtcg.json`: dezelfde waarden in het W3C-formaat voor design tokens (DTCG), voor
+  Tokens Studio, Figma-plugins en Style Dictionary. Themakleuren verwijzen naar het palet
+  (`{primitive.paper}`), zodat een ontwerptool laat zien waar elke rol vandaan komt;
 - `android/PapierTokens.kt`: dezelfde kleuren, ruimte, vorm, type en beweging voor Jetpack Compose.
 
 ## Teksten
@@ -172,18 +221,22 @@ Teksten met een getal, zoals "Pagina 3 van 12" en "4 resultaten", zijn functies:
 ## Kwaliteit
 
 ```bash
-npm run check      # typecheck, contrast, unit-, axe- en SSR-tests, build
+npm run check      # props-docs, typecheck, contrast, unit-, axe- en SSR-tests, build en buildcheck
 npm run test:e2e   # Playwright: axe, hoogcontrast, toetsenbord, visuele regressie
 ```
 
 - `scripts/contrast.mjs` controleert 26 kleurparen per thema volgens WCAG 2.2.
 - Vitest: axe op elk component in licht en donker, gedragstests voor toetsenbord,
-  focus en ARIA, en een server-rendertest zonder `window`.
+  focus en ARIA, en een server-rendertest zonder `window`. CI draait ze ook op React 18.
+- `scripts/build-props.mjs` haalt de API-tabellen van de docs uit de TypeScript-types;
+  `npm run check` faalt als `docs/props.json` achterloopt.
 - Playwright: axe op de docs in licht, donker en hoogcontrast, toetsenbordroutes en
-  screenshotvergelijking per component. CI draait Chromium, Firefox en WebKit.
+  screenshotvergelijking per component, ook met `dir="rtl"`. CI draait Chromium, Firefox
+  en WebKit.
 - Lokaal met een eigen Chromium: `PAPIER_CHROMIUM=/pad/naar/chromium npm run test:e2e`.
 
-Nog niet gedaan: een handmatige test met VoiceOver en NVDA.
+Met de hand, voor elke minor-release: de [schermlezertest](docs/schermlezertest.md) met
+NVDA en VoiceOver. Die heb ik nog niet gedaan.
 
 ## Releasen
 

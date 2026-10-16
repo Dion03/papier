@@ -11,6 +11,17 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run check            # typecheck, contrast, unit + axe tests, build
+  react18:
+    # The peer dependency promises React 18 too, so the unit, axe and SSR tests also run on it.
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm install --no-save react@18 react-dom@18
+      - run: npx vitest run
   browsers:
     runs-on: ubuntu-latest
     needs: check

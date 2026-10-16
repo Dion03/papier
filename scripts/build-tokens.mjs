@@ -3,6 +3,7 @@
 import { mkdirSync, writeFileSync, existsSync, copyFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as t from '../src/tokens/tokens.mjs';
+import { toDtcg } from './dtcg.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const vars = (obj, prefix) => Object.entries(obj).map(([k, v]) => `  --papier-${prefix}${k}: ${v};`).join('\n');
@@ -52,6 +53,7 @@ writeFileSync(`${root}src/styles/tokens.css`, css);
 if (existsSync(`${root}dist`)) {
   copyFileSync(`${root}src/styles/tokens.css`, `${root}dist/tokens.css`);
   copyFileSync(`${root}src/styles/fonts.css`, `${root}dist/fonts.css`);
+  writeFileSync(`${root}dist/tokens.dtcg.json`, `${JSON.stringify(toDtcg(), null, 2)}\n`);
   writeFileSync(`${root}dist/tokens.json`, JSON.stringify({ primitives: t.primitives, themes: t.themes, font: t.font, type: t.type, space: t.space, radius: t.radius, motion: t.motion, size: t.size }, null, 2));
 }
 console.log('tokens written');

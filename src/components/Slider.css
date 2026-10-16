@@ -23,4 +23,5 @@
 .papier .pp-slider__input:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--papier-color-focus); outline-offset: 2px; }
 .papier .pp-slider__input:focus-visible::-moz-range-thumb { outline: 3px solid var(--papier-color-focus); outline-offset: 2px; }
 .pp-slider__input:disabled { opacity: 0.45; cursor: not-allowed; }
+.pp-slider__input:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(270deg, var(--pp-fill-color) var(--pp-fill), var(--pp-track) var(--pp-fill)); }
 }

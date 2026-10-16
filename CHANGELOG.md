@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.5.0 (nog niet uitgebracht)
+
+- Server components: de build heeft nu één bestand per module, en alleen modules met hooks,
+  context of events zijn `'use client'`. Text, VisuallyHidden, Stack, Container, Surface,
+  Tag, Table, Skeleton, de iconen en de themafuncties blijven server components in Next.js.
+  De paden in `exports` zijn gelijk gebleven; wie rechtstreeks `dist/papier.js` als één
+  bundel kopieerde, krijgt nu een map met modules.
+- Eigen thema: `themeStyle()` zet kleurrollen als CSS-variabelen, `checkTheme()` legt ze langs
+  de 26 contrastparen van de build, plus `colorRoles` en `themeColors()`.
+- Van rechts naar links: logische CSS in Select, Table, Toast, Dialog, Combobox, Menu en
+  Switch, menu's die `align` spiegelen, gespiegelde pijlen in Link, Breadcrumb en Pagination,
+  en de klasse `pp-flip-rtl` voor eigen iconen. Slider en Progress vullen van rechts.
+- Fix: de markering van SegmentedControl en Tabs meet opnieuw als de opties breder worden,
+  bijvoorbeeld wanneer een webfont later laadt.
+- Tokens: `tokens.dtcg.json` in het W3C-formaat voor design tokens, voor Tokens Studio,
+  Figma en Style Dictionary.
+- Docs: een API-tabel per component, gemaakt uit de TypeScript-types. `npm run check` faalt
+  als die achterloopt.
+- Kwaliteit: CI draait de unit-, axe- en SSR-tests ook op React 18; een e2e-test met
+  `dir="rtl"`; `scripts/check-build.mjs` controleert de build; een checklist voor de
+  schermlezertest met NVDA en VoiceOver staat in `docs/schermlezertest.md`.
+
 ## 0.4.0 (nog niet uitgebracht)
 
 - Nieuw: `Combobox`, een invoerveld met een lijst die meezoekt (WAI-ARIA combobox). Zoekt

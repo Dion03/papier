@@ -40,7 +40,9 @@ export const SegmentedControl = forwardRef(function SegmentedControl<T extends s
     };
     measure();
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    // Options too: their width changes when a web font arrives, the group's may not.
     if (groupRef.current) ro?.observe(groupRef.current);
+    refs.current.forEach((el) => el && ro?.observe(el));
     return () => ro?.disconnect();
   }, [index, options.length]);
 

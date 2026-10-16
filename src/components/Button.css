@@ -50,4 +50,6 @@
 .pp-icon-button[data-variant="disc"]:hover { background: var(--papier-color-accent); color: var(--papier-color-on-action-strong); }
 .pp-icon-button:disabled { opacity: 0.45; cursor: not-allowed; }
 .pp-spinner-wrap { display: inline-flex; color: var(--papier-color-accent); }
+/* Right-to-left: the end icon nudges towards the end, i.e. to the left. */
+.pp-button:dir(rtl):hover .pp-button__end { transform: translateX(-3px); }
 }

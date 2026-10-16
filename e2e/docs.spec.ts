@@ -125,6 +125,36 @@ test('alertdialog: focus op Annuleren, klik ernaast sluit niet, focus keert teru
   await expect(opener).toBeFocused();
 });
 
+test('rechts-naar-links: geen horizontale scroll, axe schoon, menu en pijlen gespiegeld', async ({ page }) => {
+  // As an app would: dir="rtl" in the HTML itself, before anything renders.
+  await page.route('/', async (route) => {
+    const res = await route.fetch();
+    await route.fulfill({ response: res, body: (await res.text()).replace('<html ', '<html dir="rtl" ') });
+  });
+  await open(page, 'light');
+  expect(await page.evaluate(() => getComputedStyle(document.body).direction)).toBe('rtl');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  expect(await axe(page)).toEqual([]);
+  // align="start" lines the menu up with the button's start edge, which is now the right edge.
+  const trigger = page.getByRole('button', { name: 'Acties', exact: true });
+  await trigger.click();
+  const m = (await page.getByRole('menu').boundingBox())!;
+  const t = (await trigger.boundingBox())!;
+  expect(Math.abs((m.x + m.width) - (t.x + t.width))).toBeLessThanOrEqual(1);
+  await page.keyboard.press('Escape');
+  expect(await page.locator('.pp-breadcrumb__sep').first().evaluate((el) => getComputedStyle(el).scale)).toBe('-1 1');
+  // The SegmentedControl indicator sits under the chosen option.
+  const chosen = (await page.locator('#keuzes .pp-segmented__option[aria-checked="true"]').first().boundingBox())!;
+  const marker = (await page.locator('#keuzes .pp-segmented__indicator').first().boundingBox())!;
+  expect(Math.abs(marker.x - chosen.x)).toBeLessThanOrEqual(2);
+  // A checked switch has its thumb at the end, i.e. on the left.
+  const track = page.locator('#keuzes .pp-switch__track').first();
+  if ((await track.getAttribute('aria-checked')) !== 'true') await track.click();
+  const thumb = (await track.locator('.pp-switch__thumb').boundingBox())!;
+  const box = (await track.boundingBox())!;
+  expect(thumb.x + thumb.width / 2).toBeLessThan(box.x + box.width / 2);
+});
+
 test('eigen CSS wint van Papier dankzij @layer papier', async ({ page }) => {
   await open(page, 'light');
   await page.addStyleTag({ content: '.pp-button { background: rgb(1, 2, 3); }' });

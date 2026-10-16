@@ -24,4 +24,7 @@
 }
 .pp-text[data-tone="muted"] { color: var(--papier-color-text-muted); }
 .pp-text[data-tone="accent"] { color: var(--papier-color-accent-text); }
+/* Arrows and chevrons that point "forward" mirror in right-to-left text. Add
+   .pp-flip-rtl to your own directional icons, e.g. in Button iconEnd. */
+.pp-flip-rtl:dir(rtl), .pp-link__arrow:dir(rtl), .pp-breadcrumb__sep:dir(rtl), .pp-pagination__control svg:dir(rtl) { scale: -1 1; }
 }

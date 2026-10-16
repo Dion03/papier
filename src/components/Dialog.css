@@ -17,7 +17,7 @@
 .pp-dialog__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .pp-dialog__title { margin: 4px 0 0; font: 500 var(--papier-type-title-size)/var(--papier-type-title-line) var(--papier-font-display); letter-spacing: var(--papier-type-title-tracking); text-wrap: balance; }
 .pp-dialog__close {
-  flex: none; display: grid; place-items: center; width: var(--papier-hit-target); height: var(--papier-hit-target); margin: -6px -10px 0 0;
+  flex: none; display: grid; place-items: center; width: var(--papier-hit-target); height: var(--papier-hit-target); margin-block-start: -6px; margin-inline-end: -10px;
   border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer;
   transition: background-color var(--papier-dur-color) var(--papier-ease-arrive);
 }

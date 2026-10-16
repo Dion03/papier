@@ -16,4 +16,5 @@
 .pp-link__arrow { transition: transform 200ms ease; }
 .pp-link:hover .pp-link__arrow { transform: translate(3px, -3px); }
 .papier .pp-link:focus-visible { border-radius: 4px; }
+.pp-link:dir(rtl):hover .pp-link__arrow { transform: translate(-3px, -3px); }
 }

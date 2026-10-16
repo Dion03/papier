@@ -1,0 +1,1550 @@
+{
+  "Papier": [
+    {
+      "name": "labels",
+      "type": "Partial<PapierLabels>",
+      "required": false,
+      "default": null,
+      "doc": "Override built-in strings, e.g. `englishLabels` or a partial set."
+    },
+    {
+      "name": "motion",
+      "type": "'full' | 'reduced'",
+      "required": false,
+      "default": "'full'",
+      "doc": "`reduced` makes every Papier transition instant, independent of the OS setting."
+    },
+    {
+      "name": "theme",
+      "type": "'light' | 'dark' | 'system'",
+      "required": false,
+      "default": "'light'",
+      "doc": "Colour theme for everything inside. `system` follows the OS setting."
+    }
+  ],
+  "Text": [
+    {
+      "name": "as",
+      "type": "ElementType",
+      "required": false,
+      "default": null,
+      "doc": "Element to render; defaults to a sensible tag per variant."
+    },
+    {
+      "name": "tone",
+      "type": "'default' | 'muted' | 'accent'",
+      "required": false,
+      "default": "'default'",
+      "doc": ""
+    },
+    {
+      "name": "variant",
+      "type": "'display' | 'headline' | 'title' | 'subtitle' | 'body' | 'body-lg' | 'small' | 'label'",
+      "required": false,
+      "default": "'body'",
+      "doc": "Typographic role from the Papier scale."
+    }
+  ],
+  "Button": [
+    {
+      "name": "asChild",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Render the single child element (e.g. a router link) with the button's look and behaviour instead of a <button>. Its children become the label."
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "iconEnd",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "iconStart",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": "Shows a spinner and blocks activation while keeping the button focusable."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    },
+    {
+      "name": "variant",
+      "type": "'primary' | 'ink' | 'secondary' | 'ghost' | 'danger'",
+      "required": false,
+      "default": "'primary'",
+      "doc": ""
+    }
+  ],
+  "IconButton": [
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "Accessible name; required because the button only shows an icon."
+    },
+    {
+      "name": "asChild",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Render this element (e.g. a router link) instead of a <button>; it shows the icon."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Only with `asChild`: the element to render."
+    },
+    {
+      "name": "size",
+      "type": "'md' | 'lg'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    },
+    {
+      "name": "variant",
+      "type": "'disc' | 'outline' | 'ghost'",
+      "required": false,
+      "default": "'outline'",
+      "doc": "`disc` is the portfolio's ink circle that turns vermilion on hover."
+    }
+  ],
+  "Link": [
+    {
+      "name": "asChild",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Render the single child element (e.g. Next.js or React Router `Link`) with Papier's link style."
+    },
+    {
+      "name": "external",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Opens in a new tab with safe rel and an announced hint."
+    },
+    {
+      "name": "variant",
+      "type": "'underline' | 'quiet' | 'arrow' | 'accent'",
+      "required": false,
+      "default": "'underline'",
+      "doc": "`underline`: a resting line that darkens on hover. `quiet`: the line rises only on hover. `arrow`: label with a thin arrow that nudges up-right."
+    }
+  ],
+  "Surface": [
+    {
+      "name": "as",
+      "type": "ElementType",
+      "required": false,
+      "default": "'div'",
+      "doc": ""
+    },
+    {
+      "name": "elevation",
+      "type": "'flat' | 'raised' | 'object'",
+      "required": false,
+      "default": "'flat'",
+      "doc": "`object` adds the portfolio's tactile shadow with light top and dark bottom edge. Prose stays flat."
+    },
+    {
+      "name": "material",
+      "type": "'ink' | 'paper' | 'sunken' | 'sage' | 'sage-soft' | 'coral'",
+      "required": false,
+      "default": "'paper'",
+      "doc": "The material of the module. Text colour follows it automatically."
+    },
+    {
+      "name": "padding",
+      "type": "'none' | 'sm' | 'md' | 'lg'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    },
+    {
+      "name": "radius",
+      "type": "'md' | 'lg' | 'xl'",
+      "required": false,
+      "default": "'lg'",
+      "doc": ""
+    }
+  ],
+  "Tag": [
+    {
+      "name": "tone",
+      "type": "'neutral' | 'sage' | 'coral' | 'accent' | 'outline'",
+      "required": false,
+      "default": "'neutral'",
+      "doc": ""
+    }
+  ],
+  "Notice": [
+    {
+      "name": "action",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "A recovery or follow-up action, e.g. a Button."
+    },
+    {
+      "name": "live",
+      "type": "'off' | 'polite' | 'assertive'",
+      "required": false,
+      "default": null,
+      "doc": "Announce changes: `polite` for results, `assertive` only for errors that block. Default depends on tone."
+    },
+    {
+      "name": "onDismiss",
+      "type": "() => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "tone",
+      "type": "'danger' | 'info' | 'success' | 'warning'",
+      "required": false,
+      "default": "'info'",
+      "doc": ""
+    }
+  ],
+  "Progress": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": "Visible label; also the accessible name."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "default": "100",
+      "doc": ""
+    },
+    {
+      "name": "tone",
+      "type": "'action' | 'accent'",
+      "required": false,
+      "default": "'action'",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": "Omit for an indeterminate state."
+    },
+    {
+      "name": "valueText",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Text shown next to the label, e.g. \"3 van 5\". Defaults to a percentage."
+    }
+  ],
+  "Field": [
+    {
+      "name": "children",
+      "type": "ReactNode | ((control: FieldControlProps) => ReactNode)",
+      "required": true,
+      "default": null,
+      "doc": "The control: a render function that gets the props, or elements that call useFieldControl()."
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "describedBy",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Extra ids for the control's aria-describedby."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Error text. Sets aria-invalid and is announced with the field."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Visually hides the label while keeping it as the accessible name."
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Helper text below the field."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Id for the control."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Shows the asterisk; set `required` on the control as well."
+    }
+  ],
+  "FieldLabel": [
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Adds a decorative asterisk; mark the control itself as required too."
+    },
+    {
+      "name": "visuallyHidden",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Visually hides the label while keeping it as the accessible name."
+    }
+  ],
+  "FieldControl": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "aria-invalid",
+      "type": "true",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "TextField": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Error text. Sets aria-invalid and is announced with the field."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Visually hides the label while keeping it as the accessible name."
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Helper text below the field."
+    },
+    {
+      "name": "multiline",
+      "type": "false",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "prefix",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Before the value: an icon or a unit such as €. Decorative, so name the unit in the label or hint too."
+    },
+    {
+      "name": "suffix",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "After the value: an icon or a unit such as kg. Decorative, so name the unit in the label or hint too."
+    }
+  ],
+  "TextArea": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "multiline",
+      "type": "true",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Error text. Sets aria-invalid and is announced with the field."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Visually hides the label while keeping it as the accessible name."
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Helper text below the field."
+    }
+  ],
+  "Checkbox": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Switch": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": ""
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Slider": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "formatValue",
+      "type": "(value: number) => string",
+      "required": false,
+      "default": "String",
+      "doc": "Formats the visible value and aria-valuetext, e.g. seconds as 1:24."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "default": "100",
+      "doc": ""
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: number) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "SegmentedControl": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "Accessible name for the group."
+    },
+    {
+      "name": "options",
+      "type": "Array<SegmentOption<T>>",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "T",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: T) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "T",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Tabs": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(v: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "TabList": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Tab": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "TabPanel": [
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Disclosure": [
+    {
+      "name": "summary",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Dialog": [
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "required": true,
+      "default": null,
+      "doc": "Called for Escape, the close button and (by default) a backdrop click."
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "closeLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "dismissOnBackdrop",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "doc": ""
+    },
+    {
+      "name": "footer",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Actions, e.g. Cancel and Confirm buttons."
+    },
+    {
+      "name": "returnFocusTo",
+      "type": "RefObject<HTMLElement | null>",
+      "required": false,
+      "default": null,
+      "doc": "Where focus goes after closing. Defaults to the element that opened it."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    }
+  ],
+  "Select": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "options",
+      "type": "SelectOption[]",
+      "required": false,
+      "default": null,
+      "doc": "Options; or pass <option>/<optgroup> children yourself."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "RadioGroup": [
+    {
+      "name": "legend",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "options",
+      "type": "Array<RadioOption<T>>",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "appearance",
+      "type": "'list' | 'card'",
+      "required": false,
+      "default": "'list'",
+      "doc": "`card` gives each option a bordered tile, handy for plans or modes."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "T",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: T) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "orientation",
+      "type": "'vertical' | 'horizontal'",
+      "required": false,
+      "default": "'vertical'",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "T",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Tooltip": [
+    {
+      "name": "children",
+      "type": "ReactElement<Record<string, unknown>>",
+      "required": true,
+      "default": null,
+      "doc": "One focusable element, e.g. an IconButton. Its own ref keeps working."
+    },
+    {
+      "name": "content",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": "Extra description. Never the only name: an icon button still needs its own label."
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "required": false,
+      "default": "400",
+      "doc": "Hover delay in ms; keyboard focus shows it immediately."
+    },
+    {
+      "name": "placement",
+      "type": "'top' | 'bottom' | 'left' | 'right'",
+      "required": false,
+      "default": "'top'",
+      "doc": "Preferred side; flips to the opposite side when there is no room."
+    }
+  ],
+  "Menu": [
+    {
+      "name": "items",
+      "type": "MenuItem[]",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "trigger",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": "Content of the trigger button."
+    },
+    {
+      "name": "align",
+      "type": "'center' | 'start' | 'end'",
+      "required": false,
+      "default": "'start'",
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "side",
+      "type": "'top' | 'bottom' | 'left' | 'right'",
+      "required": false,
+      "default": "'bottom'",
+      "doc": "Preferred side of the trigger; flips when there is no room."
+    },
+    {
+      "name": "triggerLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Accessible name when the trigger is only an icon."
+    },
+    {
+      "name": "triggerVariant",
+      "type": "'secondary' | 'ghost' | 'icon'",
+      "required": false,
+      "default": "'secondary'",
+      "doc": ""
+    }
+  ],
+  "Table": [
+    {
+      "name": "caption",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "Required: names the table for screen readers and the scroll region."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "density",
+      "type": "'comfortable' | 'compact'",
+      "required": false,
+      "default": "'comfortable'",
+      "doc": ""
+    },
+    {
+      "name": "showCaption",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Show the caption visually as well."
+    }
+  ],
+  "Skeleton": [
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "height",
+      "type": "CSSProperties['height']",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "lines",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "doc": "Number of text lines; the last one is shorter."
+    },
+    {
+      "name": "shape",
+      "type": "'text' | 'block' | 'circle'",
+      "required": false,
+      "default": "'text'",
+      "doc": ""
+    },
+    {
+      "name": "width",
+      "type": "CSSProperties['width']",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Sheet": [
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "footer",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hideTitle",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Visually hide the title (it stays the accessible name), e.g. for a navigation sheet."
+    },
+    {
+      "name": "returnFocusTo",
+      "type": "RefObject<HTMLElement | null>",
+      "required": false,
+      "default": null,
+      "doc": "Where focus goes after closing. Defaults to the element that opened it."
+    },
+    {
+      "name": "side",
+      "type": "'right' | 'left' | 'bottom' | 'top'",
+      "required": false,
+      "default": "'right'",
+      "doc": ""
+    }
+  ],
+  "Stack": [
+    {
+      "name": "align",
+      "type": "CSSProperties['alignItems']",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "as",
+      "type": "ElementType",
+      "required": false,
+      "default": "'div'",
+      "doc": ""
+    },
+    {
+      "name": "direction",
+      "type": "'column' | 'row'",
+      "required": false,
+      "default": "'column'",
+      "doc": ""
+    },
+    {
+      "name": "gap",
+      "type": "Space",
+      "required": false,
+      "default": "4",
+      "doc": "Gap as a step of the Papier space scale (4 to 72 px)."
+    },
+    {
+      "name": "justify",
+      "type": "CSSProperties['justifyContent']",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "wrap",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Container": [
+    {
+      "name": "as",
+      "type": "ElementType",
+      "required": false,
+      "default": "'div'",
+      "doc": ""
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg' | 'full'",
+      "required": false,
+      "default": "'lg'",
+      "doc": "sm 720, md 1040, lg 1300 (the portfolio field), full."
+    }
+  ],
+  "Avatar": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "The person's or artist's name: used as alt text and for the initials fallback."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Set when the name is already written next to the avatar, to avoid saying it twice."
+    },
+    {
+      "name": "shape",
+      "type": "'circle' | 'square'",
+      "required": false,
+      "default": "'circle'",
+      "doc": ""
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "AlertDialog": [
+    {
+      "name": "confirmLabel",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "A verb for the action, e.g. \"Verwijderen\". Never \"OK\" or \"Ja\"."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "required": true,
+      "default": null,
+      "doc": "Called for Escape, Cancel and after a successful confirm."
+    },
+    {
+      "name": "onConfirm",
+      "type": "() => void | Promise<unknown>",
+      "required": true,
+      "default": null,
+      "doc": "The action. Return a promise to keep the dialog open with a loading button until it settles: it closes when the promise resolves and stays open when it rejects."
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": "A question that names the consequence, e.g. \"Plaat uit je collectie halen?\"."
+    },
+    {
+      "name": "cancelLabel",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "returnFocusTo",
+      "type": "RefObject<HTMLElement | null>",
+      "required": false,
+      "default": null,
+      "doc": "Where focus goes after closing. Defaults to the element that opened it."
+    },
+    {
+      "name": "tone",
+      "type": "'default' | 'danger'",
+      "required": false,
+      "default": "'default'",
+      "doc": "`danger` for actions that delete or cannot be undone."
+    }
+  ],
+  "Combobox": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "options",
+      "type": "ComboboxOption[]",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "string | null",
+      "required": false,
+      "default": "null",
+      "doc": ""
+    },
+    {
+      "name": "emptyText",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Shown when nothing matches; defaults to the \"no results\" label."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "filter",
+      "type": "((option: ComboboxOption, query: string) => boolean) | false",
+      "required": false,
+      "default": null,
+      "doc": "How typed text matches an option. `false` shows `options` as given (already filtered)."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "inputValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "The typed text, for searching on a server. Use with `filter={false}`."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Shows a loading line in the list, e.g. while a server search runs."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string | null, option: ComboboxOption | null) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onInputChange",
+      "type": "(text: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "string | null",
+      "required": false,
+      "default": null,
+      "doc": "The chosen option's value, or null for none."
+    }
+  ],
+  "Breadcrumb": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Name of the landmark; defaults to the \"breadcrumb\" label."
+    }
+  ],
+  "BreadcrumbItem": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "asChild",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Render the single child (e.g. Next.js or React Router `Link`) as the item's link."
+    },
+    {
+      "name": "current",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "The page you are on. An item without href or asChild is the current page too."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Pagination": [
+    {
+      "name": "page",
+      "type": "number",
+      "required": true,
+      "default": null,
+      "doc": "The current page, starting at 1."
+    },
+    {
+      "name": "pageCount",
+      "type": "number",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "getHref",
+      "type": "(page: number) => string",
+      "required": false,
+      "default": null,
+      "doc": "Makes every page a real link, so it can be opened in a new tab and crawled."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Name of the landmark; defaults to the \"pagination\" label."
+    },
+    {
+      "name": "linkAs",
+      "type": "ElementType",
+      "required": false,
+      "default": null,
+      "doc": "Component for those links, e.g. Next.js `Link`. It gets href, className, aria-* and children."
+    },
+    {
+      "name": "onPageChange",
+      "type": "(page: number) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called with the chosen page. Without getHref the pages are buttons."
+    },
+    {
+      "name": "siblings",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "doc": "Pages shown on each side of the current one."
+    }
+  ]
+}

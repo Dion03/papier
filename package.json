@@ -20,6 +20,7 @@
     "./papier.css": "./dist/papier.css",
     "./tokens.css": "./dist/tokens.css",
     "./tokens.json": "./dist/tokens.json",
+    "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
     "./fonts.css": "./dist/fonts.css",
     "./android/PapierTokens.kt": "./dist/android/PapierTokens.kt"
   },
@@ -29,13 +30,13 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "vite --config docs/vite.config.ts",
+    "dev": "node scripts/build-props.mjs && vite --config docs/vite.config.ts",
     "build": "vite build && tsc -p tsconfig.build.json && node scripts/build-tokens.mjs && node scripts/build-android.mjs",
-    "build:docs": "vite build --config docs/vite.config.ts",
+    "build:docs": "node scripts/build-props.mjs && vite build --config docs/vite.config.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:contrast": "node scripts/contrast.mjs",
-    "check": "npm run typecheck && npm run test:contrast && npm test && npm run build",
+    "check": "node scripts/build-props.mjs --check && npm run typecheck && npm run test:contrast && npm test && npm run build && node scripts/check-build.mjs",
     "test:e2e": "npm run build:docs && playwright test",
     "test:e2e:update": "npm run build:docs && playwright test --update-snapshots",
     "prepublishOnly": "npm run check",
