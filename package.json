@@ -72,7 +72,8 @@
     "type": "git",
     "url": "git+https://github.com/Dion03/papier.git"
   },
-  "homepage": "https://github.com/Dion03/papier#readme",
+  "homepage": "https://papier.dionbm.nl",
+  "bugs": "https://github.com/Dion03/papier/issues",
   "keywords": [
     "design-system",
     "react",
