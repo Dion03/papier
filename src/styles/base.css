@@ -1,3 +1,4 @@
+@layer papier {
 .papier {
   background: var(--papier-color-bg);
   color: var(--papier-color-text);
@@ -23,3 +24,4 @@
 }
 .pp-text[data-tone="muted"] { color: var(--papier-color-text-muted); }
 .pp-text[data-tone="accent"] { color: var(--papier-color-accent-text); }
+}

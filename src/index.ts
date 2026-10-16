@@ -34,12 +34,15 @@ export { Surface, type SurfaceProps, type SurfaceMaterial } from './components/S
 export { Tag, type TagProps } from './components/Tag';
 export { Notice, type NoticeProps, type NoticeTone } from './components/Notice';
 export { Progress, type ProgressProps } from './components/Progress';
-export { TextField, TextArea, type TextFieldProps, type TextAreaProps } from './components/Field';
+export {
+  Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl, TextField, TextArea,
+  type FieldProps, type FieldLabelProps, type FieldControlProps, type FieldState, type UseFieldOptions, type TextFieldProps, type TextAreaProps,
+} from './components/Field';
 export { Checkbox, type CheckboxProps } from './components/Checkbox';
 export { Switch, type SwitchProps } from './components/Switch';
 export { Slider, type SliderProps } from './components/Slider';
 export { SegmentedControl, type SegmentedControlProps, type SegmentOption } from './components/SegmentedControl';
-export { Tabs, TabList, Tab, TabPanel, type TabsProps } from './components/Tabs';
+export { Tabs, TabList, Tab, TabPanel, type TabsProps, type TabListProps, type TabProps, type TabPanelProps } from './components/Tabs';
 export { Disclosure, type DisclosureProps } from './components/Disclosure';
 export { Dialog, type DialogProps } from './components/Dialog';
 export { Select, type SelectProps, type SelectOption } from './components/Select';

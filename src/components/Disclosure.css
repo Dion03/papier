@@ -1,3 +1,4 @@
+@layer papier {
 .pp-disclosure { border-bottom: 1px solid var(--papier-color-line); }
 .pp-disclosure__summary {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -10,3 +11,4 @@
 .pp-disclosure[open]:not([data-closing]) > .pp-disclosure__summary .pp-disclosure__chevron { transform: rotate(180deg); }
 .pp-disclosure__content { padding: 0 0 var(--papier-space-5); color: var(--papier-color-text-muted); }
 .papier .pp-disclosure__summary:focus-visible { outline-offset: 2px; border-radius: 6px; }
+}

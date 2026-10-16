@@ -20,11 +20,18 @@ describe('server rendering (Next.js)', () => {
             <P.Menu trigger="m" items={[{ label: 'i', onSelect: () => {} }]} /><P.Table caption="c"><tbody><tr><td>1</td></tr></tbody></P.Table>
             <P.Skeleton /><P.Avatar name="D M" /><P.Spinner />
             <P.Dialog open={false} onClose={() => {}} title="d" /><P.Sheet open={false} onClose={() => {}} title="s" />
+            <P.Button asChild><a href="/werk">Werk</a></P.Button><P.Link asChild><a href="/over">Over</a></P.Link>
+            <P.IconButton asChild label="Home" icon={<P.icons.ArrowLeft />}><a href="/" /></P.IconButton>
+            <P.Field label="f" hint="h">{(c) => <input {...c} />}</P.Field><P.TextField label="prijs" prefix="€" suffix="incl. btw" />
+            <P.Menu trigger="m" side="left" items={[]} /><P.Tooltip content="t" placement="right"><button>b</button></P.Tooltip>
           </P.Stack></P.Container>
         </P.ToastProvider>
       </P.Papier>,
     );
     expect(html).toContain('pp-button');
     expect(html).toContain('data-papier-theme="system"');
+    expect(html).toMatch(/<a(?=[^>]*class="pp-button")(?=[^>]*href="\/werk")/);
+    expect(html).toContain('pp-field__group');
+    expect(html).not.toContain('popover');
   });
 });

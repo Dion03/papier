@@ -1,4 +1,5 @@
-import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { forwardRef, useId, useRef, useState, type ForwardedRef, type KeyboardEvent, type ReactElement, type ReactNode, type Ref } from 'react';
+import { useMergedRefs } from '../lib/slot';
 import { cx } from '../lib/cx';
 import { useIsoLayoutEffect } from '../lib/useIsoLayoutEffect';
 import { useControllable } from '../lib/useControllable';
@@ -20,10 +21,14 @@ export interface SegmentedControlProps<T extends string> {
  * A single choice between a few periods or views, e.g. Week / Maand / Jaar.
  * A radio group with roving focus and a highlight that slides to the choice.
  */
-export function SegmentedControl<T extends string>({ label, options, value, defaultValue, onValueChange, size = 'md', className }: SegmentedControlProps<T>) {
+export const SegmentedControl = forwardRef(function SegmentedControl<T extends string>(
+  { label, options, value, defaultValue, onValueChange, size = 'md', className }: SegmentedControlProps<T>,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
   const [current, setCurrent] = useControllable<T>(value, defaultValue ?? options[0].value, onValueChange);
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
   const groupRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useMergedRefs(groupRef, ref);
   const [indicator, setIndicator] = useState<{ x: number; w: number } | null>(null);
   const name = useId();
   const index = Math.max(0, options.findIndex((o) => o.value === current));
@@ -59,7 +64,7 @@ export function SegmentedControl<T extends string>({ label, options, value, defa
   };
 
   return (
-    <div ref={groupRef} role="radiogroup" aria-label={label} className={cx('pp-segmented', className)} data-size={size} data-name={name}>
+    <div ref={mergedRef} role="radiogroup" aria-label={label} className={cx('pp-segmented', className)} data-size={size} data-name={name}>
       {indicator && <span className="pp-segmented__indicator" aria-hidden="true" style={{ transform: `translateX(${indicator.x}px)`, width: indicator.w }} />}
       {options.map((o, i) => {
         const selected = i === index;
@@ -82,4 +87,4 @@ export function SegmentedControl<T extends string>({ label, options, value, defa
       })}
     </div>
   );
-}
+}) as <T extends string>(props: SegmentedControlProps<T> & { ref?: Ref<HTMLDivElement> }) => ReactElement | null;

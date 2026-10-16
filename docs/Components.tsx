@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   Avatar, Container, Menu, RadioGroup, Select, Sheet, Skeleton, Spinner, Stack, Table, Tooltip, useToast,
   Button, Checkbox, Dialog, Disclosure, IconButton, Link, Notice, Progress, SegmentedControl, Slider, Surface,
-  Switch, Tab, TabList, TabPanel, Tabs, Tag, Text, TextArea, TextField, icons,
+  Switch, Tab, TabList, TabPanel, Tabs, Tag, Text, TextArea, TextField, icons, Field,
 } from '@dionbm/papier';
 import { Example } from './Example';
 
@@ -32,6 +32,22 @@ function FormDemo() {
       <TextField label="E-mailadres" type="email" value={mail} onChange={(e) => setMail(e.target.value)} hint="Alleen voor een antwoord, nooit voor een nieuwsbrief."
         error={invalid ? 'Vul een volledig e-mailadres in, zoals naam@voorbeeld.nl.' : undefined} autoComplete="email" />
       <TextArea label="Bericht" placeholder="Waar wil je het over hebben?" />
+    </div>
+  );
+}
+
+function FieldsDemo() {
+  const [weight, setWeight] = useState('180');
+  const heavy = Number(weight) > 220;
+  return (
+    <div className="doc-stack doc-narrow">
+      <TextField label="Zoek in je bak" hideLabel type="search" placeholder="Zoek op artiest of titel" prefix={<icons.Search />} />
+      <TextField label="Prijs in euro" inputMode="decimal" prefix="€" defaultValue="24,95" />
+      <TextField label="Gewicht in gram" inputMode="numeric" suffix="g" value={weight} onChange={(e) => setWeight(e.target.value)}
+        hint="Een gewone plaat weegt 140 tot 180 gram." error={heavy ? 'Zwaarder dan 220 gram past niet in de hoes.' : undefined} />
+      <Field label="Toerental" hint="Een eigen input, met dezelfde opmaak en koppelingen.">
+        {(control) => <input {...control} className="pp-field__control" type="number" min={33} max={78} defaultValue={33} />}
+      </Field>
     </div>
   );
 }
@@ -196,8 +212,12 @@ function DataDemo() {
   return (
     <div className="doc-stack">
       <Table caption="Meest gedraaid deze maand (voorbeelddata)" showCaption>
-        <thead><tr><th scope="col">Plaat</th><th scope="col">Artiest</th><th scope="col" className="pp-num">Keer</th></tr></thead>
-        <tbody>{rows.map(([t, a, n]) => <tr key={t}><th scope="row"><Stack direction="row" gap={3} align="center"><Avatar name={a} size="sm" shape="square" decorative />{t}</Stack></th><td>{a}</td><td className="pp-num">{n}</td></tr>)}</tbody>
+        <thead><tr><th scope="col">Plaat</th><th scope="col">Artiest</th><th scope="col" className="pp-num">Keer</th><th scope="col"><span className="pp-visually-hidden">Acties</span></th></tr></thead>
+        <tbody>{rows.map(([t, a, n]) => <tr key={t}><th scope="row"><Stack direction="row" gap={3} align="center"><Avatar name={a} size="sm" shape="square" decorative />{t}</Stack></th><td>{a}</td><td className="pp-num">{n}</td>
+          <td className="doc-row-actions"><Menu trigger={<icons.More />} triggerLabel={`Acties voor ${t}`} triggerVariant="icon" align="end" items={[
+            { label: 'Afspelen', icon: <icons.Play />, onSelect: () => {} },
+            { label: 'Naar Discogs', icon: <icons.External />, onSelect: () => {} },
+          ]} /></td></tr>)}</tbody>
       </Table>
       <div className="doc-row"><Button size="sm" variant="secondary" onClick={() => setLoading((l) => !l)}>{loading ? 'Laad inhoud' : 'Toon skelet'}</Button>{loading && <Spinner label="Hoezen laden" />}</div>
       <div aria-busy={loading} aria-live="polite" className="doc-skeleton-card">
@@ -231,13 +251,19 @@ export function Components() {
       <Example id="knoppen" name="Button en IconButton" intro="De salie-groene actie uit de cases, de inktknop en rustige secundaire varianten. Tijdens laden blijft de knop focusbaar."
         code={`<Button loading={saving} iconEnd={<icons.ArrowRight />}>Opslaan</Button>
 <Button variant="ink">Bekijk de case</Button>
-<IconButton label="Volgende plaat" variant="disc" icon={<icons.ArrowRight />} />`}
-        a11y={['Laden gebruikt aria-busy en aria-disabled, dus de focus springt nooit weg.', 'IconButton vereist een label; dat wordt de toegankelijke naam en de tooltip.', 'Elk raakvlak is minimaal 44 × 44 px.']}
+<IconButton label="Volgende plaat" variant="disc" icon={<icons.ArrowRight />} />
+
+// Als link van Next.js of React Router
+<Button asChild variant="ink">
+  <NextLink href="/werk">Bekijk het werk</NextLink>
+</Button>`}
+        a11y={['Laden gebruikt aria-busy en aria-disabled, dus de focus springt nooit weg.', 'Met asChild blijft een link een link: Enter volgt hem, de knopvorm is alleen uiterlijk.', 'IconButton vereist een label; dat wordt de toegankelijke naam en de tooltip.', 'Elk raakvlak is minimaal 44 × 44 px.']}
         props={[
           { name: 'variant', type: "'primary' | 'ink' | 'secondary' | 'ghost' | 'danger'", note: 'Visuele rol. Standaard primary.' },
           { name: 'size', type: "'sm' | 'md' | 'lg'", note: 'Hoogte 36, 44 of 55 px.' },
           { name: 'loading', type: 'boolean', note: 'Toont een spinner en blokkeert activeren.' },
           { name: 'iconStart / iconEnd', type: 'ReactNode', note: 'Het eindicoon schuift 3 px bij hover.' },
+          { name: 'asChild', type: 'boolean', note: 'Rendert het enige kind (bv. een routerlink) met de stijl en het gedrag van de knop. Ook op IconButton en Link.' },
         ]}>
         <ButtonDemo />
       </Example>
@@ -256,6 +282,30 @@ export function Components() {
           { name: 'hideLabel', type: 'boolean', note: 'Alleen voor velden met een duidelijke context.' },
         ]}>
         <FormDemo />
+      </Example>
+
+      <Example id="velden" name="Field, prefix en suffix" intro="Een icoon of eenheid in het veld, en de bouwstenen achter TextField en Select voor je eigen of een externe input."
+        code={`<TextField label="Prijs in euro" prefix="€" />
+<TextField label="Gewicht in gram" suffix="g" />
+
+<Field label="Toerental" hint="Een eigen input">
+  {(control) => <MijnInput {...control} />}
+</Field>
+
+// Of helemaal los:
+const f = useField({ hint, error });
+<FieldLabel {...f.labelProps}>Artiest</FieldLabel>
+<MijnCombobox {...f.controlProps} aria-labelledby={f.ids.label} />
+<FieldError {...f.errorProps}>{error}</FieldError>
+<FieldHint {...f.hintProps}>{hint}</FieldHint>`}
+        a11y={['Prefix en suffix zijn decoratief (aria-hidden); zet de eenheid ook in het label, zoals "Prijs in euro".', 'Field geeft id, aria-describedby (fout eerst) en aria-invalid door aan elk control.', 'Een klik op het icoon of de eenheid zet de focus in het veld.']}
+        props={[
+          { name: 'prefix / suffix', type: 'ReactNode', note: 'Op TextField: icoon of eenheid voor of na de waarde.' },
+          { name: 'Field children', type: 'ReactNode | (control) => ReactNode', note: 'Renderfunctie, of kinderen die useFieldControl() gebruiken.' },
+          { name: 'useField', type: '({ id, hint, error, describedBy }) => FieldState', note: 'ids, controlProps, labelProps, hintProps en errorProps.' },
+          { name: 'FieldLabel / FieldHint / FieldError', type: 'component', note: 'De losse onderdelen met Papier-opmaak.' },
+        ]}>
+        <FieldsDemo />
       </Example>
 
       <Example id="keuzes" name="SegmentedControl, Checkbox en Switch" intro="Een keuze tussen een paar periodes, met de schuivende markering uit de Auralis-films. Switch voor instellingen die meteen gelden."
@@ -321,7 +371,8 @@ export function Components() {
         code={`<Surface material="sage" elevation="object">…</Surface>
 <Tag tone="sage">Kotlin</Tag>
 <Link href="/werk" variant="arrow">Verken het werk</Link>
-<Link href="https://discogs.com" external>Discogs</Link>`}
+<Link href="https://discogs.com" external>Discogs</Link>
+<Link asChild variant="arrow"><RouterLink to="/werk">Werk</RouterLink></Link>`}
         a11y={['De tekstkleur volgt het materiaal en haalt op elk materiaal minimaal 4,5:1.', 'Externe links krijgen rel="noopener noreferrer" en een voorgelezen hint "opent in een nieuw tabblad".', 'Prose blijft vlak: de objectschaduw is alleen voor bedienbare objecten.']}>
         <SurfaceDemo />
       </Example>
@@ -336,12 +387,18 @@ export function Components() {
       </Example>
 
       <Example id="overlays" name="Tooltip, Menu en Sheet" intro="Een hint op hover of focus, een actiemenu en een paneel vanaf de rand, zoals het mobiele navigatieblad van het portfolio."
-        code={`<Tooltip content="Zet de plaat terug">
+        code={`<Tooltip content="Zet de plaat terug" placement="right">
   <IconButton label="Opbergen" icon={<icons.Close />} />
 </Tooltip>
-<Menu trigger="Acties" items={[{ label: 'Afspelen', onSelect: play }]} />
+<Menu trigger="Acties" side="bottom" align="end" items={[{ label: 'Afspelen', onSelect: play }]} />
 <Sheet open={open} onClose={close} title="Navigatie" hideTitle>…</Sheet>`}
-        a11y={['Tooltip voegt een beschrijving toe, nooit de naam; hij blijft staan als je erop beweegt en Escape sluit hem (WCAG 1.4.13).', 'Menu volgt het menu-button-patroon: pijl omlaag opent, Escape en Tab sluiten, focus keert terug.', 'Sheet is een native modale dialog met een verborgen maar voorgelezen titel.']}>
+        a11y={['Tooltip voegt een beschrijving toe, nooit de naam; hij blijft staan als je erop beweegt en Escape sluit hem (WCAG 1.4.13).', 'Menu volgt het menu-button-patroon: pijl omlaag opent, Escape en Tab sluiten, focus keert terug.', 'Sheet is een native modale dialog met een verborgen maar voorgelezen titel.', 'Menu en Tooltip openen in de top layer (Popover API), dus overflow:hidden knipt ze niet af; aan de rand van het scherm klappen ze om.']}
+        props={[
+          { name: 'Menu side', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Voorkeurskant; klapt om als er geen ruimte is. Standaard bottom.' },
+          { name: 'Menu align', type: "'start' | 'center' | 'end'", note: 'Uitlijning langs de knop.' },
+          { name: 'Tooltip placement', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Voorkeurskant; klapt om aan de rand. Standaard top.' },
+          { name: 'ref', type: 'Ref', note: 'Menu: de triggerknop. Dialog en Sheet: het dialog-element.' },
+        ]}>
         <OverlayDemo />
       </Example>
 
@@ -356,7 +413,7 @@ toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`
         <ToastDemo />
       </Example>
 
-      <Example id="data" name="Table, Avatar, Skeleton en Spinner" intro="Gegevens in een native tabel, hoezen of personen als avatar, en plaatshouders terwijl iets laadt."
+      <Example id="data" name="Table, Avatar, Skeleton en Spinner" intro="Gegevens in een native tabel met een actiemenu per rij, hoezen of personen als avatar, en plaatshouders terwijl iets laadt."
         code={`<Table caption="Meest gedraaid" showCaption>
   <thead>…</thead>
   <tbody><tr><th scope="row">Uitzinnig</th><td className="pp-num">42</td></tr></tbody>

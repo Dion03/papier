@@ -1,3 +1,4 @@
+@layer papier {
 .pp-select { position: relative; display: block; }
 .pp-select__control { appearance: none; padding-right: 32px; cursor: pointer; }
 .pp-select__control option { color: var(--papier-color-text); background: var(--papier-color-surface); }
@@ -49,4 +50,5 @@
   .pp-select__control option:disabled { opacity: 0.45; cursor: not-allowed; }
   .pp-select__chevron { transition: rotate var(--papier-dur-color) var(--papier-ease-arrive); }
   .pp-select:has(.pp-select__control:open) .pp-select__chevron { rotate: 180deg; }
+}
 }

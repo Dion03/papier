@@ -1,3 +1,4 @@
+@layer papier {
 .pp-slider { display: grid; gap: 6px; }
 .pp-slider__head { display: flex; justify-content: space-between; gap: 12px; font: var(--papier-type-label-weight) var(--papier-type-label-size)/var(--papier-type-label-line) var(--papier-font-body); }
 .pp-slider__value { color: var(--papier-color-text-muted); font-variant-numeric: tabular-nums; font-weight: 500; }
@@ -22,3 +23,4 @@
 .papier .pp-slider__input:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--papier-color-focus); outline-offset: 2px; }
 .papier .pp-slider__input:focus-visible::-moz-range-thumb { outline: 3px solid var(--papier-color-focus); outline-offset: 2px; }
 .pp-slider__input:disabled { opacity: 0.45; cursor: not-allowed; }
+}

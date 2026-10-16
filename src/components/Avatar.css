@@ -1,3 +1,4 @@
+@layer papier {
 .pp-avatar {
   --pp-size: 44px; display: inline-grid; place-items: center; flex: none; width: var(--pp-size); height: var(--pp-size); overflow: hidden;
   border-radius: 50%; background: var(--papier-color-sage-soft); color: var(--papier-color-on-sage);
@@ -7,3 +8,4 @@
 .pp-avatar[data-size="lg"] { --pp-size: 64px; }
 .pp-avatar[data-shape="square"] { border-radius: var(--papier-radius-md); }
 .pp-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}

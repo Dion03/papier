@@ -1,3 +1,4 @@
+@layer papier {
 .pp-link {
   display: inline-flex; align-items: center; gap: 6px;
   color: inherit; text-decoration: none; font-weight: 500;
@@ -15,3 +16,4 @@
 .pp-link__arrow { transition: transform 200ms ease; }
 .pp-link:hover .pp-link__arrow { transform: translate(3px, -3px); }
 .papier .pp-link:focus-visible { border-radius: 4px; }
+}

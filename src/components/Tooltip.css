@@ -1,14 +1,20 @@
+@layer papier {
 .pp-tooltip { position: relative; display: inline-flex; }
+/* Opens in the top layer (Popover API) or, without it, as a fixed bubble; JS sets top and left. */
 .pp-tooltip__bubble {
-  position: absolute; left: 50%; z-index: 50; width: max-content; max-width: 260px; padding: 7px 11px;
+  position: fixed; inset: auto; z-index: 50; width: max-content; max-width: 260px; margin: 0; padding: 7px 11px; border: 0; overflow: visible;
   border-radius: var(--papier-radius-sm); background: var(--papier-color-action-strong); color: var(--papier-color-on-action-strong);
   font: 500 var(--papier-type-small-size)/1.35 var(--papier-font-body); text-align: center; box-shadow: var(--papier-shadow-md);
-  translate: -50% 0; animation: pp-tip-in var(--papier-dur-color) var(--papier-ease-arrive);
+  --pp-tip-from: 0 3px; animation: pp-tip-in var(--papier-dur-color) var(--papier-ease-arrive);
 }
-.pp-tooltip__bubble[data-side="top"] { bottom: calc(100% + 8px); }
-.pp-tooltip__bubble[data-side="bottom"] { top: calc(100% + 8px); }
+.pp-tooltip__bubble[data-side="bottom"] { --pp-tip-from: 0 -3px; }
+.pp-tooltip__bubble[data-side="left"] { --pp-tip-from: 3px 0; }
+.pp-tooltip__bubble[data-side="right"] { --pp-tip-from: -3px 0; }
 /* Bridge the gap so the pointer can move onto the bubble without closing it. */
-.pp-tooltip__bubble::before { content: ''; position: absolute; left: 0; right: 0; height: 10px; }
-.pp-tooltip__bubble[data-side="top"]::before { top: 100%; }
-.pp-tooltip__bubble[data-side="bottom"]::before { bottom: 100%; }
-@keyframes pp-tip-in { from { opacity: 0; transform: translateY(3px); } }
+.pp-tooltip__bubble::before { content: ''; position: absolute; }
+.pp-tooltip__bubble[data-side="top"]::before { top: 100%; left: 0; right: 0; height: 10px; }
+.pp-tooltip__bubble[data-side="bottom"]::before { bottom: 100%; left: 0; right: 0; height: 10px; }
+.pp-tooltip__bubble[data-side="left"]::before { left: 100%; top: 0; bottom: 0; width: 10px; }
+.pp-tooltip__bubble[data-side="right"]::before { right: 100%; top: 0; bottom: 0; width: 10px; }
+@keyframes pp-tip-in { from { opacity: 0; translate: var(--pp-tip-from); } }
+}

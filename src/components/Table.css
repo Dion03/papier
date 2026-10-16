@@ -1,3 +1,4 @@
+@layer papier {
 .pp-table-wrap { overflow-x: auto; border: 1px solid var(--papier-color-line); border-radius: var(--papier-radius-lg); background: var(--papier-color-surface); }
 .pp-table { width: 100%; border-collapse: collapse; font-size: var(--papier-type-small-size); }
 .pp-table__caption { padding: 14px 16px 4px; text-align: left; font: 500 var(--papier-type-subtitle-size)/1.3 var(--papier-font-display); caption-side: top; }
@@ -8,3 +9,4 @@
 .pp-table tbody tr { transition: background-color var(--papier-dur-color) var(--papier-ease-arrive); }
 .pp-table tbody tr:hover { background: var(--papier-color-surface-sunken); }
 .pp-table .pp-num { text-align: right; font-variant-numeric: tabular-nums; }
+}

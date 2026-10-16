@@ -1,6 +1,7 @@
-import { useId, type ReactNode } from 'react';
+import { forwardRef, useId, type ForwardedRef, type ReactElement, type ReactNode, type Ref } from 'react';
 import { cx } from '../lib/cx';
 import { useControllable } from '../lib/useControllable';
+import { FieldError, FieldHint } from './Field';
 
 export interface RadioOption<T extends string> { value: T; label: ReactNode; description?: ReactNode; disabled?: boolean }
 
@@ -20,17 +21,20 @@ export interface RadioGroupProps<T extends string> {
 }
 
 /** A fieldset of native radio buttons: arrow keys, form submit and labels all work natively. */
-export function RadioGroup<T extends string>({ legend, options, value, defaultValue, onValueChange, name, hint, error, appearance = 'list', orientation = 'vertical', className }: RadioGroupProps<T>) {
+export const RadioGroup = forwardRef(function RadioGroup<T extends string>(
+  { legend, options, value, defaultValue, onValueChange, name, hint, error, appearance = 'list', orientation = 'vertical', className }: RadioGroupProps<T>,
+  ref: ForwardedRef<HTMLFieldSetElement>,
+) {
   const auto = useId();
   const groupName = name ?? `pp-${auto}`;
   const [current, setCurrent] = useControllable<T | undefined>(value, defaultValue, (v) => v !== undefined && onValueChange?.(v));
   const hintId = hint ? `${groupName}-hint` : undefined;
   const errorId = error ? `${groupName}-error` : undefined;
   return (
-    <fieldset className={cx('pp-radio-group', className)} data-appearance={appearance} data-orientation={orientation}
+    <fieldset ref={ref} className={cx('pp-radio-group', className)} data-appearance={appearance} data-orientation={orientation}
       aria-describedby={cx(errorId, hintId) || undefined} aria-invalid={error ? true : undefined}>
       <legend className="pp-field__label pp-radio-group__legend">{legend}</legend>
-      {hint && <p id={hintId} className="pp-field__hint">{hint}</p>}
+      <FieldHint id={hintId}>{hint}</FieldHint>
       <div className="pp-radio-group__options">
         {options.map((o) => {
           const id = `${groupName}-${o.value}`;
@@ -46,7 +50,7 @@ export function RadioGroup<T extends string>({ legend, options, value, defaultVa
           );
         })}
       </div>
-      {error && <p id={errorId} className="pp-field__error"><span aria-hidden="true">! </span>{error}</p>}
+      <FieldError id={errorId}>{error}</FieldError>
     </fieldset>
   );
-}
+}) as <T extends string>(props: RadioGroupProps<T> & { ref?: Ref<HTMLFieldSetElement> }) => ReactElement | null;

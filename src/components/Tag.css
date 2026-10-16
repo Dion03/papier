@@ -1,3 +1,4 @@
+@layer papier {
 .pp-tag {
   display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 2px 11px;
   border-radius: var(--papier-radius-pill); border: 1px solid transparent;
@@ -9,3 +10,4 @@
 .pp-tag[data-tone="coral"] { background: var(--papier-color-coral); color: var(--papier-color-on-coral); }
 .pp-tag[data-tone="accent"] { background: transparent; color: var(--papier-color-accent-text); border-color: currentColor; }
 .pp-tag[data-tone="outline"] { background: transparent; border-color: var(--papier-color-line); }
+}

@@ -1,3 +1,4 @@
+@layer papier {
 /* Windows high contrast / forced colours: backgrounds and shadows disappear, so every
    state that relied on fill gets a border or system colour instead. */
 @media (forced-colors: active) {
@@ -21,11 +22,12 @@
   .pp-progress__track { border: 1px solid CanvasText; }
   .pp-progress__bar { background: Highlight; forced-color-adjust: none; }
   .pp-skeleton { border: 1px dashed GrayText; background: none; }
-  .pp-field__control { border-bottom-color: CanvasText; }
+  .pp-field__control, .pp-field__group { border-bottom-color: CanvasText; }
   .pp-field[data-invalid] .pp-field__control { border-bottom-style: double; border-bottom-width: 4px; }
   .pp-slider__input::-webkit-slider-runnable-track { border: 1px solid CanvasText; background: linear-gradient(90deg, Highlight var(--pp-fill), Canvas var(--pp-fill)); forced-color-adjust: none; }
   .pp-slider__input::-moz-range-track { border: 1px solid CanvasText; }
   .pp-slider__input::-moz-range-progress { background: Highlight; }
   .pp-slider__input::-webkit-slider-thumb { background: Canvas; border-color: CanvasText; forced-color-adjust: none; }
   .pp-notice__icon { border: 1px solid CanvasText; forced-color-adjust: none; background: Canvas; color: CanvasText; }
+}
 }

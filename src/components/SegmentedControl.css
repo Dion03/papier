@@ -1,3 +1,4 @@
+@layer papier {
 .pp-segmented {
   position: relative; display: inline-flex; gap: 2px; padding: 4px;
   border-radius: var(--papier-radius-pill); background: var(--papier-color-surface-sunken);
@@ -18,3 +19,4 @@
 .pp-segmented__option:not([aria-checked="true"]):hover { color: var(--papier-color-accent-text); }
 .pp-segmented__option:disabled { opacity: 0.4; cursor: not-allowed; }
 .pp-segmented[data-size="sm"] .pp-segmented__option { min-height: 30px; padding: 0 12px; font-size: var(--papier-type-label-size); }
+}

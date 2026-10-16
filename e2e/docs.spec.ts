@@ -43,7 +43,7 @@ test('hoogcontrastmodus: axe en elke knop zichtbaar begrensd', async ({ page, br
 
 test('toetsenbord: menu, dialoog en terugkeer van focus', async ({ page }) => {
   await open(page, 'light');
-  const trigger = page.getByRole('button', { name: /^Acties/ });
+  const trigger = page.getByRole('button', { name: 'Acties', exact: true });
   await trigger.focus();
   await page.keyboard.press('ArrowDown');
   await expect(page.getByRole('menuitem', { name: 'Afspelen' })).toBeFocused();
@@ -59,6 +59,43 @@ test('toetsenbord: menu, dialoog en terugkeer van focus', async ({ page }) => {
   await expect(opener).toBeFocused();
 });
 
+test('menu in een tabel opent in de top layer en wordt niet afgeknipt', async ({ page }) => {
+  await open(page, 'light');
+  const trigger = page.getByRole('button', { name: 'Acties voor Kleine Uren' });
+  await trigger.click();
+  const menu = page.getByRole('menu');
+  await expect(menu).toBeVisible();
+  expect(await menu.evaluate((el) => el.matches(':popover-open'))).toBe(true);
+  await expect(page.getByRole('menuitem', { name: 'Afspelen' })).toBeFocused();
+  const item = page.getByRole('menuitem', { name: 'Naar Discogs' });
+  // The last item sits below the table, which scrolls (overflow-x: auto): it must still be the topmost element there.
+  const wrap = await page.locator('#data .pp-table-wrap').boundingBox();
+  const box = (await item.boundingBox())!;
+  expect(box.y + box.height).toBeGreaterThan(wrap!.y + wrap!.height);
+  expect(await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('[role="menuitem"]')?.textContent, [box.x + box.width / 2, box.y + box.height / 2])).toBe('Naar Discogs');
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test('menu klapt omhoog onderaan het scherm', async ({ page }) => {
+  await open(page, 'light');
+  const trigger = page.getByRole('button', { name: 'Acties', exact: true });
+  await trigger.evaluate((el) => { el.scrollIntoView({ block: 'end' }); window.scrollBy(0, -4); });
+  await trigger.click();
+  const menu = page.getByRole('menu');
+  await expect(menu).toHaveAttribute('data-side', 'top');
+  const m = (await menu.boundingBox())!;
+  const t = (await trigger.boundingBox())!;
+  expect(m.y + m.height).toBeLessThanOrEqual(t.y);
+});
+
+test('eigen CSS wint van Papier dankzij @layer papier', async ({ page }) => {
+  await open(page, 'light');
+  await page.addStyleTag({ content: '.pp-button { background: rgb(1, 2, 3); }' });
+  expect(await page.locator('#knoppen .pp-button').first().evaluate((el) => getComputedStyle(el).backgroundColor)).toBe('rgb(1, 2, 3)');
+});
+
 test('thema wisselen werkt en blijft bewaard', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('radio', { name: 'Donker' }).click();
@@ -67,7 +104,7 @@ test('thema wisselen werkt en blijft bewaard', async ({ page }) => {
   await expect(page.locator('.papier').first()).toHaveAttribute('data-papier-theme', 'dark');
 });
 
-const sections = ['knoppen', 'formulieren', 'keuzes', 'slider', 'feedback', 'select', 'overlays', 'data', 'materiaal'];
+const sections = ['knoppen', 'formulieren', 'velden', 'keuzes', 'slider', 'feedback', 'select', 'overlays', 'data', 'materiaal'];
 for (const theme of ['light', 'dark'] as const) {
   test(`visuele regressie (${theme})`, async ({ page }) => {
     await open(page, theme);

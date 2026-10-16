@@ -7,8 +7,9 @@ import type { ReactElement } from 'react';
 import {
   Papier, Text, Button, IconButton, Link, Surface, Tag, Notice, Progress, TextField, TextArea,
   Checkbox, Switch, Slider, SegmentedControl, Tabs, TabList, Tab, TabPanel, Disclosure, Dialog, icons,
-  Select, RadioGroup, Tooltip, Menu, ToastProvider, Table, Skeleton, Sheet, Stack, Container, Avatar, Spinner,
+  Select, RadioGroup, Tooltip, Menu, ToastProvider, Table, Skeleton, Sheet, Stack, Container, Avatar, Spinner, Field,
 } from '../src';
+import userEvent from '@testing-library/user-event';
 
 const cases: Array<[string, ReactElement]> = [
   ['Text', <><Text variant="display">Kop</Text><Text tone="muted">Uitleg</Text></>],
@@ -37,6 +38,11 @@ const cases: Array<[string, ReactElement]> = [
   ['Stack/Container', <Container><Stack gap={3} direction="row"><p>Een</p><p>Twee</p></Stack></Container>],
   ['Avatar', <><Avatar name="Froukje Veenstra" /><Avatar name="Dion" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" /></>],
   ['Spinner', <Spinner />],
+  ['Button asChild', <><Button asChild variant="ink"><a href="/werk">Bekijk het werk</a></Button><Button asChild loading><a href="/x">Bezig</a></Button></>],
+  ['Link asChild', <Link asChild external variant="arrow"><a href="https://x.nl">Bron</a></Link>],
+  ['IconButton asChild', <IconButton asChild label="Home" icon={<icons.ArrowLeft />}><a href="/" /></IconButton>],
+  ['Field', <Field label="Artiest" hint="Zoek in je bak" error="Niets gevonden" required>{(c) => <input type="search" {...c} />}</Field>],
+  ['TextField prefix/suffix', <><TextField label="Prijs in euro" prefix="€" /><TextField label="Gewicht in kg" suffix="kg" error="Te zwaar" /><TextField label="Zoeken" hideLabel prefix={<icons.Search />} /></>],
 ];
 
 describe('axe: geen toegankelijkheidsfouten', () => {
@@ -50,6 +56,19 @@ describe('axe: geen toegankelijkheidsfouten', () => {
   it('Sheet (open)', async () => {
     render(<Papier><Sheet open onClose={() => {}} title="Navigatie" hideTitle><nav aria-label="Hoofd"><a href="#a">Werk</a></nav></Sheet></Papier>);
     expect(await axe(document.body)).toHaveNoViolations();
+  });
+
+  it('Menu (open, top layer)', async () => {
+    const { container } = render(<Papier><main><Menu trigger="Acties" side="right" items={[{ label: 'Delen', onSelect: () => {} }, { label: 'Wissen', tone: 'danger', onSelect: () => {} }]} /></main></Papier>);
+    await userEvent.click(container.querySelector('button')!);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('Tooltip (open)', async () => {
+    const { container } = render(<Papier><main><Tooltip content="Volgende plaat" placement="left"><IconButton label="Volgende" icon={<icons.ArrowRight />} /></Tooltip></main></Papier>);
+    await userEvent.tab();
+    expect(container.querySelector('[role="tooltip"]')).toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
   });
 
   it('Dialog (open)', async () => {

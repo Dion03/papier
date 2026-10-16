@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Papier, ToastProvider, SegmentedControl, Slider, Surface, Switch, Tag, Text, icons, type PapierTheme } from '@dionbm/papier';
+import { Button, Link, Papier, ToastProvider, SegmentedControl, Slider, Surface, Switch, Tag, Text, icons, type PapierTheme } from '@dionbm/papier';
 import { Foundations } from './Foundations';
 import { Components } from './Components';
 
@@ -85,13 +85,13 @@ export function App() {
       <main id="inhoud" tabIndex={-1}>
         <section id="top" className="doc-hero" aria-labelledby="hero-title">
           <div className="doc-hero__copy">
-            <Tag tone="outline">v0.2 · React · MIT</Tag>
+            <Tag tone="outline">v0.3 · React · MIT</Tag>
             <Text variant="display" id="hero-title">Papier<span className="doc-accent">.</span></Text>
             <Text variant="body-lg" tone="muted" className="doc-hero__lead">
               Het design system achter mijn portfolio en apps. Warm papier, inkt, vermiljoen en salie als 30 toegankelijke React-componenten, met tokens die zichzelf controleren.
             </Text>
             <div className="doc-row">
-              <a className="pp-button" data-variant="ink" data-size="lg" href="#componenten"><span className="pp-button__label">Bekijk de componenten</span><span className="pp-button__end"><icons.ArrowRight /></span></a>
+              <Button asChild variant="ink" size="lg" iconEnd={<icons.ArrowRight />}><a href="#componenten">Bekijk de componenten</a></Button>
               <Link href="#gebruik" variant="arrow">Installeren</Link>
             </div>
           </div>
@@ -145,7 +145,14 @@ export function App() {
               <ul className="doc-list">
                 <li>axe zonder overtredingen voor elk component, in licht en donker.</li>
                 <li>Gedragstests voor toetsenbord, focus en ARIA-status.</li>
-                <li>Een contrastcheck op 22 paren per thema die de build laat falen.</li>
+                <li>Een contrastcheck op 24 paren per thema die de build laat falen.</li>
+              </ul>
+              <Text variant="subtitle" as="h3">In je eigen app</Text>
+              <ul className="doc-list">
+                <li><code>asChild</code> op Button, IconButton en Link: de Link van Next.js of React Router krijgt de Papier-vorm.</li>
+                <li>Alle CSS staat in <code>@layer papier</code>. Je eigen stijlen winnen zonder specificiteitsgevecht; zet bij Tailwind 4 bovenaan <code>@layer theme, base, papier, components, utilities;</code>.</li>
+                <li>Menu en Tooltip openen in de top layer en vallen niet weg in een tabel of module met <code>overflow: hidden</code>.</li>
+                <li>Elk component met een eigen element geeft een <code>ref</code> door.</li>
               </ul>
             </div>
           </div>

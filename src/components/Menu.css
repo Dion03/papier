@@ -1,12 +1,18 @@
+@layer papier {
 .pp-menu { position: relative; display: inline-block; }
+/* Opens in the top layer (Popover API) or, without it, as a fixed panel; JS sets top and left. */
 .pp-menu__list {
-  position: absolute; top: calc(100% + 6px); left: 0; z-index: 40; min-width: 200px; margin: 0; padding: 6px; list-style: none;
-  border-radius: var(--papier-radius-md); background: var(--papier-color-surface); box-shadow: var(--papier-shadow-object);
+  position: fixed; inset: auto; z-index: 40; min-width: 200px; margin: 0; padding: 6px; list-style: none; overflow: visible;
+  border-radius: var(--papier-radius-md); background: var(--papier-color-surface); color: var(--papier-color-text); box-shadow: var(--papier-shadow-object);
   border: 1px solid var(--papier-color-line); transform-origin: top left;
   animation: pp-menu-in var(--papier-dur-color) var(--papier-ease-arrive);
 }
-.pp-menu[data-align="end"] .pp-menu__list { left: auto; right: 0; transform-origin: top right; }
-@keyframes pp-menu-in { from { opacity: 0; transform: scale(0.97) translateY(-4px); } }
+.pp-menu__list[data-align="end"] { transform-origin: top right; }
+.pp-menu__list[data-side="top"] { transform-origin: bottom left; --pp-menu-from: 4px; }
+.pp-menu__list[data-side="top"][data-align="end"] { transform-origin: bottom right; }
+.pp-menu__list[data-side="left"] { transform-origin: top right; --pp-menu-from: 0px; }
+.pp-menu__list[data-side="right"] { transform-origin: top left; --pp-menu-from: 0px; }
+@keyframes pp-menu-in { from { opacity: 0; transform: scale(0.97) translateY(var(--pp-menu-from, -4px)); } }
 .pp-menu__item {
   display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 0 12px; border: 0; border-radius: var(--papier-radius-sm);
   background: transparent; color: var(--papier-color-text); text-align: left; cursor: pointer; font: 500 var(--papier-type-body-size)/1.2 var(--papier-font-body);
@@ -16,3 +22,4 @@
 .pp-menu__item[data-tone="danger"] { color: var(--papier-color-danger); }
 .pp-menu__item:disabled { opacity: 0.45; cursor: not-allowed; }
 .pp-menu__icon { display: inline-flex; color: var(--papier-color-text-muted); }
+}
