@@ -13,6 +13,8 @@
 - Menu en Tooltip openen in de top layer (Popover API, met een vast paneel als terugval),
   dus `overflow: hidden` knipt ze niet meer af. Ze klappen om aan de rand van het scherm.
   Nieuw: `side` en `align: 'center'` op Menu, `placement: 'left' | 'right'` op Tooltip.
+  Let op: `data-align` staat nu op het menupaneel (`.pp-menu__list`) in plaats van op
+  `.pp-menu`. Eigen CSS met `.pp-menu[data-align="end"]` moet naar het paneel wijzen.
 - Alle CSS, ook `tokens.css`, staat in `@layer papier`: CSS van je app wint zonder
   specificiteitsgevecht. Let op: een eigen reset zoals `button { color: inherit }` wint nu
   ook; zet die in een laag vóór Papier (zie README).
