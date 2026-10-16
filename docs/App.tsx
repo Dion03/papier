@@ -100,7 +100,6 @@ export function App() {
 
         <section id="principes" className="doc-section" aria-labelledby="principes-title">
           <div className="doc-section__head">
-            <Text variant="label" as="p" tone="accent">01 · Principes</Text>
             <Text variant="headline" as="h2" id="principes-title">Gemaakt om aan te raken.</Text>
           </div>
           <ol className="doc-principles">
@@ -116,7 +115,6 @@ export function App() {
 
         <section id="gebruik" className="doc-section" aria-labelledby="gebruik-title">
           <div className="doc-section__head">
-            <Text variant="label" as="p" tone="accent">04 · Gebruik</Text>
             <Text variant="headline" as="h2" id="gebruik-title">In drie regels op papier.</Text>
           </div>
           <div className="doc-grid-2">

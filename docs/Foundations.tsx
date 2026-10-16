@@ -100,7 +100,6 @@ export function Foundations({ theme }: { theme: ThemeName }) {
   return (
     <section id="fundament" className="doc-section" aria-labelledby="fundament-title">
       <div className="doc-section__head">
-        <Text variant="label" as="p" tone="accent">02 · Fundament</Text>
         <Text variant="headline" as="h2" id="fundament-title">Eén bron, elke vorm.</Text>
         <Text variant="body-lg" tone="muted">
           Alle waarden staan in één bestand. Een script maakt er CSS-variabelen en JSON van, en een tweede script controleert bij elke build of elk paar leesbaar blijft. Dezelfde berekening vult de tabel hieronder.
