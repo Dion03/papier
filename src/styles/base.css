@@ -1,0 +1,25 @@
+.papier {
+  background: var(--papier-color-bg);
+  color: var(--papier-color-text);
+  font-family: var(--papier-font-body);
+  font-size: var(--papier-type-body-size);
+  line-height: var(--papier-type-body-line);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.papier *, .papier *::before, .papier *::after { box-sizing: border-box; }
+.papier :focus-visible { outline: 3px solid var(--papier-color-focus); outline-offset: 3px; }
+.papier ::selection { background: var(--papier-color-accent); color: var(--papier-color-on-action-strong); }
+
+.pp-visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Typography helpers */
+.pp-text { margin: 0; font-family: var(--papier-font-body); }
+.pp-text[data-role="display"], .pp-text[data-role="headline"], .pp-text[data-role="title"], .pp-text[data-role="subtitle"] {
+  font-family: var(--papier-font-display); text-wrap: balance;
+}
+.pp-text[data-tone="muted"] { color: var(--papier-color-text-muted); }
+.pp-text[data-tone="accent"] { color: var(--papier-color-accent-text); }

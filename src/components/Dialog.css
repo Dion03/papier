@@ -1,0 +1,27 @@
+.pp-dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 0; margin: auto;
+  border: 0; border-radius: var(--papier-radius-xl); background: var(--papier-color-surface); color: var(--papier-color-text);
+  box-shadow: var(--papier-shadow-object);
+  font-family: var(--papier-font-body);
+}
+.pp-dialog[data-size="sm"] { width: min(400px, calc(100vw - 32px)); }
+.pp-dialog[data-size="lg"] { width: min(760px, calc(100vw - 32px)); }
+.pp-dialog::backdrop { background: var(--papier-color-overlay); }
+.pp-dialog[open] { animation: pp-dialog-in var(--papier-dur-open) var(--papier-ease-arrive); }
+.pp-dialog[open]::backdrop { animation: pp-fade-in var(--papier-dur-open) var(--papier-ease-arrive); }
+@keyframes pp-dialog-in { from { opacity: 0; transform: translateY(15px) scale(0.98); } }
+@keyframes pp-fade-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pp-dialog[open], .pp-dialog[open]::backdrop { animation: none; } }
+.pp-dialog__panel { padding: var(--papier-space-6); }
+.pp-dialog__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.pp-dialog__title { margin: 4px 0 0; font: 500 var(--papier-type-title-size)/var(--papier-type-title-line) var(--papier-font-display); letter-spacing: var(--papier-type-title-tracking); text-wrap: balance; }
+.pp-dialog__close {
+  flex: none; display: grid; place-items: center; width: var(--papier-hit-target); height: var(--papier-hit-target); margin: -6px -10px 0 0;
+  border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer;
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-dialog__close:hover { background: var(--papier-color-surface-sunken); }
+.pp-dialog__desc { margin: 10px 0 0; color: var(--papier-color-text-muted); }
+.pp-dialog__body { margin-top: var(--papier-space-5); }
+.pp-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: var(--papier-space-6); }
+@media (max-width: 480px) { .pp-dialog__panel { padding: var(--papier-space-5); } .pp-dialog__footer > * { flex: 1; } }

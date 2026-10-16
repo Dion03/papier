@@ -1,0 +1,15 @@
+.pp-tablist { position: relative; display: flex; gap: 22px; border-bottom: 1px solid var(--papier-color-line); overflow-x: auto; scrollbar-width: none; }
+.pp-tab {
+  position: relative; min-height: var(--papier-hit-target); padding: 0 2px; border: 0; background: transparent; cursor: pointer; white-space: nowrap;
+  color: var(--papier-color-text-muted); font: var(--papier-type-control-weight) var(--papier-type-control-size)/1 var(--papier-font-body);
+  transition: color var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-tab:hover, .pp-tab[aria-selected="true"] { color: var(--papier-color-text); }
+.pp-tab:disabled { opacity: 0.4; cursor: not-allowed; }
+.pp-tablist__bar {
+  position: absolute; left: 0; bottom: -1px; height: 2px; border-radius: 2px; background: var(--papier-color-accent);
+  transition: transform var(--papier-dur-open) var(--papier-ease-arrive), width var(--papier-dur-open) var(--papier-ease-arrive);
+}
+.pp-tabpanel { padding-top: var(--papier-space-5); }
+.papier .pp-tabpanel:focus-visible { outline-offset: 6px; border-radius: 4px; }
+.papier .pp-tab:focus-visible { outline-offset: -2px; border-radius: 6px; }
