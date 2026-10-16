@@ -241,7 +241,7 @@ describe('focus terug na sluiten (Dialog, AlertDialog, Sheet)', () => {
       const opener = screen.getByRole('button', { name: 'Open' });
       // Safari: a click does not focus the button, so activeElement stays <body>.
       fireEvent.pointerDown(opener);
-      opener.click();
+      act(() => opener.click());
       expect(document.activeElement).not.toBe(opener);
       await userEvent.click(screen.getByRole('button', { name: 'Klaar', hidden: true }));
       expect(opener).toHaveFocus();
@@ -252,7 +252,7 @@ describe('focus terug na sluiten (Dialog, AlertDialog, Sheet)', () => {
       const opener = screen.getByRole('button', { name: 'Open' });
       fireEvent.pointerDown(opener);
       screen.getByRole('main').focus();
-      opener.click();
+      act(() => opener.click());
       await userEvent.click(screen.getByRole('button', { name: 'Klaar', hidden: true }));
       expect(opener).toHaveFocus();
     });

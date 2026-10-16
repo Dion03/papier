@@ -1,6 +1,6 @@
 @layer papier {
 .pp-combobox__toggle {
-  flex: none; display: grid; place-items: center; width: 36px; height: 36px; margin-right: -8px;
+  flex: none; display: grid; place-items: center; width: 36px; height: 36px; margin-inline-end: -8px;
   border: 0; border-radius: 50%; background: transparent; color: var(--papier-color-text-muted); cursor: pointer;
   transition: background-color var(--papier-dur-color) var(--papier-ease-arrive), transform var(--papier-dur-color) var(--papier-ease-arrive);
 }
@@ -28,4 +28,5 @@
 .pp-combobox__check { flex: none; color: var(--papier-color-accent-text); }
 .pp-combobox__note { margin: 0; padding: 10px 12px; color: var(--papier-color-text-muted); font-size: var(--papier-type-small-size); }
 @media (prefers-reduced-motion: reduce) { .pp-combobox__popup { animation: none; } }
+.pp-combobox__option:dir(rtl)[data-active] { box-shadow: inset -2px 0 0 var(--papier-color-focus); }
 }

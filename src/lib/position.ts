@@ -64,10 +64,13 @@ export function useAnchoredPopover(
     if (supportsPopover() && f.hasAttribute('popover')) {
       try { f.showPopover(); } catch { /* already open or detached */ }
     }
+    // In right-to-left text, start and end along a top or bottom edge swap sides.
+    const rtl = getComputedStyle(a).direction === 'rtl';
+    const crossAlign: Align = rtl && (side === 'top' || side === 'bottom') && align !== 'center' ? (align === 'start' ? 'end' : 'start') : align;
     const update = () => {
       const r = a.getBoundingClientRect();
       const p = computePosition(r, { width: f.offsetWidth, height: f.offsetHeight },
-        { width: document.documentElement.clientWidth || window.innerWidth, height: window.innerHeight }, side, align, offset);
+        { width: document.documentElement.clientWidth || window.innerWidth, height: window.innerHeight }, side, crossAlign, offset);
       f.style.top = `${p.top}px`;
       f.style.left = `${p.left}px`;
       f.dataset.side = p.side;

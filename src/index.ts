@@ -65,3 +65,4 @@ export { Breadcrumb, BreadcrumbItem, type BreadcrumbProps, type BreadcrumbItemPr
 export { Pagination, paginationRange, type PaginationProps } from './components/Pagination';
 export { dutchLabels, englishLabels, type PapierLabels } from './lib/labels';
 export * as icons from './components/icons';
+export { themeStyle, checkTheme, themeColors, colorRoles, type ColorRole, type ThemeColors, type ContrastResult } from './lib/theme';

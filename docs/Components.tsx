@@ -300,7 +300,7 @@ export function Components() {
         <Text variant="body-lg" tone="muted">Elk onderdeel is gebouwd op een native element waar dat kan. Papier voegt materiaal en beweging toe, nooit een eigen versie van wat de browser al goed doet.</Text>
       </div>
 
-      <Example id="knoppen" name="Button en IconButton" intro="De salie-groene actie uit de cases, de inktknop en rustige secundaire varianten. Tijdens laden blijft de knop focusbaar."
+      <Example id="knoppen" api={['Button', 'IconButton']} name="Button en IconButton" intro="De salie-groene actie uit de cases, de inktknop en rustige secundaire varianten. Tijdens laden blijft de knop focusbaar."
         code={`<Button loading={saving} iconEnd={<icons.ArrowRight />}>Opslaan</Button>
 <Button variant="ink">Bekijk de case</Button>
 <IconButton label="Volgende plaat" variant="disc" icon={<icons.ArrowRight />} />
@@ -320,7 +320,7 @@ export function Components() {
         <ButtonDemo />
       </Example>
 
-      <Example id="formulieren" name="TextField en TextArea" intro="Het onderstreepte invoerveld uit de portfoliowidget. Label, hint en fout horen bij het veld en worden samen voorgelezen."
+      <Example id="formulieren" api={['TextField', 'TextArea']} name="TextField en TextArea" intro="Het onderstreepte invoerveld uit de portfoliowidget. Label, hint en fout horen bij het veld en worden samen voorgelezen."
         code={`<TextField
   label="E-mailadres"
   hint="Alleen voor een antwoord."
@@ -336,7 +336,7 @@ export function Components() {
         <FormDemo />
       </Example>
 
-      <Example id="velden" name="Field, prefix en suffix" intro="Een icoon of eenheid in het veld, en de bouwstenen achter TextField en Select voor je eigen of een externe input."
+      <Example id="velden" api={['Field', 'FieldLabel']} name="Field, prefix en suffix" intro="Een icoon of eenheid in het veld, en de bouwstenen achter TextField en Select voor je eigen of een externe input."
         code={`<TextField label="Prijs in euro" prefix="€" />
 <TextField label="Gewicht in gram" suffix="g" />
 
@@ -360,7 +360,7 @@ const f = useField({ hint, error });
         <FieldsDemo />
       </Example>
 
-      <Example id="keuzes" name="SegmentedControl, Checkbox en Switch" intro="Een keuze tussen een paar periodes, met de schuivende markering uit de Auralis-films. Switch voor instellingen die meteen gelden."
+      <Example id="keuzes" api={['SegmentedControl', 'Checkbox', 'Switch']} name="SegmentedControl, Checkbox en Switch" intro="Een keuze tussen een paar periodes, met de schuivende markering uit de Auralis-films. Switch voor instellingen die meteen gelden."
         code={`<SegmentedControl
   label="Periode"
   value={period}
@@ -372,7 +372,7 @@ const f = useField({ hint, error });
         <ChoicesDemo />
       </Example>
 
-      <Example id="slider" name="Slider" intro="Een native range met gevuld spoor en leesbare waarde. Gebouwd voor de luisterkamer: positie in minuten, volume in procenten."
+      <Example id="slider" api={['Slider']} name="Slider" intro="Een native range met gevuld spoor en leesbare waarde. Gebouwd voor de luisterkamer: positie in minuten, volume in procenten."
         code={`<Slider
   label="Positie"
   max={213}
@@ -384,7 +384,7 @@ const f = useField({ hint, error });
         <PlayerDemo />
       </Example>
 
-      <Example id="feedback" name="Notice en Progress" intro="Statusmeldingen met eigen icoon en woorden, en voortgang met een echte waardetekst."
+      <Example id="feedback" api={['Notice', 'Progress']} name="Notice en Progress" intro="Statusmeldingen met eigen icoon en woorden, en voortgang met een echte waardetekst."
         code={`<Notice tone="danger" title="Synchronisatie mislukt"
   action={<Button size="sm" variant="secondary">Opnieuw proberen</Button>}>
   Er is geen verbinding met de server.
@@ -394,7 +394,7 @@ const f = useField({ hint, error });
         <FeedbackDemo />
       </Example>
 
-      <Example id="dialoog" name="Dialog" intro="Een modaal venster op het native dialog-element. Escape, de sluitknop en een klik naast het venster sluiten het."
+      <Example id="dialoog" api={['Dialog']} name="Dialog" intro="Een modaal venster op het native dialog-element. Escape, de sluitknop en een klik naast het venster sluiten het."
         code={`<Dialog
   open={open}
   onClose={() => setOpen(false)}
@@ -405,7 +405,7 @@ const f = useField({ hint, error });
         <DialogDemo />
       </Example>
 
-      <Example id="structuur" name="Tabs en Disclosure" intro="Tabs voor weergaven van dezelfde inhoud. Disclosure is een native uitklapper die in 420 ms ontvouwt en in 290 ms dichtvouwt."
+      <Example id="structuur" api={['Tabs', 'TabList', 'Tab', 'TabPanel', 'Disclosure']} name="Tabs en Disclosure" intro="Tabs voor weergaven van dezelfde inhoud. Disclosure is een native uitklapper die in 420 ms ontvouwt en in 290 ms dichtvouwt."
         code={`<Tabs defaultValue="nu">
   <TabList label="Luisterweergave">
     <Tab value="nu">Nu</Tab>
@@ -419,7 +419,7 @@ const f = useField({ hint, error });
         <StructureDemo />
       </Example>
 
-      <Example id="materiaal" name="Surface, Tag en Link" intro="Modules met een eigen materiaal en objectschaduw, kleine labels en links met een opkomende onderstreping."
+      <Example id="materiaal" api={['Surface', 'Tag', 'Link']} name="Surface, Tag en Link" intro="Modules met een eigen materiaal en objectschaduw, kleine labels en links met een opkomende onderstreping."
         code={`<Surface material="sage" elevation="object">…</Surface>
 <Tag tone="sage">Kotlin</Tag>
 <Link href="/werk" variant="arrow">Verken het werk</Link>
@@ -429,7 +429,7 @@ const f = useField({ hint, error });
         <SurfaceDemo />
       </Example>
 
-      <Example id="select" name="Select en RadioGroup" intro="Een gestijlde native select en een fieldset met keuzerondjes, als lijst of als tegels."
+      <Example id="select" api={['Select', 'RadioGroup']} name="Select en RadioGroup" intro="Een gestijlde native select en een fieldset met keuzerondjes, als lijst of als tegels."
         code={`<Select label="Sorteer de bak op" options={[{ value: 'artist', label: 'Artiest' }]} />
 <RadioGroup legend="Weergave" appearance="card" options={[
   { value: 'bak', label: 'Platenbak', description: 'Blader door hoezen.' },
@@ -438,7 +438,7 @@ const f = useField({ hint, error });
         <SelectRadioDemo />
       </Example>
 
-      <Example id="overlays" name="Tooltip, Menu en Sheet" intro="Een hint op hover of focus, een actiemenu en een paneel vanaf de rand, zoals het mobiele navigatieblad van het portfolio."
+      <Example id="overlays" api={['Tooltip', 'Menu', 'Sheet']} name="Tooltip, Menu en Sheet" intro="Een hint op hover of focus, een actiemenu en een paneel vanaf de rand, zoals het mobiele navigatieblad van het portfolio."
         code={`<Tooltip content="Zet de plaat terug" placement="right">
   <IconButton label="Opbergen" icon={<icons.Close />} />
 </Tooltip>
@@ -455,7 +455,7 @@ const f = useField({ hint, error });
         <OverlayDemo />
       </Example>
 
-      <Example id="zoeken" name="Combobox" intro="Een invoerveld met een lijst die meezoekt terwijl je typt. Voor lange lijsten of zoeken op een server; voor een paar vaste keuzes blijft Select de betere keuze."
+      <Example id="zoeken" api={['Combobox']} name="Combobox" intro="Een invoerveld met een lijst die meezoekt terwijl je typt. Voor lange lijsten of zoeken op een server; voor een paar vaste keuzes blijft Select de betere keuze."
         code={`<Combobox
   label="Plaat"
   options={records}
@@ -477,7 +477,7 @@ const f = useField({ hint, error });
         <ComboboxDemo />
       </Example>
 
-      <Example id="bevestigen" name="AlertDialog" intro="Een bevestiging die je werk onderbreekt, voor acties met gevolgen. Sluit alleen via de knoppen of Escape, nooit met een klik ernaast."
+      <Example id="bevestigen" api={['AlertDialog']} name="AlertDialog" intro="Een bevestiging die je werk onderbreekt, voor acties met gevolgen. Sluit alleen via de knoppen of Escape, nooit met een klik ernaast."
         code={`<AlertDialog
   open={open}
   onClose={() => setOpen(false)}
@@ -490,7 +490,7 @@ const f = useField({ hint, error });
         <AlertDialogDemo />
       </Example>
 
-      <Example id="navigatie" name="Breadcrumb en Pagination" intro="Waar je bent en waar je heen kunt: een kruimelpad naar de pagina's erboven en paginering voor lange lijsten. Op smalle schermen houdt Pagination alleen vorige, volgende en de positie."
+      <Example id="navigatie" api={['Breadcrumb', 'BreadcrumbItem', 'Pagination']} name="Breadcrumb en Pagination" intro="Waar je bent en waar je heen kunt: een kruimelpad naar de pagina's erboven en paginering voor lange lijsten. Op smalle schermen houdt Pagination alleen vorige, volgende en de positie."
         code={`<Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
   <BreadcrumbItem asChild><NextLink href="/collectie">Collectie</NextLink></BreadcrumbItem>
@@ -520,7 +520,7 @@ toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`
         <ToastDemo />
       </Example>
 
-      <Example id="data" name="Table, Avatar, Skeleton en Spinner" intro="Gegevens in een native tabel met een actiemenu per rij, hoezen of personen als avatar, en plaatshouders terwijl iets laadt."
+      <Example id="data" api={['Table', 'Avatar', 'Skeleton']} name="Table, Avatar, Skeleton en Spinner" intro="Gegevens in een native tabel met een actiemenu per rij, hoezen of personen als avatar, en plaatshouders terwijl iets laadt."
         code={`<Table caption="Meest gedraaid" showCaption>
   <thead>…</thead>
   <tbody><tr><th scope="row">Uitzinnig</th><td className="pp-num">42</td></tr></tbody>
@@ -530,7 +530,7 @@ toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`
         <DataDemo />
       </Example>
 
-      <Example id="layout" name="Stack en Container" intro="Twee kleine layoutbouwstenen: een flexstapel op de ruimteschaal en een container met de goot van het portfolio."
+      <Example id="layout" api={['Stack', 'Container']} name="Stack en Container" intro="Twee kleine layoutbouwstenen: een flexstapel op de ruimteschaal en een container met de goot van het portfolio."
         code={`<Container size="md">
   <Stack gap={5}>
     <Text variant="title">Kop</Text>

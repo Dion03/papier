@@ -138,14 +138,17 @@ export function App() {
               <ul className="doc-list">
                 <li><code>papier.css</code>: tokens, basis en alle componenten, 7 kB gzip.</li>
                 <li><code>tokens.css</code> en <code>tokens.json</code> voor wie alleen de waarden wil, ook buiten React.</li>
+                <li><code>tokens.dtcg.json</code> in het W3C-formaat voor design tokens, voor Tokens Studio, Figma en Style Dictionary.</li>
                 <li><code>fonts.css</code>: Manrope en DM Sans als variabele fonts.</li>
-                <li>ES- en CommonJS-builds met typedefinities. React is een peer dependency.</li>
+                <li>ES- en CommonJS-builds met typedefinities, één bestand per module. React 18 of 19 is een peer dependency.</li>
               </ul>
               <Text variant="subtitle" as="h3">Hoe het getest is</Text>
               <ul className="doc-list">
                 <li>axe zonder overtredingen voor elk component, in licht en donker.</li>
                 <li>Gedragstests voor toetsenbord, focus en ARIA-status.</li>
                 <li>Een contrastcheck op 26 paren per thema die de build laat falen.</li>
+                <li>Unit-, axe- en SSR-tests op React 18 en 19; Playwright in Chromium, Firefox, WebKit en mobiel, ook van rechts naar links.</li>
+                <li>De API-tabellen hieronder komen uit de TypeScript-types, dus ze lopen nooit achter.</li>
               </ul>
               <Text variant="subtitle" as="h3">In je eigen app</Text>
               <ul className="doc-list">
@@ -153,14 +156,33 @@ export function App() {
                 <li>Alle CSS staat in <code>@layer papier</code>. Je eigen stijlen winnen zonder specificiteitsgevecht; zet bij Tailwind 4 bovenaan <code>@layer theme, base, papier, components, utilities;</code>.</li>
                 <li>Menu en Tooltip openen in de top layer en vallen niet weg in een tabel of module met <code>overflow: hidden</code>.</li>
                 <li>Elk component met een eigen element geeft een <code>ref</code> door.</li>
+                <li>Next.js: Text, Stack, Container, Surface, Tag, Table en Skeleton blijven server components; alleen wat je bedient is client-code.</li>
+                <li>Van rechts naar links: zet <code>dir="rtl"</code> op je pagina. Uitlijning, menu's en pijlen draaien mee; geef eigen pijlen <code>className="pp-flip-rtl"</code>.</li>
               </ul>
+            </div>
+          </div>
+          <div className="doc-grid-2 doc-theme">
+            <Surface material="ink" padding="lg" className="doc-code-card">
+              <pre tabIndex={0} aria-label="Voorbeeld van een eigen thema"><code>{`import { Papier, themeStyle, checkTheme } from '@dionbm/papier';
+
+const merk = { action: '#1f4e8c', 'action-hover': '#183d6e', 'on-action': '#ffffff' };
+
+<Papier theme="light" style={themeStyle(merk)}>…</Papier>
+
+// In een test: geen merkkleur maakt tekst onleesbaar.
+expect(checkTheme(merk).filter((r) => !r.ok)).toEqual([]);`}</code></pre>
+            </Surface>
+            <div className="doc-stack">
+              <Text variant="subtitle" as="h3">Een eigen thema</Text>
+              <Text tone="muted">Componenten gebruiken alleen kleurrollen. Een merk of thema is dus een andere waarde voor een paar rollen, als CSS-variabele <code>--papier-color-*</code>. <code>themeStyle</code> zet ze inline, <code>checkTheme</code> legt ze langs dezelfde 26 contrastparen als de build.</Text>
+              <Text tone="muted">Alle rollen staan in <code>colorRoles</code>. Voor licht én donker zet je de variabelen in je eigen CSS onder <code>[data-papier-theme]</code>.</Text>
             </div>
           </div>
         </section>
       </main>
 
       <footer className="doc-footer">
-        <Text variant="small" tone="muted">Papier is gemaakt door Dion Meijboom en draagt de identiteit van zijn portfolio. Fonts onder de SIL Open Font License.</Text>
+        <Text variant="small" tone="muted">Papier is mijn design system en draagt de identiteit van mijn portfolio. Fonts onder de SIL Open Font License.</Text>
         <a href="#top" className="doc-wordmark doc-wordmark--small">papier<span>.</span><span className="pp-visually-hidden"> terug naar boven</span></a>
       </footer>
       </ToastProvider>

@@ -27,7 +27,7 @@
 }
 .pp-switch__track::before { content: ''; position: absolute; inset: -8px -4px; }
 .pp-switch__thumb {
-  position: absolute; top: 3px; left: 3px; width: 21px; height: 21px; border-radius: 50%;
+  position: absolute; top: 3px; inset-inline-start: 3px; width: 21px; height: 21px; border-radius: 50%;
   background: var(--papier-color-text); box-shadow: var(--papier-shadow-sm);
   transition: transform var(--papier-dur-color) var(--papier-ease-arrive), background-color var(--papier-dur-color) var(--papier-ease-arrive);
 }
@@ -36,4 +36,6 @@
 .pp-switch__track:active .pp-switch__thumb { width: 25px; }
 .pp-switch__track[aria-checked="true"]:active .pp-switch__thumb { transform: translateX(18px); }
 .pp-switch__track:disabled { opacity: 0.45; cursor: not-allowed; }
+.pp-switch__track:dir(rtl)[aria-checked="true"] .pp-switch__thumb { transform: translateX(-22px); }
+.pp-switch__track:dir(rtl)[aria-checked="true"]:active .pp-switch__thumb { transform: translateX(-18px); }
 }

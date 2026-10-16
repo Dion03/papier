@@ -32,7 +32,9 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(function TabList
     };
     measure();
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    // Tabs too: their width changes when a web font arrives, the list's may not.
     if (ref.current) ro?.observe(ref.current);
+    ref.current?.querySelectorAll('[role="tab"]').forEach((el) => ro?.observe(el));
     return () => ro?.disconnect();
   }, [value]);
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {

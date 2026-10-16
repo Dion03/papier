@@ -11,4 +11,7 @@
 .pp-progress__track[data-indeterminate] .pp-progress__bar { width: 38%; animation: pp-indeterminate 1.4s var(--papier-ease-arrive) infinite; }
 @keyframes pp-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(270%); } }
 @media (prefers-reduced-motion: reduce) { .pp-progress__track[data-indeterminate] .pp-progress__bar { animation: none; width: 100%; opacity: 0.45; } }
+.pp-progress__bar:dir(rtl) { transform-origin: right; }
+.pp-progress__track[data-indeterminate] .pp-progress__bar:dir(rtl) { animation-name: pp-indeterminate-rtl; }
+@keyframes pp-indeterminate-rtl { from { transform: translateX(100%); } to { transform: translateX(-270%); } }
 }
