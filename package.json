@@ -1,7 +1,7 @@
 {
   "name": "@dionbm/papier",
   "version": "0.2.0",
-  "description": "Papier: het design system van Dion. Warm papier, inkt, vermiljoen en salie als toegankelijke React-componenten.",
+  "description": "Papier: mijn design system. Warm papier, inkt, vermiljoen en salie als toegankelijke React-componenten.",
   "license": "MIT",
   "author": "Dion Meijboom",
   "type": "module",

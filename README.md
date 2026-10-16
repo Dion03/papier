@@ -1,6 +1,6 @@
 # Papier
 
-Het design system van Dion: warm papier, inkt, vermiljoen en salie uit
+Mijn design system: warm papier, inkt, vermiljoen en salie uit
 [portfolio.dionbm.nl](https://portfolio.dionbm.nl) als toegankelijke React-componenten,
 met tokens voor web en Android.
 
