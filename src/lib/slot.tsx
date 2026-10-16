@@ -32,7 +32,9 @@ function elementRef(el: ReactElement): Ref<unknown> | undefined {
  * (a blocked Button) skips the child's handler, as router links already do.
  */
 function mergeProps(slot: AnyProps, child: AnyProps): AnyProps {
-  const out: AnyProps = { ...child, ...slot };
+  // An undefined slot prop (e.g. no target) never wipes out what the child sets itself.
+  const out: AnyProps = { ...child };
+  for (const key of Object.keys(slot)) if (slot[key] !== undefined) out[key] = slot[key];
   for (const key of Object.keys(child)) {
     const s = slot[key];
     const c = child[key];
@@ -43,7 +45,6 @@ function mergeProps(slot: AnyProps, child: AnyProps): AnyProps {
       };
     } else if (key === 'className') out[key] = cx(slot[key] as string, c as string);
     else if (key === 'style') out[key] = { ...(c as object), ...(s as object) };
-    else if (s === undefined) out[key] = c;
   }
   return out;
 }

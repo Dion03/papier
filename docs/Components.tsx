@@ -3,6 +3,7 @@ import {
   Avatar, Container, Menu, RadioGroup, Select, Sheet, Skeleton, Spinner, Stack, Table, Tooltip, useToast,
   Button, Checkbox, Dialog, Disclosure, IconButton, Link, Notice, Progress, SegmentedControl, Slider, Surface,
   Switch, Tab, TabList, TabPanel, Tabs, Tag, Text, TextArea, TextField, icons, Field,
+  AlertDialog, Breadcrumb, BreadcrumbItem, Combobox, Pagination, type ComboboxOption,
 } from '@dionbm/papier';
 import { Example } from './Example';
 
@@ -240,6 +241,57 @@ function LayoutDemo() {
   );
 }
 
+const records: ComboboxOption[] = [
+  { value: 'uitzinnig', label: 'Uitzinnig', description: 'Froukje · 2023' },
+  { value: 'cafe', label: 'Café Brazil', description: 'Diverse artiesten · 1998' },
+  { value: 'kind', label: 'Kind of Blue', description: 'Miles Davis · uitgeleend', disabled: true },
+  { value: 'blue', label: 'Blue Train', description: 'John Coltrane · 1957' },
+  { value: 'rumours', label: 'Rumours', description: 'Fleetwood Mac · 1977' },
+  { value: 'ok', label: 'OK Computer', description: 'Radiohead · 1997' },
+  { value: 'vespertine', label: 'Vespertine', description: 'Björk · 2001' },
+];
+
+function ComboboxDemo() {
+  const [record, setRecord] = useState<string | null>('blue');
+  return (
+    <div className="doc-stack doc-narrow">
+      <Combobox label="Plaat op de draaitafel" options={records} value={record} onChange={setRecord} placeholder="Zoek op titel of artiest"
+        hint="Typ bijvoorbeeld bjork of cafe: accenten en hoofdletters tellen niet mee." />
+      <Text variant="small" tone="muted" role="status">{record ? `Gekozen: ${records.find((r) => r.value === record)?.label}.` : 'Nog niets gekozen.'}</Text>
+    </div>
+  );
+}
+
+function AlertDialogDemo() {
+  const [open, setOpen] = useState(false);
+  const [result, setResult] = useState('');
+  return (
+    <div className="doc-stack">
+      <div className="doc-row"><Button variant="danger" iconStart={<icons.Close />} onClick={() => setOpen(true)}>Uit collectie halen</Button></div>
+      <Text variant="small" tone="muted" role="status">{result}</Text>
+      <AlertDialog open={open} onClose={() => setOpen(false)} tone="danger"
+        title="Blue Train uit je collectie halen?" description="De plaat en je luistergeschiedenis verdwijnen. Dit kun je niet ongedaan maken."
+        confirmLabel="Uit collectie halen"
+        onConfirm={() => new Promise<void>((done) => window.setTimeout(() => { setResult('Blue Train is uit je collectie gehaald.'); done(); }, 900))} />
+    </div>
+  );
+}
+
+function NavigationDemo() {
+  const [page, setPage] = useState(4);
+  return (
+    <div className="doc-stack">
+      <Breadcrumb>
+        <BreadcrumbItem href="#navigatie">Home</BreadcrumbItem>
+        <BreadcrumbItem href="#navigatie">Collectie</BreadcrumbItem>
+        <BreadcrumbItem href="#navigatie">Jazz</BreadcrumbItem>
+        <BreadcrumbItem>Blue Train</BreadcrumbItem>
+      </Breadcrumb>
+      <Pagination page={page} pageCount={12} onPageChange={setPage} label="Pagina's van de collectie" />
+    </div>
+  );
+}
+
 export function Components() {
   return (
     <section id="componenten" className="doc-section" aria-labelledby="componenten-title">
@@ -400,6 +452,60 @@ const f = useField({ hint, error });
           { name: 'ref', type: 'Ref', note: 'Menu: de triggerknop. Dialog en Sheet: het dialog-element.' },
         ]}>
         <OverlayDemo />
+      </Example>
+
+      <Example id="zoeken" name="Combobox" intro="Een invoerveld met een lijst die meezoekt terwijl je typt. Voor lange lijsten of zoeken op een server; voor een paar vaste keuzes blijft Select de betere keuze."
+        code={`<Combobox
+  label="Plaat"
+  options={records}
+  value={record}
+  onChange={setRecord}
+/>
+
+// Zoeken op een server
+<Combobox label="Artiest" options={results} filter={false}
+  inputValue={query} onInputChange={setQuery} loading={pending} />`}
+        a11y={['Volgt het WAI-ARIA-comboboxpatroon: de focus blijft in het veld, aria-activedescendant wijst de actieve optie aan.', 'Pijltjes bewegen en slaan uitgeschakelde opties over, Enter kiest, Escape sluit en wist daarna.', 'Het aantal resultaten of "Geen resultaten" wordt beleefd voorgelezen.', 'Bij verlaten blijft er altijd een echte keuze staan: een exacte naam telt, anders keert de vorige terug.']}
+        props={[
+          { name: 'options', type: 'ComboboxOption[]', note: 'value, label en optioneel description en disabled.' },
+          { name: 'value / onChange', type: 'string | null', note: 'De gekozen waarde; onChange krijgt ook de optie.' },
+          { name: 'filter', type: '(option, query) => boolean | false', note: 'Standaard: label of beschrijving bevat de tekst, zonder accenten en hoofdletters. false voor resultaten van een server.' },
+          { name: 'inputValue / onInputChange', type: 'string', note: 'De getypte tekst, voor zoeken op een server.' },
+          { name: 'name', type: 'string', note: 'Stuurt de waarde mee in een formulier.' },
+        ]}>
+        <ComboboxDemo />
+      </Example>
+
+      <Example id="bevestigen" name="AlertDialog" intro="Een bevestiging die je werk onderbreekt, voor acties met gevolgen. Sluit alleen via de knoppen of Escape, nooit met een klik ernaast."
+        code={`<AlertDialog
+  open={open}
+  onClose={() => setOpen(false)}
+  onConfirm={() => removeRecord(id)}  // een promise laat de knop laden
+  title="Blue Train uit je collectie halen?"
+  confirmLabel="Uit collectie halen"
+  tone="danger"
+/>`}
+        a11y={['role="alertdialog" op het native dialog-element, met de titel als naam en de beschrijving in aria-describedby.', 'De focus begint op Annuleren, zodat Enter nooit per ongeluk iets verwijdert.', 'Geeft onConfirm een promise terug, dan laadt de knop en blijft het venster open als het mislukt.']}>
+        <AlertDialogDemo />
+      </Example>
+
+      <Example id="navigatie" name="Breadcrumb en Pagination" intro="Waar je bent en waar je heen kunt: een kruimelpad naar de pagina's erboven en paginering voor lange lijsten. Op smalle schermen houdt Pagination alleen vorige, volgende en de positie."
+        code={`<Breadcrumb>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem asChild><NextLink href="/collectie">Collectie</NextLink></BreadcrumbItem>
+  <BreadcrumbItem>Blue Train</BreadcrumbItem>
+</Breadcrumb>
+
+<Pagination page={page} pageCount={12} onPageChange={setPage} />
+<Pagination page={page} pageCount={12} getHref={(p) => \`?p=\${p}\`} linkAs={NextLink} />`}
+        a11y={['Beide zijn een benoemde nav-landmark met een echte lijst.', 'De huidige pagina heeft aria-current="page", in het kruimelpad en in de paginering.', "Paginanummers heten voluit \"Pagina 3\"; weggelaten pagina's zijn voor schermlezers verborgen."]}
+        props={[
+          { name: 'BreadcrumbItem', type: 'href | asChild', note: 'Zonder href of asChild is het item de huidige pagina.' },
+          { name: 'Pagination getHref', type: '(page) => string', note: 'Echte links, te openen in een nieuw tabblad. Zonder getHref zijn het knoppen.' },
+          { name: 'Pagination linkAs', type: 'ElementType', note: 'Eigen linkcomponent, zoals de Link van Next.js.' },
+          { name: 'Pagination siblings', type: 'number', note: "Pagina's aan elke kant van de huidige. Standaard 1." },
+        ]}>
+        <NavigationDemo />
       </Example>
 
       <Example id="toast" name="Toast" intro="Korte bevestigingen rechtsonder. Ze pauzeren als je erop wijst of focust; fouten blijven staan tot je ze sluit."

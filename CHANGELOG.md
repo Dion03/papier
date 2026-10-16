@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.4.0 (nog niet uitgebracht)
+
+- Nieuw: `Combobox`, een invoerveld met een lijst die meezoekt (WAI-ARIA combobox). Zoekt
+  standaard in label en beschrijving, zonder accenten en hoofdletters; `filter={false}` met
+  `inputValue` en `onInputChange` voor zoeken op een server, `loading` en `name` voor formulieren.
+- Nieuw: `AlertDialog` voor bevestigingen (role="alertdialog"). De focus begint op Annuleren,
+  een klik ernaast sluit niet, en een promise uit `onConfirm` laat de knop laden.
+- Nieuw: `Breadcrumb` en `BreadcrumbItem`, met `asChild` voor routerlinks.
+- Nieuw: `Pagination` met knoppen (`onPageChange`) of echte links (`getHref`, `linkAs`).
+  Op smalle schermen blijven vorige, volgende en "Pagina 3 van 12".
+- Teksten: nieuwe labels `cancel`, `breadcrumb`, `pagination`, `previous`, `next`,
+  `showOptions` en `noResults`, en de functies `page`, `pageOf` en `results`.
+- Contrastcheck: twee nieuwe paren (focus op verdiept vlak, tekst op de gevarenknop), samen 26.
+- Hoogcontrastmodus: de actieve optie en de huidige pagina blijven zichtbaar.
+- Fix: `asChild` overschreef een prop van het kind met `undefined` (bijvoorbeeld `href` van
+  een routerlink die `to` gebruikt). Papier zet nu alleen props die een waarde hebben.
+
 ## 0.3.0 (nog niet uitgebracht)
 
 - Router-links: `asChild` op Button, IconButton en Link rendert het kind (bv. de Link van

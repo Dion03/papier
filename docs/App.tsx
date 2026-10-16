@@ -46,7 +46,7 @@ function Constellation() {
         <Slider label="Volume" value={vol} onValueChange={setVol} formatValue={(v) => `${v}%`} />
       </Surface>
       <Surface material="ink" elevation="object" className="doc-obj doc-obj--d">
-        <span className="doc-obj__count">30</span>
+        <span className="doc-obj__count">34</span>
         <Text variant="small" as="p">componenten, getest met axe in licht en donker</Text>
       </Surface>
       <div className="doc-obj doc-obj--e doc-disc" aria-hidden="true"><span /></div>
@@ -88,7 +88,7 @@ export function App() {
             <Tag tone="outline">v0.3 · React · MIT</Tag>
             <Text variant="display" id="hero-title">Papier<span className="doc-accent">.</span></Text>
             <Text variant="body-lg" tone="muted" className="doc-hero__lead">
-              Het design system achter mijn portfolio en apps. Warm papier, inkt, vermiljoen en salie als 30 toegankelijke React-componenten, met tokens die zichzelf controleren.
+              Het design system achter mijn portfolio en apps. Warm papier, inkt, vermiljoen en salie als 34 toegankelijke React-componenten, met tokens die zichzelf controleren.
             </Text>
             <div className="doc-row">
               <Button asChild variant="ink" size="lg" iconEnd={<icons.ArrowRight />}><a href="#componenten">Bekijk de componenten</a></Button>
@@ -145,7 +145,7 @@ export function App() {
               <ul className="doc-list">
                 <li>axe zonder overtredingen voor elk component, in licht en donker.</li>
                 <li>Gedragstests voor toetsenbord, focus en ARIA-status.</li>
-                <li>Een contrastcheck op 24 paren per thema die de build laat falen.</li>
+                <li>Een contrastcheck op 26 paren per thema die de build laat falen.</li>
               </ul>
               <Text variant="subtitle" as="h3">In je eigen app</Text>
               <ul className="doc-list">

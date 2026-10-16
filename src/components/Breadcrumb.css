@@ -1,0 +1,9 @@
+@layer papier {
+.pp-breadcrumb__list { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 0; padding: 0; list-style: none; font: 400 var(--papier-type-small-size)/var(--papier-type-small-line) var(--papier-font-body); }
+.pp-breadcrumb__item { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.pp-breadcrumb__sep { flex: none; color: var(--papier-color-text-muted); }
+.pp-breadcrumb__item:first-child .pp-breadcrumb__sep { display: none; }
+.pp-breadcrumb__link { color: var(--papier-color-text-muted); font-weight: 400; }
+.pp-breadcrumb__link:hover { color: var(--papier-color-accent-text); }
+.pp-breadcrumb__current, .pp-breadcrumb__link[aria-current="page"] { color: var(--papier-color-text); font-weight: 500; }
+}
