@@ -17,7 +17,10 @@
   .pp-switch__track[aria-checked="true"] .pp-switch__thumb { background: HighlightText; }
   .pp-check__input, .pp-radio__input { border-color: ButtonText; }
   .pp-check__input:checked { background: Highlight; border-color: Highlight; forced-color-adjust: none; }
-  .pp-check__mark { color: HighlightText; }
+  .pp-check__mark, .pp-check__dash { color: HighlightText; }
+  .pp-check__input:indeterminate { background: Highlight; border-color: Highlight; forced-color-adjust: none; }
+  .pp-checkbox-group[data-appearance="card"] .pp-check { border-color: CanvasText; }
+  .pp-checkbox-group[data-appearance="card"] .pp-check:has(:checked) { outline: 2px solid Highlight; }
   .pp-radio__input:checked { border-color: Highlight; forced-color-adjust: none; }
   .pp-progress__track { border: 1px solid CanvasText; }
   .pp-progress__bar { background: Highlight; forced-color-adjust: none; }
@@ -31,6 +34,26 @@
   .pp-notice__icon { border: 1px solid CanvasText; forced-color-adjust: none; background: Canvas; color: CanvasText; }
   .pp-combobox__popup { border: 1px solid CanvasText; }
   .pp-combobox__option[data-active] { outline: 2px solid Highlight; outline-offset: -2px; }
+  .pp-popover__panel, .pp-file__item, .pp-kbd { border: 1px solid CanvasText; }
+  .pp-toggle, .pp-number__step, .pp-sort, .pp-file__remove, .pp-popover__close, .pp-password__toggle { border: 1px solid ButtonText; }
+  .pp-toggle[aria-pressed="true"] { background: Highlight; color: HighlightText; border-color: Highlight; forced-color-adjust: none; }
+  .pp-toggle:disabled, .pp-number__step:disabled { border-color: GrayText; color: GrayText; }
+  .pp-file__zone { border-color: CanvasText; }
+  .pp-range__track { forced-color-adjust: none; background: linear-gradient(to right, Canvas 0 11px, CanvasText 11px var(--pp-pos-lo), Highlight var(--pp-pos-lo) var(--pp-pos-hi), CanvasText var(--pp-pos-hi) calc(100% - 11px), Canvas calc(100% - 11px)) center / 100% 6px no-repeat; }
+  .pp-range__input::-webkit-slider-thumb { background: Canvas; border-color: CanvasText; forced-color-adjust: none; }
+  .pp-range__mark { background: CanvasText; forced-color-adjust: none; }
+  .pp-multi__tag { border: 1px solid CanvasText; }
+  .pp-date__panel { border: 1px solid CanvasText; }
+  .pp-calendar__nav, .pp-date__toggle, .pp-multi__remove { border: 1px solid ButtonText; }
+  .pp-calendar__day[aria-selected="true"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+  .pp-calendar__day[data-range] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+  .pp-calendar__day[data-range="middle"] { background: Canvas; color: CanvasText; outline: 1px solid Highlight; outline-offset: -1px; }
+  .pp-calendar__day[aria-current="date"] { text-decoration: underline 2px; }
+  .pp-calendar__day[aria-disabled="true"] { color: GrayText; }
+  .pp-multi__option[aria-selected="true"] .pp-multi__box { background: Highlight; border-color: Highlight; forced-color-adjust: none; }
+  .pp-file__zone[data-dragging] { border-color: Highlight; }
+  .pp-menu__item[aria-checked="true"] .pp-menu__check { color: Highlight; }
+  .pp-tabs[data-orientation="vertical"] .pp-tab[aria-selected="true"] { text-underline-offset: 4px; }
   .pp-pagination__control[aria-current="page"] { border-color: Highlight; background: Highlight; color: HighlightText; forced-color-adjust: none; }
 }
 }

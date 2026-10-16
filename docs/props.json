@@ -218,6 +218,13 @@
       "doc": "A recovery or follow-up action, e.g. a Button."
     },
     {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Replaces the tone's mark, e.g. a Spinner while something is still running. Decorative."
+    },
+    {
       "name": "live",
       "type": "'off' | 'polite' | 'assertive'",
       "required": false,
@@ -454,6 +461,13 @@
       "doc": ""
     },
     {
+      "name": "autoResize",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Grows with its content instead of scrolling, from `rows` up to `maxRows`."
+    },
+    {
       "name": "error",
       "type": "ReactNode",
       "required": false,
@@ -473,6 +487,13 @@
       "required": false,
       "default": null,
       "doc": "Helper text below the field."
+    },
+    {
+      "name": "maxRows",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": "With autoResize: the height at which it stops growing and scrolls."
     }
   ],
   "Checkbox": [
@@ -489,6 +510,106 @@
       "required": false,
       "default": null,
       "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Error text, e.g. for terms that must be accepted. Sets aria-invalid."
+    },
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": "Partly checked, e.g. \"select all\" when some rows are selected. Announced as \"mixed\"."
+    }
+  ],
+  "CheckboxGroup": [
+    {
+      "name": "legend",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "options",
+      "type": "Array<CheckboxOption<T>>",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "appearance",
+      "type": "'list' | 'card'",
+      "required": false,
+      "default": "'list'",
+      "doc": "`card` gives each option a bordered tile."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "T[]",
+      "required": false,
+      "default": "[]",
+      "doc": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Form name; every checked option is submitted under it."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: T[]) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "orientation",
+      "type": "'vertical' | 'horizontal'",
+      "required": false,
+      "default": "'vertical'",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "T[]",
+      "required": false,
+      "default": null,
+      "doc": "The checked values, in the order of `options`."
     }
   ],
   "Switch": [
@@ -660,6 +781,13 @@
       "doc": ""
     },
     {
+      "name": "activation",
+      "type": "'automatic' | 'manual'",
+      "required": false,
+      "default": "'automatic'",
+      "doc": "`manual`: arrows only move focus and Enter or Space opens the tab. Use it when a panel is slow to load."
+    },
+    {
       "name": "className",
       "type": "string",
       "required": false,
@@ -672,6 +800,13 @@
       "required": false,
       "default": null,
       "doc": ""
+    },
+    {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "required": false,
+      "default": "'horizontal'",
+      "doc": "`vertical` puts the tabs in a column beside the panel (above it on small screens) and uses the up and down arrows."
     },
     {
       "name": "value",
@@ -757,6 +892,22 @@
       "required": false,
       "default": null,
       "doc": ""
+    }
+  ],
+  "Accordion": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": "Disclosure elements."
+    },
+    {
+      "name": "type",
+      "type": "'single' | 'multiple'",
+      "required": false,
+      "default": "'multiple'",
+      "doc": "`single`: opening one section folds the open one. `multiple`: each opens on its own."
     }
   ],
   "Dialog": [
@@ -994,10 +1145,10 @@
   "Menu": [
     {
       "name": "items",
-      "type": "MenuItem[]",
+      "type": "MenuEntry[]",
       "required": true,
       "default": null,
-      "doc": ""
+      "doc": "Items, with `{ type: 'separator' }` and `{ type: 'label', label }` to group them."
     },
     {
       "name": "trigger",
@@ -1545,6 +1696,1086 @@
       "required": false,
       "default": "1",
       "doc": "Pages shown on each side of the current one."
+    }
+  ],
+  "Popover": [
+    {
+      "name": "children",
+      "type": "ReactNode | ((api: { close: () => void }) => ReactNode)",
+      "required": true,
+      "default": null,
+      "doc": "Content, or a function that gets `close` for a button that applies and closes."
+    },
+    {
+      "name": "trigger",
+      "type": "ReactElement<Record<string, unknown>>",
+      "required": true,
+      "default": null,
+      "doc": "One element that opens the popover, e.g. a Button. Its own onClick keeps working."
+    },
+    {
+      "name": "align",
+      "type": "'center' | 'start' | 'end'",
+      "required": false,
+      "default": "'start'",
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "closeButton",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "doc": "Shows a close button in the corner. Escape and a click outside always close."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": ""
+    },
+    {
+      "name": "initialFocus",
+      "type": "RefObject<HTMLElement | null>",
+      "required": false,
+      "default": null,
+      "doc": "Element that gets focus on open. Defaults to the first control in the panel."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Accessible name when there is no visible title."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "side",
+      "type": "'top' | 'bottom' | 'left' | 'right'",
+      "required": false,
+      "default": "'bottom'",
+      "doc": "Preferred side of the trigger; flips when there is no room."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Visible heading; also the accessible name of the panel."
+    }
+  ],
+  "NumberField": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "number | null",
+      "required": false,
+      "default": "null",
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "formatOptions",
+      "type": "Intl.NumberFormatOptions",
+      "required": false,
+      "default": null,
+      "doc": "Intl.NumberFormat options, e.g. `{ style: 'currency', currency: 'EUR' }` or `{ style: 'percent' }`."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hideStepper",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Hides the − and + buttons; the arrow keys still step."
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Locale for formatting and parsing. Defaults to the `locale` of the Papier labels."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: number | null) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "prefix",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Before the value: an icon or unit. Decorative, so name the unit in the label or hint too."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "doc": "Step for the buttons and arrow keys; PageUp and PageDown take ten steps."
+    },
+    {
+      "name": "suffix",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "After the value: an icon or unit. Decorative, so name the unit in the label or hint too."
+    },
+    {
+      "name": "value",
+      "type": "number | null",
+      "required": false,
+      "default": null,
+      "doc": "The number, or null when the field is empty."
+    }
+  ],
+  "PasswordField": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultVisible",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onVisibleChange",
+      "type": "(visible: boolean) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "visible",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Whether the password shows as text."
+    }
+  ],
+  "FileField": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "accept",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Allowed types, as for the native input: \".jpg,.png\", \"image/*\" or \"application/pdf\"."
+    },
+    {
+      "name": "defaultValue",
+      "type": "File[]",
+      "required": false,
+      "default": "[]",
+      "doc": ""
+    },
+    {
+      "name": "dropText",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Text in the drop zone; defaults to the \"choose files\" label."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "maxFiles",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": "Most files at once, with `multiple`."
+    },
+    {
+      "name": "maxSize",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": "Largest file in bytes."
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": ""
+    },
+    {
+      "name": "onFilesChange",
+      "type": "(files: File[]) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onReject",
+      "type": "(rejections: FileRejection[]) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called with files that were refused, and why. They are also announced in the field."
+    },
+    {
+      "name": "value",
+      "type": "File[]",
+      "required": false,
+      "default": null,
+      "doc": "The chosen files."
+    }
+  ],
+  "Toggle": [
+    {
+      "name": "defaultPressed",
+      "type": "boolean",
+      "required": false,
+      "default": "false",
+      "doc": ""
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Shown before the label; when pressed without one, a tick appears so state is never colour alone."
+    },
+    {
+      "name": "onPressedChange",
+      "type": "(pressed: boolean) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "pressed",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    }
+  ],
+  "ToggleGroup": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "Accessible name for the group."
+    },
+    {
+      "name": "options",
+      "type": "Array<ToggleOption<T>>",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "T[]",
+      "required": false,
+      "default": "[]",
+      "doc": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: T[]) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "T[]",
+      "required": false,
+      "default": null,
+      "doc": "The pressed values, in the order of `options`."
+    }
+  ],
+  "SortHeader": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onSort",
+      "type": "() => void",
+      "required": true,
+      "default": null,
+      "doc": "Called when the header is activated; decide the next direction yourself or use useTableSort."
+    },
+    {
+      "name": "align",
+      "type": "'start' | 'end'",
+      "required": false,
+      "default": "'start'",
+      "doc": "`end` for number columns, so the header lines up with `pp-num` cells."
+    },
+    {
+      "name": "sort",
+      "type": "SortDirection | 'none'",
+      "required": false,
+      "default": "'none'",
+      "doc": "This column's sort direction, or none when another column (or nothing) is sorted."
+    }
+  ],
+  "MultiCombobox": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "options",
+      "type": "ComboboxOption[]",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "string[]",
+      "required": false,
+      "default": "[]",
+      "doc": ""
+    },
+    {
+      "name": "emptyText",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Shown when nothing matches; defaults to the \"no results\" label."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "filter",
+      "type": "((option: ComboboxOption, query: string) => boolean) | false",
+      "required": false,
+      "default": null,
+      "doc": "How typed text matches an option. `false` shows `options` as given (already filtered)."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "inputValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "The typed search text, for searching on a server. Use with `filter={false}`."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "default": null,
+      "doc": "Most items that can be chosen; further options are disabled until one is removed."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string[], options: ComboboxOption[]) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onInputChange",
+      "type": "(text: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "string[]",
+      "required": false,
+      "default": null,
+      "doc": "The chosen values, in the order they were chosen."
+    }
+  ],
+  "RangeSlider": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "RangeValue",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "formatValue",
+      "type": "(value: number) => string",
+      "required": false,
+      "default": "String",
+      "doc": "Formats the visible values and each thumb's aria-valuetext."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "marks",
+      "type": "Array<number | { value: number; label?: ReactNode }>",
+      "required": false,
+      "default": null,
+      "doc": "Ticks under the track, optionally with a label, e.g. `[{ value: 1960, label: '1960' }]`."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "default": "100",
+      "doc": ""
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "doc": ""
+    },
+    {
+      "name": "minDistance",
+      "type": "number",
+      "required": false,
+      "default": "0",
+      "doc": "Smallest gap between the two thumbs."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Form name; both values are submitted under it, low first."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: RangeValue) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueCommit",
+      "type": "(value: RangeValue) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called when a thumb is let go or a key is released, e.g. to start a search only then."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "required": false,
+      "default": "1",
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "RangeValue",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "Calendar": [
+    {
+      "name": "autoFocus",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Moves focus to the active day when the calendar appears, e.g. inside a popover."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultMonth",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": "A date in the month shown first; defaults to the value or today."
+    },
+    {
+      "name": "defaultValue",
+      "type": "ISODate | null",
+      "required": false,
+      "default": "null",
+      "doc": ""
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: ISODate) => boolean",
+      "required": false,
+      "default": null,
+      "doc": "Dates that cannot be chosen, e.g. days a shop is closed."
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Locale for names and the first day of the week. Defaults to the `locale` of the Papier labels."
+    },
+    {
+      "name": "max",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": "Latest date that can be chosen, \"YYYY-MM-DD\"."
+    },
+    {
+      "name": "min",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": "Earliest date that can be chosen, \"YYYY-MM-DD\"."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: ISODate) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "ISODate | null",
+      "required": false,
+      "default": null,
+      "doc": "The chosen date as \"YYYY-MM-DD\", or null."
+    }
+  ],
+  "RangeCalendar": [
+    {
+      "name": "autoFocus",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Moves focus to the active day when the calendar appears, e.g. inside a popover."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultMonth",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": "A date in the month shown first; defaults to the value or today."
+    },
+    {
+      "name": "defaultValue",
+      "type": "DateRange | null",
+      "required": false,
+      "default": "null",
+      "doc": ""
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: ISODate) => boolean",
+      "required": false,
+      "default": null,
+      "doc": "Dates that cannot be chosen, e.g. days a shop is closed."
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Locale for names and the first day of the week. Defaults to the `locale` of the Papier labels."
+    },
+    {
+      "name": "max",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": "Latest date that can be chosen, \"YYYY-MM-DD\"."
+    },
+    {
+      "name": "min",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": "Earliest date that can be chosen, \"YYYY-MM-DD\"."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: DateRange) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called after the first day (with `end: null`) and again after the second."
+    },
+    {
+      "name": "value",
+      "type": "DateRange | null",
+      "required": false,
+      "default": null,
+      "doc": ""
+    }
+  ],
+  "DatePicker": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "ISODate | null",
+      "required": false,
+      "default": "null",
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Error text from your own validation. A typed date that does not exist gets its own message."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: ISODate) => boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Locale for typing, formatting and the calendar. Defaults to the `locale` of the Papier labels."
+    },
+    {
+      "name": "max",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "min",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: ISODate | null) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "value",
+      "type": "ISODate | null",
+      "required": false,
+      "default": null,
+      "doc": "The date as \"YYYY-MM-DD\", like <input type=\"date\">, or null when empty."
+    }
+  ],
+  "DateRangePicker": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "DateRange | null",
+      "required": false,
+      "default": "null",
+      "doc": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "endName",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Error text from your own validation. Typed dates that do not exist get their own message."
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "isDateUnavailable",
+      "type": "(date: ISODate) => boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Locale for typing, formatting and the calendar. Defaults to the `locale` of the Papier labels."
+    },
+    {
+      "name": "max",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "min",
+      "type": "ISODate",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: DateRange | null) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "startName",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Form names for the start and end date."
+    },
+    {
+      "name": "value",
+      "type": "DateRange | null",
+      "required": false,
+      "default": null,
+      "doc": "The span as \"YYYY-MM-DD\" dates; `end` is null while only the start is known."
+    }
+  ],
+  "Separator": [
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "doc": "Purely visual: hidden from screen readers. Defaults to true; set false between real sections."
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "A word in the middle of a horizontal line, e.g. \"of\" between two ways to sign in. It is read out."
+    },
+    {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "required": false,
+      "default": "'horizontal'",
+      "doc": ""
+    }
+  ],
+  "EmptyState": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": "What is missing, e.g. \"Nog geen platen\"."
+    },
+    {
+      "name": "action",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "The way forward, e.g. a Button."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Why, and what to do about it."
+    },
+    {
+      "name": "headingLevel",
+      "type": "2 | 3 | 4",
+      "required": false,
+      "default": "3",
+      "doc": "Level of the title, to fit the page outline."
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "An icon or small illustration. Decorative."
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "required": false,
+      "default": "'md'",
+      "doc": ""
     }
   ]
 }

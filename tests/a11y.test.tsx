@@ -9,6 +9,8 @@ import {
   Checkbox, Switch, Slider, SegmentedControl, Tabs, TabList, Tab, TabPanel, Disclosure, Dialog, icons,
   Select, RadioGroup, Tooltip, Menu, ToastProvider, Table, Skeleton, Sheet, Stack, Container, Avatar, Spinner, Field,
   AlertDialog, Combobox, Breadcrumb, BreadcrumbItem, Pagination,
+  MultiCombobox, RangeSlider, Calendar, DatePicker, RangeCalendar, DateRangePicker,
+  Popover, NumberField, PasswordField, FileField, CheckboxGroup, Accordion, ToggleGroup, Toggle, SortHeader, Separator, Kbd, EmptyState,
 } from '../src';
 import userEvent from '@testing-library/user-event';
 
@@ -48,6 +50,23 @@ const cases: Array<[string, ReactElement]> = [
   ['IconButton asChild', <IconButton asChild label="Home" icon={<icons.ArrowLeft />}><a href="/" /></IconButton>],
   ['Field', <Field label="Artiest" hint="Zoek in je bak" error="Niets gevonden" required>{(c) => <input type="search" {...c} />}</Field>],
   ['TextField prefix/suffix', <><TextField label="Prijs in euro" prefix="€" /><TextField label="Gewicht in kg" suffix="kg" error="Te zwaar" /><TextField label="Zoeken" hideLabel prefix={<icons.Search />} /></>],
+  ['Popover', <Popover trigger={<Button>Filters</Button>} title="Filters"><p>Inhoud</p></Popover>],
+  ['NumberField', <><NumberField label="Aantal" defaultValue={2} min={1} max={9} hint="Per bestelling" /><NumberField label="Prijs" formatOptions={{ style: 'currency', currency: 'EUR' }} hideStepper error="Te hoog" /></>],
+  ['PasswordField', <PasswordField label="Wachtwoord" autoComplete="new-password" hint="Minstens 12 tekens" required />],
+  ['FileField', <><FileField label="Hoes" accept="image/*" hint="JPG of PNG" /><FileField label="Bijlagen" multiple defaultValue={[new File(['x'], 'scan.pdf', { type: 'application/pdf' })]} error="Te groot" /></>],
+  ['Checkbox indeterminate', <Checkbox label="Alles selecteren" indeterminate error="Kies minstens een plaat" />],
+  ['CheckboxGroup', <><CheckboxGroup legend="Formaten" hint="Een of meer" defaultValue={['lp']} options={[{ value: 'lp', label: 'LP' }, { value: 'ep', label: 'EP', description: 'Vier nummers' }]} /><CheckboxGroup legend="Staat" appearance="card" error="Kies een staat" options={[{ value: 'nieuw', label: 'Nieuw' }, { value: 'goed', label: 'Goed' }]} /></>],
+  ['Accordion', <Accordion type="single"><Disclosure summary="Verzending" defaultOpen><p>Twee dagen</p></Disclosure><Disclosure summary="Retour"><p>Dertig dagen</p></Disclosure></Accordion>],
+  ['Tabs vertical', <Tabs defaultValue="a" orientation="vertical" activation="manual"><TabList label="Instellingen"><Tab value="a">Profiel</Tab><Tab value="b">Meldingen</Tab></TabList><TabPanel value="a">A</TabPanel><TabPanel value="b">B</TabPanel></Tabs>],
+  ['ToggleGroup', <><ToggleGroup label="Genres" defaultValue={['jazz']} options={[{ value: 'jazz', label: 'Jazz' }, { value: 'soul', label: 'Soul' }]} /><Toggle aria-label="Vet" icon={<icons.Plus />} /></>],
+  ['SortHeader', <Table caption="Platen"><thead><tr><SortHeader sort="ascending" onSort={() => {}}>Titel</SortHeader><SortHeader onSort={() => {}} align="end">Jaar</SortHeader></tr></thead><tbody><tr><td>Uitzinnig</td><td className="pp-num">2022</td></tr></tbody></Table>],
+  ['Separator, Kbd, EmptyState', <><Separator /><Separator label="of" /><Separator decorative={false} orientation="vertical" /><p>Zoek met <Kbd>Ctrl</Kbd> <Kbd>K</Kbd></p><EmptyState title="Nog geen platen" description="Voeg je eerste plaat toe." icon={<icons.Plus />} action={<Button>Toevoegen</Button>} /></>],
+  ['MultiCombobox', <><MultiCombobox label="Genres" defaultValue={['jazz']} options={[{ value: 'jazz', label: 'Jazz' }, { value: 'soul', label: 'Soul' }]} hint="Een of meer" name="g" /><MultiCombobox label="Artiesten" options={[]} error="Kies een artiest" required /></>],
+  ['RangeSlider', <RangeSlider label="Jaar" min={1950} max={2020} defaultValue={[1960, 1990]} marks={[{ value: 1950, label: '1950' }, 1985, { value: 2020, label: '2020' }]} />],
+  ['Calendar', <Calendar defaultValue="2024-03-15" min="2024-03-05" isDateUnavailable={(d) => d === '2024-03-20'} />],
+  ['RangeCalendar', <RangeCalendar defaultValue={{ start: '2024-03-11', end: '2024-03-20' }} />],
+  ['DateRangePicker', <DateRangePicker label="Verblijf" defaultValue={{ start: '2024-03-11', end: '2024-03-20' }} hint="Aankomst en vertrek" />],
+  ['DatePicker', <><DatePicker label="Releasedatum" defaultValue="2024-03-15" hint="Op de hoes" /><DatePicker label="Leverdatum" error="Kies een werkdag" required /></>],
 ];
 
 describe('axe: geen toegankelijkheidsfouten', () => {
@@ -86,6 +105,37 @@ describe('axe: geen toegankelijkheidsfouten', () => {
     const { container } = render(<Papier><main><Tooltip content="Volgende plaat" placement="left"><IconButton label="Volgende" icon={<icons.ArrowRight />} /></Tooltip></main></Papier>);
     await userEvent.tab();
     expect(container.querySelector('[role="tooltip"]')).toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('Popover (open)', async () => {
+    const { container } = render(<Papier><main><Popover trigger={<Button>Filters</Button>} title="Filter de bak"><TextField label="Jaar" /></Popover></main></Papier>);
+    await userEvent.click(container.querySelector('button')!);
+    expect(container.querySelector('[role="dialog"]')).toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('Menu met groepen en keuzes (open)', async () => {
+    const { container } = render(<Papier><main><Menu trigger="Weergave" items={[
+      { type: 'label', label: 'Sorteren' }, { type: 'radio', label: 'Artiest', checked: true }, { type: 'radio', label: 'Jaar' },
+      { type: 'separator' }, { type: 'checkbox', label: 'Toon hoezen', checked: true }, { label: 'Discogs', href: 'https://discogs.com' },
+      { label: 'Wissen', shortcut: 'Del', tone: 'danger', onSelect: () => {} },
+    ]} /></main></Papier>);
+    await userEvent.click(container.querySelector('button')!);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('MultiCombobox en DatePicker (open)', async () => {
+    const { container } = render(<Papier><main>
+      <MultiCombobox label="Genres" defaultValue={['jazz']} options={[{ value: 'jazz', label: 'Jazz' }, { value: 'soul', label: 'Soul', description: 'Motown' }]} />
+      <DatePicker label="Datum" defaultValue="2024-03-15" />
+    </main></Papier>);
+    container.querySelector<HTMLInputElement>('[role="combobox"]')!.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(container.querySelector('[role="listbox"]')).toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+    await userEvent.click(container.querySelector<HTMLButtonElement>('.pp-date__toggle')!);
+    expect(container.querySelector('[role="grid"]')).toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
   });
 

@@ -1,0 +1,22 @@
+@layer papier {
+.pp-toggle-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp-toggle {
+  display: inline-flex; align-items: center; gap: 0; min-height: var(--papier-control-sm); padding: 0 14px;
+  border: 1.5px solid var(--papier-color-line); border-radius: var(--papier-radius-pill);
+  background: transparent; color: var(--papier-color-text); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+  font: var(--papier-type-control-weight) var(--papier-type-control-size)/1 var(--papier-font-body);
+  transition: background-color var(--papier-dur-color) var(--papier-ease-arrive), color var(--papier-dur-color) var(--papier-ease-arrive),
+              border-color var(--papier-dur-color) var(--papier-ease-arrive), transform var(--papier-dur-press) var(--papier-ease-arrive), gap var(--papier-dur-color) var(--papier-ease-arrive);
+}
+.pp-toggle[data-size="sm"] { min-height: 30px; padding: 0 12px; font-size: var(--papier-type-label-size); }
+.pp-toggle:hover { border-color: var(--papier-color-line-strong); background: var(--papier-color-surface-sunken); }
+.pp-toggle:active:not(:disabled) { transform: scale(0.96); }
+.pp-toggle[aria-pressed="true"] { gap: 6px; border-color: var(--papier-color-action-strong); background: var(--papier-color-action-strong); color: var(--papier-color-on-action-strong); }
+.pp-toggle__icon { display: inline-flex; margin-inline-end: 6px; }
+.pp-toggle:not(:has(.pp-toggle__label)) { padding: 0; width: var(--papier-control-sm); justify-content: center; }
+.pp-toggle:not(:has(.pp-toggle__label)) .pp-toggle__icon { margin: 0; }
+/* The tick slides in when pressed, so the state never rests on colour alone. */
+.pp-toggle__tick { width: 0; opacity: 0; transition: width var(--papier-dur-color) var(--papier-ease-arrive), opacity var(--papier-dur-color) var(--papier-ease-arrive); }
+.pp-toggle[aria-pressed="true"] .pp-toggle__tick { width: 14px; opacity: 1; }
+.pp-toggle:disabled { opacity: 0.45; cursor: not-allowed; }
+}

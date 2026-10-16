@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.6.0 (nog niet uitgebracht)
+
+Achttien nieuwe componenten en uitbreidingen na een vergelijking met shadcn/ui, Radix, Mantine,
+Chakra en HeroUI (zie `docs/gap-analysis.md`). Samen 52 componenten. Bestaande API's werken
+ongewijzigd.
+
+- Nieuw: `Popover`, een niet-modaal paneel naast een knop voor filters, korte formulieren en
+  uitleg. Focus gaat erin en terug, Escape en een klik of focus buiten sluiten, top layer.
+- Nieuw: `NumberField` (spinbutton) met − en +, pijltjes, PageUp/PageDown, Home/End, min, max
+  en step, en invoer en opmaak in de taal van de app via `Intl.NumberFormat` (bedrag,
+  percentage, eenheid). Ingedrukt houden blijft stappen. Plus `parseNumber`.
+- Nieuw: `DatePicker` en `Calendar`. Typen in de volgorde van de taal met elk scheidingsteken
+  en tweecijferige jaren, of kiezen in een kalender in een popover (WAI-ARIA date grid:
+  pijltjes, Home/End, PageUp/PageDown, met Shift per jaar). `min`, `max` en
+  `isDateUnavailable`; de week begint op de eerste dag van de taal. Datums zijn
+  `"YYYY-MM-DD"`, zoals `<input type="date">`. Plus `parseTypedDate` en `formatNumericDate`.
+- Nieuw: `DateRangePicker` en `RangeCalendar` voor een periode: twee typbare velden en een
+  kalender waarin de eerste dag het begin is en de tweede het eind, met een voorbeeld tijdens
+  het kiezen. Een omgekeerde periode wordt omgedraaid.
+- Nieuw: `MultiCombobox` voor meerdere keuzes met meezoeken: labels in het veld, een lijst die
+  open blijft, Backspace haalt de laatste weg, `max`, en elke waarde in het formulier.
+- Nieuw: `RangeSlider` met twee duimen op één spoor (twee native range-inputs), `minDistance`,
+  `marks` en `onValueCommit`.
+- Nieuw: `PasswordField` met een toonknop (aria-pressed).
+- Nieuw: `FileField` met sleepvlak, `accept`, `maxSize`, `maxFiles`, een lijst met voorbeelden
+  en verwijderknoppen, en meldingen voor geweigerde bestanden. De echte file-input blijft in
+  sync voor gewone formulieren. Plus `acceptsFile` en `formatFileSize`.
+- Nieuw: `CheckboxGroup` (fieldset, ook als tegels) en op `Checkbox` de props `indeterminate`
+  en `error`.
+- Nieuw: `Accordion` rond Disclosures; `type="single"` vouwt de open sectie geanimeerd dicht.
+- Nieuw: `Toggle` en `ToggleGroup` voor knoppen die ingedrukt blijven, met één tabstop.
+- Nieuw: `SortHeader` en `useTableSort` voor sorteerbare tabellen met `aria-sort`, natuurlijke
+  volgorde (2 voor 10) en sorteren in de taal van de app.
+- Nieuw: `Separator`, `Kbd` en `EmptyState`, alle drie server components.
+- Menu: kopjes (`type: 'label'`), scheidingslijnen, `checkbox`- en `radio`-items, links
+  (`href`), sneltoetsen (`shortcut`), `keepOpen` en typeahead. `onSelect` is nu optioneel.
+- Tabs: `orientation="vertical"` en `activation="manual"`. In rechts-naar-links gaan de
+  pijltjes nu naar de visueel volgende tab.
+- TextArea: `autoResize` en `maxRows`.
+- Toast: `update()` en `promise()`, plus `icon` op toasts en op `Notice`. De live region
+  meldt ook gewijzigde tekst.
+- Teksten: nieuw `locale`, `increment`, `decrement`, `showPassword`, `chooseFiles`,
+  `removeFile`, `fileTooLarge`, `fileTypeNotAllowed`, `tooManyFiles`, `remove`, `removed`,
+  `selectedItems`, `rangeStart`, `rangeEnd`, `chooseDate`, `previousMonth`, `nextMonth`,
+  `datePattern`, `invalidDate` en `dateUnavailable`. Wie een eigen,
+  volledige `PapierLabels` typt, moet die aanvullen; `labels` op `<Papier>` blijft partieel.
+- Negen nieuwe iconen: ChevronUp, ArrowUp, ArrowDown, Sort, Eye, EyeOff, Upload, File en Calendar.
+- Hoogcontrastmodus voor alle nieuwe onderdelen.
+- Fix: een klik op het vakje van een Checkbox deed niets. Het raakvlak van 44 px lag als
+  `::before` over de input en ving de klik op; alleen het label werkte. Het vakje is nu zelf
+  een label en de input ligt boven het raakvlak, dus zowel het vakje als de rand eromheen
+  vinken aan. Een e2e-test klikt nu echt op de vakjes.
+
 ## 0.5.0 (nog niet uitgebracht)
 
 - Server components: de build heeft nu één bestand per module, en alleen modules met hooks,

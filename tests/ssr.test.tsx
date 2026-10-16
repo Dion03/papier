@@ -27,6 +27,20 @@ describe('server rendering (Next.js)', () => {
             <P.AlertDialog open={false} onClose={() => {}} onConfirm={() => {}} title="a" confirmLabel="Ja, weg" />
             <P.Breadcrumb><P.BreadcrumbItem href="/">Home</P.BreadcrumbItem><P.BreadcrumbItem>Hier</P.BreadcrumbItem></P.Breadcrumb>
             <P.Pagination page={2} pageCount={9} getHref={(p) => `?p=${p}`} />
+            <P.Popover trigger={<button>p</button>} title="t">x</P.Popover>
+            <P.NumberField label="n" defaultValue={1234.5} formatOptions={{ style: 'currency', currency: 'EUR' }} name="n" />
+            <P.PasswordField label="w" /><P.FileField label="f" multiple /><P.TextArea label="a" autoResize />
+            <P.Checkbox label="c" indeterminate /><P.CheckboxGroup legend="g" options={[{ value: 'a', label: 'A' }]} />
+            <P.Accordion type="single"><P.Disclosure summary="d">x</P.Disclosure></P.Accordion>
+            <P.Tabs defaultValue="a" orientation="vertical"><P.TabList label="t"><P.Tab value="a">A</P.Tab></P.TabList><P.TabPanel value="a">A</P.TabPanel></P.Tabs>
+            <P.ToggleGroup label="t" options={[{ value: 'a', label: 'A' }]} /><P.Toggle>t</P.Toggle>
+            <P.Table caption="s"><thead><tr><P.SortHeader onSort={() => {}} sort="ascending">T</P.SortHeader></tr></thead></P.Table>
+            <P.Separator label="of" /><P.Kbd>K</P.Kbd><P.EmptyState title="Leeg" />
+            <P.Menu trigger="m" items={[{ type: 'label', label: 'g' }, { type: 'checkbox', label: 'c', checked: true }, { type: 'separator' }]} />
+            <P.MultiCombobox label="m" options={[{ value: 'a', label: 'A' }]} defaultValue={['a']} name="m" />
+            <P.RangeSlider label="r" defaultValue={[10, 40]} marks={[0, 50]} />
+            <P.Calendar defaultValue="2024-03-15" /><P.RangeCalendar defaultValue={{ start: '2024-03-11', end: '2024-03-20' }} />
+            <P.DateRangePicker label="v" defaultValue={{ start: '2024-03-11', end: null }} startName="a" endName="b" /><P.DatePicker label="d" defaultValue="2024-03-15" name="d" />
             <P.Menu trigger="m" side="left" items={[]} /><P.Tooltip content="t" placement="right"><button>b</button></P.Tooltip>
           </P.Stack></P.Container>
         </P.ToastProvider>
@@ -38,6 +52,12 @@ describe('server rendering (Next.js)', () => {
     expect(html).toContain('pp-field__group');
     expect(html).toContain('role="combobox"');
     expect(html).toContain('aria-current="page"');
-    expect(html).not.toContain('popover');
+    expect(html).not.toMatch(/ popover=/);
+    expect(html).toContain('role="spinbutton"');
+    expect(html).toMatch(/1\.234,5/);
+    expect(html).toContain('aria-sort="ascending"');
+    expect(html).toContain('pp-multi__tag');
+    expect(html).toContain('15-03-2024');
+    expect(html).toContain('role="grid"');
   });
 });
