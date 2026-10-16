@@ -22,6 +22,9 @@ import './components/Skeleton.css';
 import './components/Sheet.css';
 import './components/Layout.css';
 import './components/Avatar.css';
+import './components/Combobox.css';
+import './components/Breadcrumb.css';
+import './components/Pagination.css';
 // Last, so its overrides win over the component rules at equal specificity.
 import './styles/forced-colors.css';
 
@@ -56,5 +59,9 @@ export { Sheet, type SheetProps } from './components/Sheet';
 export { Stack, Container, type StackProps, type ContainerProps } from './components/Layout';
 export { Avatar, type AvatarProps } from './components/Avatar';
 export { Spinner } from './components/Spinner';
+export { AlertDialog, type AlertDialogProps } from './components/AlertDialog';
+export { Combobox, defaultComboboxFilter, type ComboboxProps, type ComboboxOption } from './components/Combobox';
+export { Breadcrumb, BreadcrumbItem, type BreadcrumbProps, type BreadcrumbItemProps } from './components/Breadcrumb';
+export { Pagination, paginationRange, type PaginationProps } from './components/Pagination';
 export { dutchLabels, englishLabels, type PapierLabels } from './lib/labels';
 export * as icons from './components/icons';

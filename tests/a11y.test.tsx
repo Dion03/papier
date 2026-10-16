@@ -8,6 +8,7 @@ import {
   Papier, Text, Button, IconButton, Link, Surface, Tag, Notice, Progress, TextField, TextArea,
   Checkbox, Switch, Slider, SegmentedControl, Tabs, TabList, Tab, TabPanel, Disclosure, Dialog, icons,
   Select, RadioGroup, Tooltip, Menu, ToastProvider, Table, Skeleton, Sheet, Stack, Container, Avatar, Spinner, Field,
+  AlertDialog, Combobox, Breadcrumb, BreadcrumbItem, Pagination,
 } from '../src';
 import userEvent from '@testing-library/user-event';
 
@@ -38,6 +39,10 @@ const cases: Array<[string, ReactElement]> = [
   ['Stack/Container', <Container><Stack gap={3} direction="row"><p>Een</p><p>Twee</p></Stack></Container>],
   ['Avatar', <><Avatar name="Froukje Veenstra" /><Avatar name="Dion" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" /></>],
   ['Spinner', <Spinner />],
+  ['Combobox', <><Combobox label="Plaat" options={[{ value: 'a', label: 'Uitzinnig', description: 'Froukje' }, { value: 'b', label: 'Blue Train', disabled: true }]} hint="Uit je collectie" /><Combobox label="Artiest" options={[]} error="Kies een artiest" required /></>],
+  ['AlertDialog', <AlertDialog open onClose={() => {}} onConfirm={() => {}} title="Plaat verwijderen?" description="Dit kun je niet ongedaan maken." confirmLabel="Verwijderen" tone="danger" />],
+  ['Breadcrumb', <Breadcrumb><BreadcrumbItem href="/">Home</BreadcrumbItem><BreadcrumbItem href="/werk">Werk</BreadcrumbItem><BreadcrumbItem>Papier</BreadcrumbItem></Breadcrumb>],
+  ['Pagination', <><Pagination page={6} pageCount={12} onPageChange={() => {}} /><Pagination page={1} pageCount={3} getHref={(p) => `?p=${p}`} label="Pagina's met platen" /></>],
   ['Button asChild', <><Button asChild variant="ink"><a href="/werk">Bekijk het werk</a></Button><Button asChild loading><a href="/x">Bezig</a></Button></>],
   ['Link asChild', <Link asChild external variant="arrow"><a href="https://x.nl">Bron</a></Link>],
   ['IconButton asChild', <IconButton asChild label="Home" icon={<icons.ArrowLeft />}><a href="/" /></IconButton>],
@@ -61,6 +66,19 @@ describe('axe: geen toegankelijkheidsfouten', () => {
   it('Menu (open, top layer)', async () => {
     const { container } = render(<Papier><main><Menu trigger="Acties" side="right" items={[{ label: 'Delen', onSelect: () => {} }, { label: 'Wissen', tone: 'danger', onSelect: () => {} }]} /></main></Papier>);
     await userEvent.click(container.querySelector('button')!);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('Combobox (open, met actieve optie en zonder resultaten)', async () => {
+    const { container } = render(<Papier><main><Combobox label="Plaat" options={[{ value: 'a', label: 'Uitzinnig' }, { value: 'b', label: 'Blue Train' }]} defaultValue="b" /></main></Papier>);
+    const input = container.querySelector('input')!;
+    input.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(container.querySelector('[role="listbox"]')).toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+    await userEvent.clear(input);
+    await userEvent.type(input, 'xyz');
+    expect(container.querySelector('[role="listbox"]')).not.toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
   });
 

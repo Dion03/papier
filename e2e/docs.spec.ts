@@ -92,6 +92,39 @@ test('menu klapt omhoog onderaan het scherm', async ({ page }) => {
   expect(m.y + m.height).toBeLessThanOrEqual(t.y);
 });
 
+test('combobox: typen, kiezen met het toetsenbord en de lijst in de top layer', async ({ page }) => {
+  await open(page, 'light');
+  const input = page.getByRole('combobox', { name: 'Plaat op de draaitafel' });
+  await input.fill('');
+  await input.pressSequentially('bjork');
+  const list = page.getByRole('listbox');
+  await expect(list).toBeVisible();
+  await expect(list.getByRole('option')).toHaveText([/Vespertine/]);
+  const l = (await list.boundingBox())!;
+  const i = (await input.boundingBox())!;
+  // Below the field, or above it when there is no room: never on top of it.
+  expect(l.y >= i.y + i.height || l.y + l.height <= i.y).toBe(true);
+  await page.keyboard.press('Enter');
+  await expect(input).toHaveValue('Vespertine');
+  await expect(list).toBeHidden();
+  await expect(input).toBeFocused();
+  await expect(page.locator('#zoeken').getByText('Gekozen: Vespertine.')).toBeVisible();
+});
+
+test('alertdialog: focus op Annuleren, klik ernaast sluit niet, focus keert terug', async ({ page }) => {
+  await open(page, 'light');
+  const opener = page.getByRole('button', { name: 'Uit collectie halen' });
+  await opener.click();
+  const dialog = page.getByRole('alertdialog', { name: 'Blue Train uit je collectie halen?' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('button', { name: 'Annuleren' })).toBeFocused();
+  await page.mouse.click(5, 5);
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(opener).toBeFocused();
+});
+
 test('eigen CSS wint van Papier dankzij @layer papier', async ({ page }) => {
   await open(page, 'light');
   await page.addStyleTag({ content: '.pp-button { background: rgb(1, 2, 3); }' });
@@ -106,7 +139,7 @@ test('thema wisselen werkt en blijft bewaard', async ({ page }) => {
   await expect(page.locator('.papier').first()).toHaveAttribute('data-papier-theme', 'dark');
 });
 
-const sections = ['knoppen', 'formulieren', 'velden', 'keuzes', 'slider', 'feedback', 'select', 'overlays', 'data', 'materiaal'];
+const sections = ['knoppen', 'formulieren', 'velden', 'zoeken', 'keuzes', 'slider', 'feedback', 'select', 'overlays', 'navigatie', 'data', 'materiaal'];
 for (const theme of ['light', 'dark'] as const) {
   test(`visuele regressie (${theme})`, async ({ page }) => {
     await open(page, theme);

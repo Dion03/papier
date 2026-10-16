@@ -23,6 +23,10 @@ describe('server rendering (Next.js)', () => {
             <P.Button asChild><a href="/werk">Werk</a></P.Button><P.Link asChild><a href="/over">Over</a></P.Link>
             <P.IconButton asChild label="Home" icon={<P.icons.ArrowLeft />}><a href="/" /></P.IconButton>
             <P.Field label="f" hint="h">{(c) => <input {...c} />}</P.Field><P.TextField label="prijs" prefix="€" suffix="incl. btw" />
+            <P.Combobox label="c" options={[{ value: 'a', label: 'A' }]} defaultValue="a" name="c" />
+            <P.AlertDialog open={false} onClose={() => {}} onConfirm={() => {}} title="a" confirmLabel="Ja, weg" />
+            <P.Breadcrumb><P.BreadcrumbItem href="/">Home</P.BreadcrumbItem><P.BreadcrumbItem>Hier</P.BreadcrumbItem></P.Breadcrumb>
+            <P.Pagination page={2} pageCount={9} getHref={(p) => `?p=${p}`} />
             <P.Menu trigger="m" side="left" items={[]} /><P.Tooltip content="t" placement="right"><button>b</button></P.Tooltip>
           </P.Stack></P.Container>
         </P.ToastProvider>
@@ -32,6 +36,8 @@ describe('server rendering (Next.js)', () => {
     expect(html).toContain('data-papier-theme="system"');
     expect(html).toMatch(/<a(?=[^>]*class="pp-button")(?=[^>]*href="\/werk")/);
     expect(html).toContain('pp-field__group');
+    expect(html).toContain('role="combobox"');
+    expect(html).toContain('aria-current="page"');
     expect(html).not.toContain('popover');
   });
 });

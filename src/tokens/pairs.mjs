@@ -9,6 +9,7 @@ export const pairs = [
   ['on-coral', 'coral', 4.5, 'Koraalmodule'],
   ['danger', 'bg', 4.5, 'Foutmelding'], ['danger', 'danger-soft', 4.5, 'Foutbanner'],
   ['success', 'success-soft', 4.5, 'Succesbanner'], ['warning', 'warning-soft', 4.5, 'Waarschuwing'],
-  ['focus', 'bg', 3, 'Focusring'], ['focus', 'surface', 3, 'Focusring op module'],
+  ['focus', 'bg', 3, 'Focusring'], ['focus', 'surface', 3, 'Focusring op module'], ['focus', 'surface-sunken', 3, 'Actieve optie in een lijst'],
+  ['bg', 'danger', 4.5, 'Gevarenknop'],
   ['line-strong', 'bg', 3, 'Rand van bediening'], ['accent', 'bg', 3, 'Accentmarkering'],
 ];

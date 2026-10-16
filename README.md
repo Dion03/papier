@@ -29,16 +29,17 @@ export function App() {
 Werkt in Vite en in Next.js (App Router): de build is een client-module en alles
 rendert op de server.
 
-## Componenten (30)
+## Componenten (34)
 
 | Groep | Componenten |
 |---|---|
 | Basis | Papier, Text, VisuallyHidden, Stack, Container |
 | Acties | Button, IconButton, Link, Menu |
-| Formulieren | TextField, TextArea, Select, Checkbox, RadioGroup, Switch, Slider, SegmentedControl |
+| Formulieren | TextField, TextArea, Select, Combobox, Checkbox, RadioGroup, Switch, Slider, SegmentedControl |
 | Veldbouwstenen | Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl |
+| Navigatie | Breadcrumb (BreadcrumbItem), Pagination |
 | Structuur | Tabs (TabList, Tab, TabPanel), Disclosure, Table |
-| Overlays | Dialog, Sheet, Tooltip |
+| Overlays | Dialog, AlertDialog, Sheet, Tooltip |
 | Feedback | Notice, ToastProvider en useToast, Progress, Spinner, Skeleton |
 | Materiaal | Surface, Tag, Avatar |
 
@@ -154,6 +155,12 @@ import { Papier, englishLabels } from '@dionbm/papier';
 <Papier labels={englishLabels}>…</Papier>
 ```
 
+Teksten met een getal, zoals "Pagina 3 van 12" en "4 resultaten", zijn functies:
+
+```tsx
+<Papier labels={{ pageOf: (p, n) => `${p} / ${n}` }}>…</Papier>
+```
+
 ## Principes
 
 1. Native eerst: button, details, dialog, select en input blijven echte elementen.
@@ -169,7 +176,7 @@ npm run check      # typecheck, contrast, unit-, axe- en SSR-tests, build
 npm run test:e2e   # Playwright: axe, hoogcontrast, toetsenbord, visuele regressie
 ```
 
-- `scripts/contrast.mjs` controleert 24 kleurparen per thema volgens WCAG 2.2.
+- `scripts/contrast.mjs` controleert 26 kleurparen per thema volgens WCAG 2.2.
 - Vitest: axe op elk component in licht en donker, gedragstests voor toetsenbord,
   focus en ARIA, en een server-rendertest zonder `window`.
 - Playwright: axe op de docs in licht, donker en hoogcontrast, toetsenbordroutes en
