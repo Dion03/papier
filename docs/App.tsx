@@ -38,7 +38,7 @@ function PageLoading() {
     </div>
   );
 }
-import { categories, categoryById, guides, pageBySlug, pages, type DocPage } from './registry';
+import { categories, categoryById, currentRelease, guides, pageBySlug, pages, type DocPage } from './registry';
 import { href, navigate, setLegacyAnchors, useRoute, type Route } from './router';
 
 setLegacyAnchors(Object.fromEntries(pages.map((p) => [p.example, p.slug])));
@@ -107,7 +107,7 @@ function Sidebar({ route, onNavigate }: { route: Route; onNavigate?: () => void 
       {categories.map((c) => (
         <div key={c.id} className="doc-side__group">
           <p className="doc-side__title"><a href={href('categorie', c.id)} onClick={onNavigate} aria-current={route.path[0] === 'categorie' && route.section === c.id ? 'page' : undefined}>{c.title}</a></p>
-          <ul>{pages.filter((p) => p.category === c.id).map((p) => link(`componenten/${p.slug}`, p.title, p.added === '0.7' ? 'nieuw' : undefined))}</ul>
+          <ul>{pages.filter((p) => p.category === c.id).map((p) => link(`componenten/${p.slug}`, p.title, p.added === currentRelease ? 'nieuw' : undefined))}</ul>
         </div>
       ))}
     </nav>

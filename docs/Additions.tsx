@@ -82,7 +82,7 @@ function PinDemo() {
   );
 }
 
-/** Components added in 0.7. */
+/** Components added in 0.5: Command, CopyButton, Steps and PinInput. */
 export function AdditionExamples() {
   return (
     <>

@@ -300,7 +300,7 @@ function DetailsDemo() {
   );
 }
 
-/** Components added in 0.6: overlays, form inputs, structure and data helpers. */
+/** Components added in 0.5: overlays, form inputs, structure and data helpers. */
 export function ExtendedExamples() {
   return (
     <>
