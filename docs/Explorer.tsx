@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Button, EmptyState, Tag, Text, TextField, icons } from '@dionbm/papier';
-import { categories, categoryById, pages, type DocPage } from './registry';
+import { categories, categoryById, currentRelease, pages, type DocPage } from './registry';
 import { href } from './router';
 
 const normalize = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
@@ -19,7 +19,7 @@ export function PageCard({ page, headingLevel = 3 }: { page: DocPage; headingLev
         <H className="doc-card__title"><a href={href('componenten', page.slug)} className="doc-card__link">{page.title}</a></H>
         <p className="doc-card__summary">{page.summary}</p>
         <div className="doc-card__tags">
-          {page.added === '0.7' && <Tag tone="accent">Nieuw</Tag>}
+          {page.added === currentRelease && <Tag tone="accent">Nieuw</Tag>}
           {page.server && <Tag tone="sage">Server</Tag>}
           <span className="doc-card__exports">{page.exports.filter((e) => /^[A-Z]/.test(e)).slice(0, 3).join(' · ')}</span>
         </div>

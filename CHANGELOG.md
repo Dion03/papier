@@ -1,29 +1,80 @@
 # Changelog
 
-## 0.7.0 (nog niet uitgebracht)
+## 0.5.0 (nog niet uitgebracht)
 
-Een nieuwe documentatiesite en vier componenten die er (ook) voor nodig waren. Samen 56
-componenten; bestaande API's ongewijzigd.
+Nieuwe componenten en uitbreidingen na een vergelijking met shadcn/ui, Radix, Mantine, Chakra
+en HeroUI (zie `docs/gap-analysis.md`), en een nieuwe documentatiesite. Samen 56 componenten.
+Bestaande API's werken ongewijzigd, op twee punten na: zie Teksten en Tabs.
 
-- Nieuw: `Command` en `CommandDialog`, een opdrachtenlijst die meezoekt (combobox met een
+### Nieuwe componenten
+
+- `Popover`, een niet-modaal paneel naast een knop voor filters, korte formulieren en
+  uitleg. Focus gaat erin en terug, Escape en een klik of focus buiten sluiten, top layer.
+- `NumberField` (spinbutton) met − en +, pijltjes, PageUp/PageDown, Home/End, min, max
+  en step, en invoer en opmaak in de taal van de app via `Intl.NumberFormat` (bedrag,
+  percentage, eenheid). Ingedrukt houden blijft stappen. Plus `parseNumber`.
+- `DatePicker` en `Calendar`. Typen in de volgorde van de taal met elk scheidingsteken
+  en tweecijferige jaren, of kiezen in een kalender in een popover (WAI-ARIA date grid:
+  pijltjes, Home/End, PageUp/PageDown, met Shift per jaar). `min`, `max` en
+  `isDateUnavailable`; de week begint op de eerste dag van de taal. Datums zijn
+  `"YYYY-MM-DD"`, zoals `<input type="date">`. Plus `parseTypedDate` en `formatNumericDate`.
+- `DateRangePicker` en `RangeCalendar` voor een periode: twee typbare velden en een
+  kalender waarin de eerste dag het begin is en de tweede het eind, met een voorbeeld tijdens
+  het kiezen. Een omgekeerde periode wordt omgedraaid.
+- `MultiCombobox` voor meerdere keuzes met meezoeken: labels in het veld, een lijst die
+  open blijft, Backspace haalt de laatste weg, `max`, en elke waarde in het formulier.
+- `RangeSlider` met twee duimen op één spoor (twee native range-inputs), `minDistance`,
+  `marks` en `onValueCommit`.
+- `PasswordField` met een toonknop (aria-pressed).
+- `FileField` met sleepvlak, `accept`, `maxSize`, `maxFiles`, een lijst met voorbeelden
+  en verwijderknoppen, en meldingen voor geweigerde bestanden. De echte file-input blijft in
+  sync voor gewone formulieren. Plus `acceptsFile` en `formatFileSize`.
+- `CheckboxGroup` (fieldset, ook als tegels) en op `Checkbox` de props `indeterminate`
+  en `error`.
+- `Accordion` rond Disclosures; `type="single"` vouwt de open sectie geanimeerd dicht.
+- `Toggle` en `ToggleGroup` voor knoppen die ingedrukt blijven, met één tabstop.
+- `SortHeader` en `useTableSort` voor sorteerbare tabellen met `aria-sort`, natuurlijke
+  volgorde (2 voor 10) en sorteren in de taal van de app.
+- `Separator`, `Kbd` en `EmptyState`, alle drie server components.
+- `Command` en `CommandDialog`, een opdrachtenlijst die meezoekt (combobox met een
   gegroepeerde listbox): rangschikking op label, woorden, trefwoorden en beschrijving,
   uitgeschakelde items, sneltoetshints en een eigen `filter`. Plus `scoreCommandItem`.
-- Nieuw: `CopyButton` met bevestiging op dezelfde plek, een live region naast de knop en een
+- `CopyButton` met bevestiging op dezelfde plek, een live region naast de knop en een
   terugval zonder Clipboard API.
-- Nieuw: `Steps` voor een flow van een paar stappen: `aria-current="step"`, voltooide stappen
+- `Steps` voor een flow van een paar stappen: `aria-current="step"`, voltooide stappen
   als knoppen om terug te gaan, horizontaal of verticaal, compact op smalle schermen.
-- Nieuw: `PinInput` voor codes: doorschuiven, Backspace terug, plakken en sms-autofill
+- `PinInput` voor codes: doorschuiven, Backspace terug, plakken en sms-autofill
   (`autocomplete="one-time-code"`), cijfers of letters, afgeschermd.
-- Teksten: nieuw `copy`, `copied`, `copyFailed`, `steps`, `stepOf`, `stepComplete`, `stepError`,
-  `pinChar` en `commandHints`.
-- `Steps`: een stap met `error` meldt dat ook aan schermlezers ("controleer deze stap"); het
-  uitroepteken alleen werd niet voorgelezen.
-- `PinInput`: autofill in een gevuld eerste vakje verschoof de code als hij met hetzelfde teken
-  begon, en typen vóór een bestaand teken overschreef het volgende vakje.
-- `Command`: een nieuwe render van de ouder (met een nieuwe maar gelijke `items`-array) zette
-  de gekozen regel niet meer terug naar de eerste.
-- Docs: een kapotte link (`#/componenten/%E0`) liet de site crashen.
-- Docs: een eigen pagina per component met breadcrumb, importregel, Voorbeeld/Code-tabs met
+
+### Uitbreidingen
+
+- Menu: kopjes (`type: 'label'`), scheidingslijnen, `checkbox`- en `radio`-items, links
+  (`href`), sneltoetsen (`shortcut`), `keepOpen` en typeahead. `onSelect` is nu optioneel.
+- Tabs: `orientation="vertical"` en `activation="manual"`. In rechts-naar-links gaan de
+  pijltjes nu naar de visueel volgende tab.
+- TextArea: `autoResize` en `maxRows`.
+- Toast: `update()` en `promise()`, plus `icon` op toasts en op `Notice`. De live region
+  meldt ook gewijzigde tekst.
+- Negen nieuwe iconen: ChevronUp, ArrowUp, ArrowDown, Sort, Eye, EyeOff, Upload, File en Calendar.
+- Hoogcontrastmodus voor alle nieuwe onderdelen.
+- Teksten: nieuw `locale`, `increment`, `decrement`, `showPassword`, `chooseFiles`,
+  `removeFile`, `fileTooLarge`, `fileTypeNotAllowed`, `tooManyFiles`, `remove`, `removed`,
+  `selectedItems`, `rangeStart`, `rangeEnd`, `chooseDate`, `previousMonth`, `nextMonth`,
+  `datePattern`, `invalidDate`, `dateUnavailable`, `copy`, `copied`, `copyFailed`, `steps`,
+  `stepOf`, `stepComplete`, `stepError`, `pinChar` en `commandHints`. Let op: wie een eigen,
+  volledige `PapierLabels` typt, moet die aanvullen; `labels` op `<Papier>` blijft partieel
+  en werkt zonder wijziging.
+
+### Fixes
+
+- Checkbox: een klik op het vakje deed niets. Het raakvlak van 44 px lag als
+  `::before` over de input en ving de klik op; alleen het label werkte. Het vakje is nu zelf
+  een label en de input ligt boven het raakvlak, dus zowel het vakje als de rand eromheen
+  vinken aan. Een e2e-test klikt nu echt op de vakjes.
+
+### Documentatie en kwaliteit
+
+- Een eigen pagina per component met breadcrumb, importregel, Voorbeeld/Code-tabs met
   kopieerknop, varianten en toestanden, toegankelijkheid, API-tabellen, gerelateerde
   componenten en vorige/volgende. Een zijbalk per categorie (ook als blad op mobiel), zoeken
   met Ctrl/⌘ K of `/` over componenten, exports, props, gidsen en instellingen, een
@@ -33,61 +84,25 @@ componenten; bestaande API's ongewijzigd.
   axe en de scrollcheck op elke pagina, test navigatie, zoeken, het mobiele menu en de
   kopieerknop.
 
-## 0.6.0 (nog niet uitgebracht)
+## 0.4.0 (2026-10-16)
 
-Achttien nieuwe componenten en uitbreidingen na een vergelijking met shadcn/ui, Radix, Mantine,
-Chakra en HeroUI (zie `docs/gap-analysis.md`). Samen 52 componenten. Bestaande API's werken
-ongewijzigd.
-
-- Nieuw: `Popover`, een niet-modaal paneel naast een knop voor filters, korte formulieren en
-  uitleg. Focus gaat erin en terug, Escape en een klik of focus buiten sluiten, top layer.
-- Nieuw: `NumberField` (spinbutton) met − en +, pijltjes, PageUp/PageDown, Home/End, min, max
-  en step, en invoer en opmaak in de taal van de app via `Intl.NumberFormat` (bedrag,
-  percentage, eenheid). Ingedrukt houden blijft stappen. Plus `parseNumber`.
-- Nieuw: `DatePicker` en `Calendar`. Typen in de volgorde van de taal met elk scheidingsteken
-  en tweecijferige jaren, of kiezen in een kalender in een popover (WAI-ARIA date grid:
-  pijltjes, Home/End, PageUp/PageDown, met Shift per jaar). `min`, `max` en
-  `isDateUnavailable`; de week begint op de eerste dag van de taal. Datums zijn
-  `"YYYY-MM-DD"`, zoals `<input type="date">`. Plus `parseTypedDate` en `formatNumericDate`.
-- Nieuw: `DateRangePicker` en `RangeCalendar` voor een periode: twee typbare velden en een
-  kalender waarin de eerste dag het begin is en de tweede het eind, met een voorbeeld tijdens
-  het kiezen. Een omgekeerde periode wordt omgedraaid.
-- Nieuw: `MultiCombobox` voor meerdere keuzes met meezoeken: labels in het veld, een lijst die
-  open blijft, Backspace haalt de laatste weg, `max`, en elke waarde in het formulier.
-- Nieuw: `RangeSlider` met twee duimen op één spoor (twee native range-inputs), `minDistance`,
-  `marks` en `onValueCommit`.
-- Nieuw: `PasswordField` met een toonknop (aria-pressed).
-- Nieuw: `FileField` met sleepvlak, `accept`, `maxSize`, `maxFiles`, een lijst met voorbeelden
-  en verwijderknoppen, en meldingen voor geweigerde bestanden. De echte file-input blijft in
-  sync voor gewone formulieren. Plus `acceptsFile` en `formatFileSize`.
-- Nieuw: `CheckboxGroup` (fieldset, ook als tegels) en op `Checkbox` de props `indeterminate`
-  en `error`.
-- Nieuw: `Accordion` rond Disclosures; `type="single"` vouwt de open sectie geanimeerd dicht.
-- Nieuw: `Toggle` en `ToggleGroup` voor knoppen die ingedrukt blijven, met één tabstop.
-- Nieuw: `SortHeader` en `useTableSort` voor sorteerbare tabellen met `aria-sort`, natuurlijke
-  volgorde (2 voor 10) en sorteren in de taal van de app.
-- Nieuw: `Separator`, `Kbd` en `EmptyState`, alle drie server components.
-- Menu: kopjes (`type: 'label'`), scheidingslijnen, `checkbox`- en `radio`-items, links
-  (`href`), sneltoetsen (`shortcut`), `keepOpen` en typeahead. `onSelect` is nu optioneel.
-- Tabs: `orientation="vertical"` en `activation="manual"`. In rechts-naar-links gaan de
-  pijltjes nu naar de visueel volgende tab.
-- TextArea: `autoResize` en `maxRows`.
-- Toast: `update()` en `promise()`, plus `icon` op toasts en op `Notice`. De live region
-  meldt ook gewijzigde tekst.
-- Teksten: nieuw `locale`, `increment`, `decrement`, `showPassword`, `chooseFiles`,
-  `removeFile`, `fileTooLarge`, `fileTypeNotAllowed`, `tooManyFiles`, `remove`, `removed`,
-  `selectedItems`, `rangeStart`, `rangeEnd`, `chooseDate`, `previousMonth`, `nextMonth`,
-  `datePattern`, `invalidDate` en `dateUnavailable`. Wie een eigen,
-  volledige `PapierLabels` typt, moet die aanvullen; `labels` op `<Papier>` blijft partieel.
-- Negen nieuwe iconen: ChevronUp, ArrowUp, ArrowDown, Sort, Eye, EyeOff, Upload, File en Calendar.
-- Hoogcontrastmodus voor alle nieuwe onderdelen.
-- Fix: een klik op het vakje van een Checkbox deed niets. Het raakvlak van 44 px lag als
-  `::before` over de input en ving de klik op; alleen het label werkte. Het vakje is nu zelf
-  een label en de input ligt boven het raakvlak, dus zowel het vakje als de rand eromheen
-  vinken aan. Een e2e-test klikt nu echt op de vakjes.
-
-## 0.5.0 (nog niet uitgebracht)
-
+- Nieuw: `Combobox`, een invoerveld met een lijst die meezoekt (WAI-ARIA combobox). Zoekt
+  standaard in label en beschrijving, zonder accenten en hoofdletters; `filter={false}` met
+  `inputValue` en `onInputChange` voor zoeken op een server, `loading` en `name` voor formulieren.
+- Nieuw: `AlertDialog` voor bevestigingen (role="alertdialog"). De focus begint op Annuleren,
+  een klik ernaast sluit niet, en een promise uit `onConfirm` laat de knop laden.
+- Nieuw: `Breadcrumb` en `BreadcrumbItem`, met `asChild` voor routerlinks.
+- Nieuw: `Pagination` met knoppen (`onPageChange`) of echte links (`getHref`, `linkAs`).
+  Op smalle schermen blijven vorige, volgende en "Pagina 3 van 12".
+- Teksten: nieuwe labels `cancel`, `breadcrumb`, `pagination`, `previous`, `next`,
+  `showOptions` en `noResults`, en de functies `page`, `pageOf` en `results`.
+- Contrastcheck: twee nieuwe paren (focus op verdiept vlak, tekst op de gevarenknop), samen 26.
+- Hoogcontrastmodus: de actieve optie en de huidige pagina blijven zichtbaar.
+- Dialog, AlertDialog en Sheet geven de focus na sluiten ook in Safari terug aan de knop
+  die ze opende. Safari focust een knop niet bij een klik; Papier onthoudt daarom de laatst
+  gebruikte knop. Nieuw: `returnFocusTo` om zelf te kiezen waar de focus heen gaat.
+- Fix: `asChild` overschreef een prop van het kind met `undefined` (bijvoorbeeld `href` van
+  een routerlink die `to` gebruikt). Papier zet nu alleen props die een waarde hebben.
 - Server components: de build heeft nu één bestand per module, en alleen modules met hooks,
   context of events zijn `'use client'`. Text, VisuallyHidden, Stack, Container, Surface,
   Tag, Table, Skeleton, de iconen en de themafuncties blijven server components in Next.js.
@@ -107,26 +122,6 @@ ongewijzigd.
 - Kwaliteit: CI draait de unit-, axe- en SSR-tests ook op React 18; een e2e-test met
   `dir="rtl"`; `scripts/check-build.mjs` controleert de build; een checklist voor de
   schermlezertest met NVDA en VoiceOver staat in `docs/schermlezertest.md`.
-
-## 0.4.0 (nog niet uitgebracht)
-
-- Nieuw: `Combobox`, een invoerveld met een lijst die meezoekt (WAI-ARIA combobox). Zoekt
-  standaard in label en beschrijving, zonder accenten en hoofdletters; `filter={false}` met
-  `inputValue` en `onInputChange` voor zoeken op een server, `loading` en `name` voor formulieren.
-- Nieuw: `AlertDialog` voor bevestigingen (role="alertdialog"). De focus begint op Annuleren,
-  een klik ernaast sluit niet, en een promise uit `onConfirm` laat de knop laden.
-- Nieuw: `Breadcrumb` en `BreadcrumbItem`, met `asChild` voor routerlinks.
-- Nieuw: `Pagination` met knoppen (`onPageChange`) of echte links (`getHref`, `linkAs`).
-  Op smalle schermen blijven vorige, volgende en "Pagina 3 van 12".
-- Teksten: nieuwe labels `cancel`, `breadcrumb`, `pagination`, `previous`, `next`,
-  `showOptions` en `noResults`, en de functies `page`, `pageOf` en `results`.
-- Contrastcheck: twee nieuwe paren (focus op verdiept vlak, tekst op de gevarenknop), samen 26.
-- Hoogcontrastmodus: de actieve optie en de huidige pagina blijven zichtbaar.
-- Dialog, AlertDialog en Sheet geven de focus na sluiten ook in Safari terug aan de knop
-  die ze opende. Safari focust een knop niet bij een klik; Papier onthoudt daarom de laatst
-  gebruikte knop. Nieuw: `returnFocusTo` om zelf te kiezen waar de focus heen gaat.
-- Fix: `asChild` overschreef een prop van het kind met `undefined` (bijvoorbeeld `href` van
-  een routerlink die `to` gebruikt). Papier zet nu alleen props die een waarde hebben.
 
 ## 0.3.0 (2026-10-16)
 
