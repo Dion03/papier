@@ -1,4 +1,5 @@
 import { relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { serverModules } from './scripts/server-modules.mjs';
@@ -29,5 +30,10 @@ export default defineConfig({
     },
     sourcemap: true,
   },
-  test: { environment: 'jsdom', globals: true, setupFiles: ['./vitest.setup.ts'], css: false, include: ['tests/**/*.test.{ts,tsx}'] },
+  test: {
+    environment: 'jsdom', globals: true, setupFiles: ['./vitest.setup.ts'], css: false, include: ['tests/**/*.test.{ts,tsx}'],
+    // The docs (and so tests/docs.test.ts) import '@dionbm/papier'; point it at the source, as the
+    // docs build and tsconfig do, so the tests never depend on a dist/ that CI has not built yet.
+    alias: { '@dionbm/papier': fileURLToPath(new URL('./src/index.ts', import.meta.url)) },
+  },
 });
