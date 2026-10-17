@@ -44,6 +44,13 @@
   .pp-range__mark { background: CanvasText; forced-color-adjust: none; }
   .pp-multi__tag { border: 1px solid CanvasText; }
   .pp-date__panel { border: 1px solid CanvasText; }
+  .pp-command-dialog { border: 1px solid CanvasText; }
+  .pp-command__item[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: -2px; }
+  .pp-pin__box { border-color: CanvasText; }
+  .papier .pp-pin__box:focus-visible { outline: 3px solid Highlight; }
+  .pp-steps__marker { border-color: CanvasText; }
+  .pp-steps__item[data-state="current"] .pp-steps__marker, .pp-steps__item[data-state="complete"] .pp-steps__marker { background: Highlight; color: HighlightText; border-color: Highlight; forced-color-adjust: none; }
+  .pp-steps__item:not(:last-child)::after { background: CanvasText; forced-color-adjust: none; }
   .pp-calendar__nav, .pp-date__toggle, .pp-multi__remove { border: 1px solid ButtonText; }
   .pp-calendar__day[aria-selected="true"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
   .pp-calendar__day[data-range] { background: Highlight; color: HighlightText; forced-color-adjust: none; }

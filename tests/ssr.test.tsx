@@ -41,6 +41,10 @@ describe('server rendering (Next.js)', () => {
             <P.RangeSlider label="r" defaultValue={[10, 40]} marks={[0, 50]} />
             <P.Calendar defaultValue="2024-03-15" /><P.RangeCalendar defaultValue={{ start: '2024-03-11', end: '2024-03-20' }} />
             <P.DateRangePicker label="v" defaultValue={{ start: '2024-03-11', end: null }} startName="a" endName="b" /><P.DatePicker label="d" defaultValue="2024-03-15" name="d" />
+            <P.Command label="c" items={[{ id: 'a', label: 'A', group: 'G', onSelect: () => {} }]} />
+            <P.CommandDialog open={false} onClose={() => {}} label="c" items={[]} />
+            <P.CopyButton value="x" /><P.CopyButton value="y">Kopieer</P.CopyButton>
+            <P.Steps items={[{ title: 'a' }, { title: 'b' }]} current={1} /><P.PinInput label="p" length={4} defaultValue="12" name="p" />
             <P.Menu trigger="m" side="left" items={[]} /><P.Tooltip content="t" placement="right"><button>b</button></P.Tooltip>
           </P.Stack></P.Container>
         </P.ToastProvider>
@@ -59,5 +63,7 @@ describe('server rendering (Next.js)', () => {
     expect(html).toContain('pp-multi__tag');
     expect(html).toContain('15-03-2024');
     expect(html).toContain('role="grid"');
+    expect(html).toContain('aria-current="step"');
+    expect(html).toContain('one-time-code');
   });
 });

@@ -1,14 +1,50 @@
-import { useEffect, useState } from 'react';
-import { Button, Link, Papier, ToastProvider, SegmentedControl, Slider, Surface, Switch, Tag, Text, icons, type PapierTheme } from '@dionbm/papier';
-import { Foundations } from './Foundations';
-import { Components } from './Components';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Button, CommandDialog, EmptyState, IconButton, Kbd, Papier, SegmentedControl, Sheet, Skeleton, Text, Toggle, ToastProvider, icons, useToast,
+  type CommandItem, type PapierTheme,
+} from '@dionbm/papier';
+import api from './props.json';
+import { ActiveExample, sectionsOf } from './Example';
+import { Explorer } from './Explorer';
+import { Home } from './Home';
 
-const nav = [
-  { href: '#principes', label: 'Principes' },
-  { href: '#fundament', label: 'Fundament' },
-  { href: '#componenten', label: 'Componenten' },
-  { href: '#gebruik', label: 'Gebruik' },
-];
+// Pages load on demand: the homepage and the explorer come first, every example and guide after.
+const Components = lazy(() => import('./Components').then((m) => ({ default: m.Components })));
+const Foundations = lazy(() => import('./Foundations').then((m) => ({ default: m.Foundations })));
+const StartGuide = lazy(() => import('./Guides').then((m) => ({ default: m.StartGuide })));
+const ThemeGuide = lazy(() => import('./Guides').then((m) => ({ default: m.ThemeGuide })));
+
+/** Calls `then` once an element with this id exists, e.g. after a lazy page has loaded. */
+function whenPresent(id: string, then: (el: HTMLElement) => void) {
+  const found = document.getElementById(id);
+  if (found) { then(found); return () => {}; }
+  const mo = new MutationObserver(() => {
+    const el = document.getElementById(id);
+    if (el) { mo.disconnect(); then(el); }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+  const stop = window.setTimeout(() => mo.disconnect(), 4000);
+  return () => { mo.disconnect(); window.clearTimeout(stop); };
+}
+
+function PageLoading() {
+  return (
+    <div className="doc-page doc-loading" aria-busy="true">
+      <Skeleton width="30%" />
+      <Skeleton shape="block" height={56} width="70%" />
+      <Skeleton lines={2} />
+      <Skeleton shape="block" height={260} />
+      <span className="pp-visually-hidden" role="status">Pagina laden</span>
+    </div>
+  );
+}
+import { categories, categoryById, guides, pageBySlug, pages, type DocPage } from './registry';
+import { href, navigate, setLegacyAnchors, useRoute, type Route } from './router';
+
+setLegacyAnchors(Object.fromEntries(pages.map((p) => [p.example, p.slug])));
+const reference = api as Record<string, unknown>;
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+const shortcut = isMac ? '⌘ K' : 'Ctrl K';
 
 function useResolvedTheme(theme: PapierTheme): 'light' | 'dark' {
   const query = '(prefers-color-scheme: dark)';
@@ -27,37 +63,142 @@ function readPref<T extends string>(key: string, fallback: T): T {
 }
 function writePref(key: string, value: string) { try { localStorage.setItem(key, value); } catch { /* private mode */ } }
 
-/** The hero: Papier components laid out as objects on paper, all of them live. */
-function Constellation() {
-  const [period, setPeriod] = useState('week');
-  const [on, setOn] = useState(true);
-  const [vol, setVol] = useState(64);
+const top = [
+  { to: 'start', label: 'Aan de slag' },
+  { to: 'componenten', label: 'Componenten' },
+  { to: 'thema', label: 'Thema’s' },
+  { to: 'fundament', label: 'Fundament' },
+];
+
+/** What a route shows, its title for the tab and its "Op deze pagina" list. */
+function resolve(route: Route): { kind: string; title: string; page?: DocPage; toc: Array<{ id: string; title: string }> } {
+  const [first, second] = route.path;
+  if (!first) return { kind: 'home', title: 'Papier · design system', toc: [] };
+  if (first === 'componenten' && second) {
+    const page = pageBySlug.get(second);
+    if (!page) return { kind: 'missing', title: 'Niet gevonden · Papier', toc: [] };
+    return { kind: 'component', page, title: `${page.title} · Papier`, toc: sectionsOf(page, page.exports.some((e) => reference[e])) };
+  }
+  if (first === 'componenten') return { kind: 'index', title: 'Componenten · Papier', toc: [] };
+  if (first === 'categorie') {
+    const c = categoryById.get(route.section ?? '');
+    return c ? { kind: 'category', title: `${c.title} · Papier`, toc: [] } : { kind: 'missing', title: 'Niet gevonden · Papier', toc: [] };
+  }
+  const guide = guides.find((g) => g.slug === first);
+  if (guide) return { kind: first, title: `${guide.title} · Papier`, toc: guide.sections };
+  return { kind: 'missing', title: 'Niet gevonden · Papier', toc: [] };
+}
+
+function Sidebar({ route, onNavigate }: { route: Route; onNavigate?: () => void }) {
+  const current = route.path.join('/');
+  const link = (to: string, label: string, extra?: string) => (
+    <li key={to}>
+      <a href={`#/${to}`} className="doc-side__link" aria-current={current === to ? 'page' : undefined} onClick={onNavigate}>
+        {label}{extra && <span className="doc-side__badge">{extra}</span>}
+      </a>
+    </li>
+  );
   return (
-    <div className="doc-constellation" aria-label="Voorbeeld: Papier-componenten als objecten" role="group">
-      <Surface material="sage" elevation="object" className="doc-obj doc-obj--a">
-        <Text variant="label" as="p">Periode</Text>
-        <SegmentedControl label="Periode" size="sm" value={period} onValueChange={setPeriod}
-          options={[{ value: 'week', label: 'Week' }, { value: 'maand', label: 'Maand' }, { value: 'jaar', label: 'Jaar' }]} />
-      </Surface>
-      <Surface material="coral" elevation="object" className="doc-obj doc-obj--b">
-        <Switch label="Geluid" checked={on} onCheckedChange={setOn} />
-      </Surface>
-      <Surface material="paper" elevation="object" className="doc-obj doc-obj--c">
-        <Slider label="Volume" value={vol} onValueChange={setVol} formatValue={(v) => `${v}%`} />
-      </Surface>
-      <Surface material="ink" elevation="object" className="doc-obj doc-obj--d">
-        <span className="doc-obj__count">52</span>
-        <Text variant="small" as="p">componenten, getest met axe in licht en donker</Text>
-      </Surface>
-      <div className="doc-obj doc-obj--e doc-disc" aria-hidden="true"><span /></div>
+    <nav className="doc-side" aria-label="Documentatie">
+      <div className="doc-side__group">
+        <p className="doc-side__title">Aan de slag</p>
+        <ul>{link('', 'Introductie')}{guides.map((g) => link(g.slug, g.title))}{link('componenten', 'Alle componenten')}</ul>
+      </div>
+      {categories.map((c) => (
+        <div key={c.id} className="doc-side__group">
+          <p className="doc-side__title"><a href={href('categorie', c.id)} onClick={onNavigate} aria-current={route.path[0] === 'categorie' && route.section === c.id ? 'page' : undefined}>{c.title}</a></p>
+          <ul>{pages.filter((p) => p.category === c.id).map((p) => link(`componenten/${p.slug}`, p.title, p.added === '0.7' ? 'nieuw' : undefined))}</ul>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+/** "Op deze pagina", with the section in view marked. */
+function Toc({ items, base }: { items: Array<{ id: string; title: string }>; base: string }) {
+  const [active, setActive] = useState(items[0]?.id);
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    const els = items.map((i) => document.getElementById(i.id)).filter((e): e is HTMLElement => !!e);
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) setActive(visible[0].target.id);
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    els.forEach((e) => io.observe(e));
+    return () => io.disconnect();
+  }, [items, base]);
+  if (!items.length) return null;
+  return (
+    <nav className="doc-toc" aria-label="Op deze pagina">
+      <p className="doc-toc__title">Op deze pagina</p>
+      <ul>{items.map((i) => <li key={i.id}><a href={`#/${base}/${i.id}`} aria-current={active === i.id ? 'location' : undefined}>{i.title}</a></li>)}</ul>
+    </nav>
+  );
+}
+
+function Search({ open, onClose, setTheme, reduced, setReduced }: { open: boolean; onClose: () => void; setTheme: (t: PapierTheme) => void; reduced: boolean; setReduced: (r: boolean) => void }) {
+  const { toast } = useToast();
+  const items = useMemo<CommandItem[]>(() => [
+    ...guides.flatMap((g) => [
+      { id: g.slug, group: 'Gidsen', label: g.title, description: g.summary, icon: <icons.ArrowRight />, onSelect: () => navigate(href(g.slug)) },
+      ...g.sections.map((s) => ({ id: `${g.slug}-${s.id}`, group: 'Gidsen', label: `${g.title}: ${s.title}`, textValue: `${s.title} ${g.title}`, keywords: s.keywords, icon: <icons.ChevronRight />, onSelect: () => navigate(href(g.slug, s.id)) })),
+    ]),
+    ...pages.map((p) => ({
+      id: p.slug, group: categoryById.get(p.category)!.title, label: p.title, description: p.summary, icon: categoryById.get(p.category)!.icon,
+      keywords: [...p.exports, ...(p.keywords ?? []), ...categoryById.get(p.category)!.title.split(' ')], onSelect: () => navigate(href('componenten', p.slug)),
+    })),
+    ...pages.map((p) => ({ id: `${p.slug}-api`, group: 'API', label: `${p.title}: props`, textValue: `${p.title} props api`, keywords: p.exports, icon: <icons.Sort />, onSelect: () => navigate(href('componenten', p.slug, 'api')) })),
+    { id: 'licht', group: 'Instellingen', label: 'Licht thema', icon: <icons.Sun />, keywords: ['light'], onSelect: () => setTheme('light') },
+    { id: 'donker', group: 'Instellingen', label: 'Donker thema', icon: <icons.Moon />, keywords: ['dark', 'nacht'], onSelect: () => setTheme('dark') },
+    { id: 'systeem', group: 'Instellingen', label: 'Thema van het systeem', icon: <icons.Copy />, keywords: ['system', 'auto'], onSelect: () => setTheme('system') },
+    { id: 'beweging', group: 'Instellingen', label: reduced ? 'Beweging weer aanzetten' : 'Minder beweging', icon: <icons.Pause />, keywords: ['motion', 'animatie'], onSelect: () => setReduced(!reduced) },
+    { id: 'npm', group: 'Instellingen', label: 'Kopieer de installatieopdracht', icon: <icons.Copy />, keywords: ['npm', 'install'], onSelect: () => {
+      navigator.clipboard?.writeText('npm install @dionbm/papier').then(() => toast({ title: 'Gekopieerd', description: 'npm install @dionbm/papier' }), () => toast({ tone: 'danger', title: 'Kopiëren mislukt' }));
+    } },
+  ], [reduced, setReduced, setTheme, toast]);
+  // API items only show up when you search for them; they would double the list otherwise.
+  const filter = (item: CommandItem, query: string) => {
+    if (item.group === 'API' && !query.trim()) return 0;
+    if (item.group === 'Gidsen' && item.id.includes('-') && !query.trim()) return 0;
+    const words = query.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').split(/\s+/).filter(Boolean);
+    if (!words.length) return 1;
+    const label = (item.textValue ?? String(item.label)).toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    const keys = (item.keywords ?? []).join(' ').toLowerCase();
+    const desc = typeof item.description === 'string' ? item.description.toLowerCase() : '';
+    let score = 0;
+    for (const w of words) {
+      const s = label.startsWith(w) ? 8 : label.includes(` ${w}`) ? 6 : keys.split(' ').some((k) => k.startsWith(w)) ? 5 : label.includes(w) ? 4 : keys.includes(w) ? 3 : desc.includes(w) ? 1 : 0;
+      if (!s) return 0;
+      score += s;
+    }
+    return item.group === 'API' ? score - 2 : score;
+  };
+  return <CommandDialog open={open} onClose={onClose} label="Zoek in de documentatie" placeholder="Zoek een component, prop of gids…" items={items} filter={filter}
+    emptyText={<>Niets gevonden. Probeer een export zoals <code>DatePicker</code> of een woord zoals ‘upload’.</>} />;
+}
+
+function NotFound() {
+  return (
+    <div className="doc-page">
+      <h1 id="page-title" tabIndex={-1} className="pp-visually-hidden">Niet gevonden</h1>
+      <EmptyState headingLevel={2} title="Deze pagina bestaat niet (meer)" icon={<icons.Search />}
+        description="Misschien heeft het component een nieuwe plek. Zoek het op naam, of bekijk alle componenten."
+        action={<Button asChild variant="ink"><a href={href('componenten')}>Alle componenten</a></Button>} />
     </div>
   );
 }
 
-export function App() {
-  const [theme, setTheme] = useState<PapierTheme>(() => readPref<PapierTheme>('papier-docs-theme', 'light'));
-  const [reduced, setReduced] = useState(() => readPref<string>('papier-docs-motion', 'full') === 'reduced');
+function Shell() {
+  const [theme, setThemeState] = useState<PapierTheme>(() => readPref<PapierTheme>('papier-docs-theme', 'light'));
+  const [reduced, setReducedState] = useState(() => readPref<string>('papier-docs-motion', 'full') === 'reduced');
+  const setTheme = (t: PapierTheme) => { setThemeState(t); writePref('papier-docs-theme', t); };
+  const setReduced = (r: boolean) => { setReducedState(r); writePref('papier-docs-motion', r ? 'reduced' : 'full'); };
   const resolved = useResolvedTheme(theme);
+  const route = useRoute();
+  const view = resolve(route);
+  const [search, setSearch] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const first = useRef(true);
 
   useEffect(() => {
     document.documentElement.style.colorScheme = resolved;
@@ -65,127 +206,109 @@ export function App() {
     document.body.style.background = resolved === 'dark' ? '#1c1d19' : '#f2efe7';
   }, [resolved]);
 
+  // After a route change: title, scroll, and focus on the heading so screen readers hear where they are.
+  useEffect(() => {
+    document.title = view.title;
+    const isFirst = first.current;
+    first.current = false;
+    const section = route.section && view.kind !== 'category' ? route.section : null;
+    if (section) return whenPresent(section, (el) => el.scrollIntoView({ block: 'start' }));
+    window.scrollTo(0, 0);
+    if (isFirst) return undefined;
+    return whenPresent('page-title', (el) => el.focus({ preventScroll: true }));
+  }, [route.path.join('/'), route.section]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const typing = e.target instanceof HTMLElement && (e.target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName));
+      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); setSearch((s) => !s); }
+      else if (e.key === '/' && !typing && !e.metaKey && !e.ctrlKey) { e.preventDefault(); setSearch(true); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
+
+  const withSidebar = view.kind !== 'home';
+  let content;
+  if (view.kind === 'home') content = <Home onSearch={() => setSearch(true)} shortcut={shortcut} />;
+  else if (view.kind === 'start') content = <StartGuide />;
+  else if (view.kind === 'thema') content = <ThemeGuide />;
+  else if (view.kind === 'fundament') content = <Foundations theme={resolved} />;
+  else if (view.kind === 'component') content = <ActiveExample.Provider value={view.page!.example}><Components /></ActiveExample.Provider>;
+  else if (view.kind === 'index' || view.kind === 'category') {
+    const c = view.kind === 'category' ? categoryById.get(route.section!)! : null;
+    content = (
+      <div className="doc-page doc-index">
+        <header className="doc-page__head">
+          <Text variant="label" as="p" className="doc-eyebrow">{c ? 'Categorie' : 'Componenten'}</Text>
+          <Text variant="headline" as="h1" id="page-title" tabIndex={-1} className="doc-page__title">{c ? c.title : 'Onderdelen die je kunt aanraken.'}</Text>
+          <Text variant="body-lg" tone="muted" className="doc-page__lead">{c ? c.blurb : 'Elk onderdeel is gebouwd op een native element waar dat kan. Papier voegt materiaal en beweging toe, nooit een eigen versie van wat de browser al goed doet.'}</Text>
+        </header>
+        <Explorer key={c?.id ?? 'all'} only={c?.id} />
+      </div>
+    );
+  } else content = <NotFound />;
+
+  const tocBase = view.kind === 'component' ? `componenten/${view.page!.slug}` : route.path[0];
+
   return (
     <Papier theme={resolved} motion={reduced ? 'reduced' : 'full'} className="doc">
       <ToastProvider>
-      <a className="doc-skip" href="#inhoud">Naar de inhoud</a>
+      <a className="doc-skip" href="#inhoud" onClick={(e) => { e.preventDefault(); document.getElementById('page-title')?.focus(); }}>Naar de inhoud</a>
       <header className="doc-header">
-        <a href="#top" className="doc-wordmark">papier<span>.</span><span className="pp-visually-hidden"> naar boven</span></a>
+        <IconButton label="Navigatie" variant="ghost" icon={<icons.Menu />} className="doc-header__menu" onClick={() => setMenu(true)} aria-haspopup="dialog" />
+        <a href="#/" className="doc-wordmark">papier<span>.</span><span className="pp-visually-hidden"> naar de introductie</span></a>
         <nav aria-label="Hoofdnavigatie" className="doc-nav">
-          {nav.map((n) => <Link key={n.href} href={n.href} variant="quiet">{n.label}</Link>)}
+          {top.map((n) => <a key={n.to} href={href(n.to)} className="doc-nav__link" aria-current={route.path[0] === n.to || (n.to === 'componenten' && route.path[0] === 'categorie') ? 'page' : undefined}>{n.label}</a>)}
         </nav>
         <div className="doc-controls">
-          <SegmentedControl label="Thema" size="sm" value={theme}
-            onValueChange={(v) => { setTheme(v); writePref('papier-docs-theme', v); }}
-            options={[{ value: 'light', label: 'Licht' }, { value: 'dark', label: 'Donker' }, { value: 'system', label: 'Systeem' }]} />
-          <Switch label="Minder beweging" checked={reduced} onCheckedChange={(v) => { setReduced(v); writePref('papier-docs-motion', v ? 'reduced' : 'full'); }} className="doc-motion-switch" />
+          <button type="button" className="doc-search" onClick={() => setSearch(true)} aria-haspopup="dialog" aria-keyshortcuts={isMac ? 'Meta+K' : 'Control+K'}>
+            <icons.Search width={16} height={16} />
+            <span className="doc-search__text">Zoeken</span>
+            <span className="doc-search__keys" aria-hidden="true">{shortcut.split(' ').map((k) => <Kbd key={k}>{k}</Kbd>)}</span>
+          </button>
+          <SegmentedControl label="Thema" size="sm" value={theme} onValueChange={setTheme} className="doc-theme-switch"
+            options={[
+              { value: 'light', label: <><icons.Sun width={15} height={15} /><span className="pp-visually-hidden">Licht</span></> },
+              { value: 'dark', label: <><icons.Moon width={15} height={15} /><span className="pp-visually-hidden">Donker</span></> },
+              { value: 'system', label: <><span aria-hidden="true">A</span><span className="pp-visually-hidden">Systeem</span></> },
+            ]} />
+          <Toggle size="sm" pressed={reduced} onPressedChange={setReduced} aria-label="Minder beweging" icon={<icons.Pause width={15} height={15} />} className="doc-motion-toggle" title="Minder beweging" />
+          <IconButton asChild label="Broncode op GitHub" variant="ghost" icon={<icons.External />} className="doc-header__github">
+            <a href="https://github.com/Dion03/papier" target="_blank" rel="noopener noreferrer" />
+          </IconButton>
         </div>
       </header>
 
-      <main id="inhoud" tabIndex={-1}>
-        <section id="top" className="doc-hero" aria-labelledby="hero-title">
-          <div className="doc-hero__copy">
-            <Tag tone="outline">v0.3 · React · MIT</Tag>
-            <Text variant="display" id="hero-title">Papier<span className="doc-accent">.</span></Text>
-            <Text variant="body-lg" tone="muted" className="doc-hero__lead">
-              Het design system achter mijn portfolio en apps. Warm papier, inkt, vermiljoen en salie als 52 toegankelijke React-componenten, met tokens die zichzelf controleren.
-            </Text>
-            <div className="doc-row">
-              <Button asChild variant="ink" size="lg" iconEnd={<icons.ArrowRight />}><a href="#componenten">Bekijk de componenten</a></Button>
-              <Link href="#gebruik" variant="arrow">Installeren</Link>
-            </div>
-          </div>
-          <Constellation />
-        </section>
-
-        <section id="principes" className="doc-section" aria-labelledby="principes-title">
-          <div className="doc-section__head">
-            <Text variant="headline" as="h2" id="principes-title">Gemaakt om aan te raken.</Text>
-          </div>
-          <ol className="doc-principles">
-            <li><Text variant="subtitle" as="h3">Native eerst</Text><Text tone="muted">Een knop is een button, een uitklapper een details, een venster een dialog. Papier stijlt wat de browser al goed doet en vult alleen aan waar nodig.</Text></li>
-            <li><Text variant="subtitle" as="h3">Object, geen decoratie</Text><Text tone="muted">Diepte en materiaal zijn voor dingen die je bedient. Leestekst en navigatie blijven vlak en rustig op papier.</Text></li>
-            <li><Text variant="subtitle" as="h3">Rollen, geen kleuren</Text><Text tone="muted">Componenten kennen alleen rollen zoals tekst, actie en focus. Een thema is een nieuwe set rollen die dezelfde contrasteisen haalt.</Text></li>
-            <li><Text variant="subtitle" as="h3">Beweging is optioneel</Text><Text tone="muted">Elke overgang heeft een eindtoestand die direct bereikbaar is. Minder beweging zet alle duren op nul, niets verdwijnt.</Text></li>
-          </ol>
-        </section>
-
-        <Foundations theme={resolved} />
-        <Components />
-
-        <section id="gebruik" className="doc-section" aria-labelledby="gebruik-title">
-          <div className="doc-section__head">
-            <Text variant="headline" as="h2" id="gebruik-title">In drie regels op papier.</Text>
-          </div>
-          <div className="doc-grid-2">
-            <Surface material="ink" padding="lg" className="doc-code-card">
-              <pre tabIndex={0} aria-label="Installatievoorbeeld"><code>{`npm install @dionbm/papier
-
-import '@dionbm/papier/fonts.css';
-import '@dionbm/papier/papier.css';
-import { Papier, Button } from '@dionbm/papier';
-
-export function App() {
-  return (
-    <Papier theme="system">
-      <Button>Opslaan</Button>
-    </Papier>
-  );
-}`}</code></pre>
-            </Surface>
-            <div className="doc-stack">
-              <Text variant="subtitle" as="h3">Wat je krijgt</Text>
-              <ul className="doc-list">
-                <li><code>papier.css</code>: tokens, basis en alle componenten, 7 kB gzip.</li>
-                <li><code>tokens.css</code> en <code>tokens.json</code> voor wie alleen de waarden wil, ook buiten React.</li>
-                <li><code>tokens.dtcg.json</code> in het W3C-formaat voor design tokens, voor Tokens Studio, Figma en Style Dictionary.</li>
-                <li><code>fonts.css</code>: Manrope en DM Sans als variabele fonts.</li>
-                <li>ES- en CommonJS-builds met typedefinities, één bestand per module. React 18 of 19 is een peer dependency.</li>
-              </ul>
-              <Text variant="subtitle" as="h3">Hoe het getest is</Text>
-              <ul className="doc-list">
-                <li>axe zonder overtredingen voor elk component, in licht en donker.</li>
-                <li>Gedragstests voor toetsenbord, focus en ARIA-status.</li>
-                <li>Een contrastcheck op 26 paren per thema die de build laat falen.</li>
-                <li>Unit-, axe- en SSR-tests op React 18 en 19; Playwright in Chromium, Firefox, WebKit en mobiel, ook van rechts naar links.</li>
-                <li>De API-tabellen hieronder komen uit de TypeScript-types, dus ze lopen nooit achter.</li>
-              </ul>
-              <Text variant="subtitle" as="h3">In je eigen app</Text>
-              <ul className="doc-list">
-                <li><code>asChild</code> op Button, IconButton en Link: de Link van Next.js of React Router krijgt de Papier-vorm.</li>
-                <li>Alle CSS staat in <code>@layer papier</code>. Je eigen stijlen winnen zonder specificiteitsgevecht; zet bij Tailwind 4 bovenaan <code>@layer theme, base, papier, components, utilities;</code>.</li>
-                <li>Menu en Tooltip openen in de top layer en vallen niet weg in een tabel of module met <code>overflow: hidden</code>.</li>
-                <li>Elk component met een eigen element geeft een <code>ref</code> door.</li>
-                <li>Next.js: Text, Stack, Container, Surface, Tag, Table en Skeleton blijven server components; alleen wat je bedient is client-code.</li>
-                <li>Van rechts naar links: zet <code>dir="rtl"</code> op je pagina. Uitlijning, menu's en pijlen draaien mee; geef eigen pijlen <code>className="pp-flip-rtl"</code>.</li>
-              </ul>
-            </div>
-          </div>
-          <div className="doc-grid-2 doc-theme">
-            <Surface material="ink" padding="lg" className="doc-code-card">
-              <pre tabIndex={0} aria-label="Voorbeeld van een eigen thema"><code>{`import { Papier, themeStyle, checkTheme } from '@dionbm/papier';
-
-const merk = { action: '#1f4e8c', 'action-hover': '#183d6e', 'on-action': '#ffffff' };
-
-<Papier theme="light" style={themeStyle(merk)}>…</Papier>
-
-// In een test: geen merkkleur maakt tekst onleesbaar.
-expect(checkTheme(merk).filter((r) => !r.ok)).toEqual([]);`}</code></pre>
-            </Surface>
-            <div className="doc-stack">
-              <Text variant="subtitle" as="h3">Een eigen thema</Text>
-              <Text tone="muted">Componenten gebruiken alleen kleurrollen. Een merk of thema is dus een andere waarde voor een paar rollen, als CSS-variabele <code>--papier-color-*</code>. <code>themeStyle</code> zet ze inline, <code>checkTheme</code> legt ze langs dezelfde 26 contrastparen als de build.</Text>
-              <Text tone="muted">Alle rollen staan in <code>colorRoles</code>. Voor licht én donker zet je de variabelen in je eigen CSS onder <code>[data-papier-theme]</code>.</Text>
-            </div>
-          </div>
-        </section>
-      </main>
+      <div className={withSidebar ? 'doc-layout' : 'doc-layout doc-layout--wide'}>
+        {withSidebar && <div className="doc-layout__side"><Sidebar route={route} /></div>}
+        <main id="inhoud" key={route.path.join('/') + (view.kind === 'category' ? `/${route.section}` : '')} className="doc-layout__main" data-kind={view.kind}>
+          <Suspense fallback={<PageLoading />}>{content}</Suspense>
+        </main>
+        {withSidebar && view.toc.length > 0 && <div className="doc-layout__toc"><Toc key={tocBase} items={view.toc} base={tocBase} /></div>}
+      </div>
 
       <footer className="doc-footer">
-        <Text variant="small" tone="muted">Papier is mijn design system en draagt de identiteit van mijn portfolio. Fonts onder de SIL Open Font License.</Text>
-        <a href="#top" className="doc-wordmark doc-wordmark--small">papier<span>.</span><span className="pp-visually-hidden"> terug naar boven</span></a>
+        <div>
+          <a href="#/" className="doc-wordmark doc-wordmark--small">papier<span>.</span><span className="pp-visually-hidden"> naar de introductie</span></a>
+          <Text variant="small" tone="muted">Het design system achter mijn portfolio en apps. MIT; fonts onder de SIL Open Font License.</Text>
+        </div>
+        <nav aria-label="Voettekst" className="doc-footer__nav">
+          {top.map((n) => <a key={n.to} href={href(n.to)}>{n.label}</a>)}
+          <a href="https://www.npmjs.com/package/@dionbm/papier" target="_blank" rel="noopener noreferrer">npm<span className="pp-visually-hidden"> (opent in een nieuw tabblad)</span></a>
+        </nav>
       </footer>
+
+      <Sheet open={menu} onClose={() => setMenu(false)} title="Navigatie" side="left" className="doc-menu-sheet">
+        <nav aria-label="Hoofdnavigatie (menu)" className="doc-sheet-top">
+          {top.map((n) => <a key={n.to} href={href(n.to)} onClick={() => setMenu(false)}>{n.label}</a>)}
+        </nav>
+        <Sidebar route={route} onNavigate={() => setMenu(false)} />
+      </Sheet>
+      <Search open={search} onClose={() => setSearch(false)} setTheme={setTheme} reduced={reduced} setReduced={setReduced} />
       </ToastProvider>
     </Papier>
   );
 }
+
+export const App = Shell;

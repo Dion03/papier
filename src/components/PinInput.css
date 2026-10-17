@@ -1,0 +1,16 @@
+@layer papier {
+.pp-pin__boxes { display: flex; gap: clamp(6px, 2vw, 10px); }
+.pp-pin__box {
+  width: clamp(40px, 11vw, 52px); height: 60px; min-width: 0; padding: 0;
+  border: 1.5px solid var(--papier-color-line-strong); border-radius: var(--papier-radius-md); background: var(--papier-color-surface); color: var(--papier-color-text);
+  text-align: center; font: 500 26px/1 var(--papier-font-display); font-variant-numeric: tabular-nums; caret-color: var(--papier-color-accent);
+  transition: border-color var(--papier-dur-color) var(--papier-ease-arrive), box-shadow var(--papier-dur-color) var(--papier-ease-arrive), transform var(--papier-dur-press) var(--papier-ease-arrive);
+}
+.pp-pin__box[data-filled] { border-color: var(--papier-color-action-strong); }
+.pp-pin__box:hover:not(:disabled) { border-color: var(--papier-color-accent-text); }
+.papier .pp-pin__box:focus-visible { outline: none; border-color: var(--papier-color-focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--papier-color-focus) 30%, transparent); }
+.pp-pin__box[aria-invalid="true"] { border-color: var(--papier-color-danger); }
+.pp-pin__box:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (prefers-reduced-motion: no-preference) { .pp-pin__box[data-filled] { animation: pp-pin-in var(--papier-dur-press) var(--papier-ease-arrive); } }
+@keyframes pp-pin-in { from { transform: scale(0.94); } }
+}

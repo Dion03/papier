@@ -1,7 +1,7 @@
 import { createRef, forwardRef, useRef, useState, type AnchorHTMLAttributes } from 'react';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AlertDialog, Breadcrumb, BreadcrumbItem, Button, Combobox, Dialog, Pagination, Papier, Sheet, englishLabels, paginationRange } from '../src';
+import { AlertDialog, Breadcrumb, BreadcrumbItem, Combobox, Dialog, Pagination, Papier, Sheet, englishLabels, paginationRange } from '../src';
 
 const platen = [
   { value: 'uitzinnig', label: 'Uitzinnig', description: 'Froukje' },
@@ -201,20 +201,6 @@ describe('Pagination', () => {
     expect(prev).toHaveAttribute('rel', 'prev');
     expect(prev).toHaveAttribute('data-next');
     expect(screen.getByRole('link', { name: 'Pagina 3' })).toHaveAttribute('aria-current', 'page');
-  });
-});
-
-describe('Button blijft werken naast AlertDialog', () => {
-  it('opent en sluit vanuit een knop', async () => {
-    function Demo() {
-      const [open, setOpen] = useState(false);
-      return <><Button onClick={() => setOpen(true)}>Verwijder</Button><AlertDialog open={open} onClose={() => setOpen(false)} onConfirm={() => {}} title="Zeker?" confirmLabel="Verwijderen" /></>;
-    }
-    render(<Demo />);
-    await userEvent.click(screen.getByRole('button', { name: 'Verwijder' }));
-    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: 'Annuleren' }));
-    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
 });
 

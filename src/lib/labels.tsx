@@ -52,6 +52,20 @@ export interface PapierLabels {
   invalidDate: (example: string) => string;
   /** Shown when a typed date is before min, after max or unavailable. */
   dateUnavailable: string;
+  copy: string;
+  copied: string;
+  copyFailed: string;
+  /** Name of a Steps landmark. */
+  steps: string;
+  /** Position in Steps, e.g. "Stap 2 van 4". */
+  stepOf: (step: number, count: number) => string;
+  stepComplete: string;
+  /** Said after the title of a step marked `error`; the "!" marker alone is not announced. */
+  stepError: string;
+  /** Name of one box of a PinInput, e.g. "Teken 2 van 6". */
+  pinChar: (index: number, count: number) => string;
+  /** Hints in the footer of a Command list. */
+  commandHints: { move: string; choose: string; close: string };
 }
 
 export const dutchLabels: PapierLabels = {
@@ -91,6 +105,15 @@ export const dutchLabels: PapierLabels = {
   datePattern: { day: 'dd', month: 'mm', year: 'jjjj' },
   invalidDate: (example) => `Vul een bestaande datum in, zoals ${example}.`,
   dateUnavailable: 'Deze datum kun je niet kiezen.',
+  copy: 'Kopiëren',
+  copied: 'Gekopieerd',
+  copyFailed: 'Kopiëren mislukt',
+  steps: 'Stappen',
+  stepOf: (s, n) => `Stap ${s} van ${n}`,
+  stepComplete: 'voltooid',
+  stepError: 'controleer deze stap',
+  pinChar: (i, n) => `Teken ${i} van ${n}`,
+  commandHints: { move: 'kiezen', choose: 'openen', close: 'sluiten' },
 };
 
 export const englishLabels: PapierLabels = {
@@ -130,6 +153,15 @@ export const englishLabels: PapierLabels = {
   datePattern: { day: 'dd', month: 'mm', year: 'yyyy' },
   invalidDate: (example) => `Enter a real date, such as ${example}.`,
   dateUnavailable: 'This date cannot be chosen.',
+  copy: 'Copy',
+  copied: 'Copied',
+  copyFailed: 'Copy failed',
+  steps: 'Steps',
+  stepOf: (s, n) => `Step ${s} of ${n}`,
+  stepComplete: 'completed',
+  stepError: 'needs attention',
+  pinChar: (i, n) => `Character ${i} of ${n}`,
+  commandHints: { move: 'move', choose: 'open', close: 'close' },
 };
 
 export const LabelsContext = createContext<PapierLabels>(dutchLabels);

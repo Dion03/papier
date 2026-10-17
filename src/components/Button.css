@@ -53,3 +53,12 @@
 /* Right-to-left: the end icon nudges towards the end, i.e. to the left. */
 .pp-button:dir(rtl):hover .pp-button__end { transform: translateX(-3px); }
 }
+@layer papier {
+.pp-copy__icon { display: inline-grid; place-items: center; }
+.pp-copy[data-state="copied"] .pp-copy__icon { color: var(--papier-color-success); animation: pp-copy-pop var(--papier-dur-color) var(--papier-ease-arrive); }
+.pp-button.pp-copy[data-variant="ink"][data-state="copied"] .pp-copy__icon, .pp-button.pp-copy[data-variant="primary"][data-state="copied"] .pp-copy__icon { color: inherit; }
+.pp-copy[data-state="failed"] .pp-copy__icon { color: var(--papier-color-danger); }
+.pp-icon-button.pp-copy[data-size="sm"] { width: 36px; height: 36px; }
+@keyframes pp-copy-pop { from { transform: scale(0.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pp-copy__icon { animation: none !important; } }
+}

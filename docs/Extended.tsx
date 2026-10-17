@@ -294,7 +294,7 @@ function DetailsDemo() {
       <Button fullWidth variant="ink">Inloggen met je e-mailadres</Button>
       <Separator label="of" />
       <Button fullWidth variant="secondary">Inloggen met Discogs</Button>
-      <EmptyState size="sm" headingLevel={4} title="Nog geen luisterlijst" description="Bewaar platen die je nog wilt horen."
+      <EmptyState size="sm" headingLevel={3} title="Nog geen luisterlijst" description="Bewaar platen die je nog wilt horen."
         icon={<icons.Play />} action={<Button size="sm">Plaat bewaren</Button>} />
     </div>
   );

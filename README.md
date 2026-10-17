@@ -28,21 +28,25 @@ export function App() {
 
 Werkt in Vite en in Next.js (App Router), met React 18 of 19. Alles rendert op de server.
 
-## Componenten (52)
+## Componenten (56)
 
 | Groep | Componenten |
 |---|---|
 | Basis | Papier, Text, VisuallyHidden, Stack, Container, Separator, Kbd |
-| Acties | Button, IconButton, Link, Menu, Toggle, ToggleGroup |
-| Formulieren | TextField, TextArea, PasswordField, NumberField, FileField, DatePicker, DateRangePicker, Calendar, RangeCalendar, Select, Combobox, MultiCombobox, Checkbox, CheckboxGroup, RadioGroup, Switch, Slider, RangeSlider, SegmentedControl |
+| Acties | Button, IconButton, CopyButton, Link, Menu, Toggle, ToggleGroup |
+| Formulieren | TextField, TextArea, PasswordField, NumberField, PinInput, FileField, DatePicker, DateRangePicker, Calendar, RangeCalendar, Select, Combobox, MultiCombobox, Checkbox, CheckboxGroup, RadioGroup, Switch, Slider, RangeSlider, SegmentedControl |
 | Veldbouwstenen | Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl |
-| Navigatie | Breadcrumb (BreadcrumbItem), Pagination |
+| Navigatie | Breadcrumb (BreadcrumbItem), Pagination, Steps |
 | Structuur | Tabs (TabList, Tab, TabPanel), Disclosure, Accordion, Table, SortHeader en useTableSort |
-| Overlays | Dialog, AlertDialog, Sheet, Popover, Tooltip |
+| Overlays | Dialog, AlertDialog, Sheet, Popover, Tooltip, Command en CommandDialog |
 | Feedback | Notice, ToastProvider en useToast, Progress, Spinner, Skeleton, EmptyState |
 | Materiaal | Surface, Tag, Avatar |
 
 Plus 30 lijniconen onder `icons`.
+
+Elk component heeft een eigen pagina op [papier.dionbm.nl](https://papier.dionbm.nl) met een
+live voorbeeld, code, varianten, toegankelijkheid en de API uit de types. Zoek met
+<kbd>Ctrl</kbd> <kbd>K</kbd> (<kbd>⌘</kbd> <kbd>K</kbd> op een Mac) of <kbd>/</kbd>.
 
 Hoe Papier zich verhoudt tot shadcn/ui, Radix, Mantine, Chakra en HeroUI, en wat nog op de
 lijst staat: [docs/gap-analysis.md](docs/gap-analysis.md).
@@ -263,6 +267,29 @@ Elk component met een eigen element geeft `ref` door: Dialog en Sheet naar het
 en FileField naar de input, Tabs, TabList, Tab en TabPanel, RadioGroup naar de
 fieldset, SegmentedControl, Avatar, Skeleton, Field en alle invoervelden. Tooltip heeft
 geen eigen element; de ref van zijn kind blijft gewoon werken.
+
+## De documentatiesite
+
+`docs/` is een Vite-app met hash-routes (`#/componenten/button`), zodat de statische build
+zonder extra instellingen op GitHub Pages werkt. Er zit geen router- of docs-framework in;
+alles op de site is Papier zelf.
+
+- `docs/registry.tsx` is de kaart van de site: per pagina de categorie, titel, samenvatting,
+  exports, trefwoorden, gerelateerde pagina's en een klein live voorbeeld voor de verkenner.
+- `docs/Components.tsx`, `docs/Extended.tsx` en `docs/Additions.tsx` bevatten de voorbeelden
+  (`<Example id="…">`); elk voorbeeld rendert alleen op zijn eigen pagina.
+- `docs/variants.tsx` voegt varianten, maten en toestanden toe per pagina.
+- De API-tabellen komen uit de types (`docs/props.json`, `node scripts/build-props.mjs`).
+
+Een nieuw component documenteren: schrijf een `<Example id="…">`, voeg een pagina toe aan
+`docs/registry.tsx` en draai `npm run check`. `tests/docs.test.ts` faalt als een voorbeeld
+geen pagina heeft (of omgekeerd), als een pagina een export noemt die niet bestaat, als een
+gerelateerde link nergens heen gaat of als een geëxporteerd component nergens staat. De
+e2e-test draait axe en de horizontale-scrollcheck op elke pagina, in licht en donker.
+
+```bash
+npm run dev        # docs op http://127.0.0.1:4330
+```
 
 ## Tokens
 

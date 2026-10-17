@@ -26,7 +26,7 @@ function Swatches({ palette }: { palette: Palette }) {
     <div className="doc-swatch-groups">
       {swatchGroups.map((g) => (
         <div key={g.title} className="doc-swatch-group">
-          <Text variant="label" as="h4">{g.title}</Text>
+          <Text variant="label" as="h3">{g.title}</Text>
           <ul className="doc-swatches">
             {g.roles.map((role) => (
               <li key={role} className="doc-swatch">
@@ -98,23 +98,24 @@ function MotionDemo() {
 export function Foundations({ theme }: { theme: ThemeName }) {
   const palette = themes[theme] as unknown as Palette;
   return (
-    <section id="fundament" className="doc-section" aria-labelledby="fundament-title">
-      <div className="doc-section__head">
-        <Text variant="headline" as="h2" id="fundament-title">Eén bron, elke vorm.</Text>
+    <article id="fundament" className="doc-page doc-guide" aria-labelledby="page-title">
+      <div className="doc-page__head">
+        <Text variant="label" as="p" className="doc-eyebrow">Fundament</Text>
+        <Text variant="headline" as="h1" id="page-title" tabIndex={-1} className="doc-page__title">Eén bron, elke vorm.</Text>
         <Text variant="body-lg" tone="muted">
           Alle waarden staan in één bestand. Een script maakt er CSS-variabelen en JSON van, en een tweede script controleert bij elke build of elk paar leesbaar blijft. Dezelfde berekening vult de tabel hieronder.
         </Text>
       </div>
 
-      <div className="doc-block">
-        <Text variant="title" as="h3">Kleur</Text>
+      <div className="doc-block" id="kleur">
+        <Text variant="title" as="h2">Kleur en contrast</Text>
         <Text tone="muted" className="doc-block__intro">Je ziet nu het {theme === 'light' ? 'lichte' : 'donkere'} thema. Componenten gebruiken alleen rollen, nooit hexwaarden, dus een thema is een nieuwe set rollen.</Text>
         <Swatches palette={palette} />
         <ContrastTable palette={palette} theme={theme} />
       </div>
 
-      <div className="doc-block">
-        <Text variant="title" as="h3">Typografie</Text>
+      <div className="doc-block" id="typografie">
+        <Text variant="title" as="h2">Typografie</Text>
         <Text tone="muted" className="doc-block__intro">Manrope draagt de koppen, DM Sans de uitleg. Beide lokaal als variabel font, onder de OFL-licentie.</Text>
         <ul className="doc-type">
           {Object.entries(typeScale).map(([role, [size, line, weight]]) => (
@@ -128,9 +129,9 @@ export function Foundations({ theme }: { theme: ThemeName }) {
         </ul>
       </div>
 
-      <div className="doc-block doc-grid-2">
+      <div className="doc-block doc-grid-2" id="ruimte">
         <div>
-          <Text variant="title" as="h3">Ruimte</Text>
+          <Text variant="title" as="h2">Ruimte</Text>
           <ul className="doc-space">
             {Object.entries(space).filter(([k]) => k !== '0').map(([k, v]) => (
               <li key={k}><code>space-{k}</code><span className="doc-space__bar" style={{ width: v }} /><span className="doc-num">{v}</span></li>
@@ -138,7 +139,7 @@ export function Foundations({ theme }: { theme: ThemeName }) {
           </ul>
         </div>
         <div>
-          <Text variant="title" as="h3">Vorm</Text>
+          <Text variant="title" as="h2">Vorm</Text>
           <ul className="doc-radius">
             {Object.entries(radius).map(([k, v]) => (
               <li key={k}><span className="doc-radius__box" style={{ borderRadius: v }} /><code>radius-{k}</code><span className="doc-num">{v}</span></li>
@@ -147,11 +148,11 @@ export function Foundations({ theme }: { theme: ThemeName }) {
         </div>
       </div>
 
-      <div className="doc-block">
-        <Text variant="title" as="h3">Beweging</Text>
+      <div className="doc-block" id="beweging">
+        <Text variant="title" as="h2">Beweging</Text>
         <Text tone="muted" className="doc-block__intro">Korte reacties met één aankomstcurve. Beweging ondersteunt de volgorde; zonder animatie blijft alles bruikbaar.</Text>
         <MotionDemo />
       </div>
-    </section>
+    </article>
   );
 }

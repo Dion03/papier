@@ -33,8 +33,10 @@ Compared against shadcn/ui (Radix or Base UI), Radix Primitives, Mantine 8, Chak
 | 13 | **MultiCombobox** (multi-select with tags) | Mantine, Chakra, HeroUI | Medium | built |
 | 14 | **RangeSlider** (two thumbs), marks | Mantine, Radix, Chakra | Medium | built |
 | 15 | **DatePicker** and **Calendar** (typed input in the locale's order, date grid) | all but Radix | High | built |
-| 16 | Command palette, context menu, menubar, navigation menu | shadcn, Radix | Low for Papier's audience | not planned |
-| 17 | Stepper, PinInput, Rating, Carousel | Mantine, Chakra | Low | not planned |
+| 16 | **Command** palette (and CommandDialog) | shadcn (cmdk), Mantine Spotlight, HeroUI | Medium; powers the docs search | built (0.7) |
+| 16b | Context menu, menubar, navigation menu | Radix, shadcn | Low for Papier's audience | not planned |
+| 17 | **Steps**, **PinInput**, **CopyButton** | Mantine, Chakra, HeroUI | Medium: checkout, sign-in codes, code samples | built (0.7) |
+| 17b | Rating, Carousel | Mantine, Chakra | Low | not planned |
 | 18 | **DateRangePicker** and **RangeCalendar** | Mantine, HeroUI, React Aria | Medium | built |
 | 19 | Time input | Mantine, HeroUI, React Aria | Low: native `<TextField type="time">` already gives a localized, accessible picker | native |
 
@@ -47,3 +49,11 @@ Compared against shadcn/ui (Radix or Base UI), Radix Primitives, Mantine 8, Chak
   `useControllable`, has typed props in the generated API tables and Dutch/English labels.
 - **Testing**: each addition gets axe cases (light and dark), behaviour tests for keyboard and
   ARIA, and server rendering coverage.
+
+## Documentation site (0.7)
+
+Compared with ui.shadcn.com, mantine.dev, radix-ui.com and heroui.com, the old one-page
+site lacked routes, a sidebar, search, per-component pages and variants. The new site adds
+all of these with hash routes and no extra dependencies, keeps Papier's own identity
+(dot-grid paper stages, ink, vermilion accents, objects that lift on hover) and reuses the
+existing examples and generated API tables. A registry test keeps pages and examples in step.
