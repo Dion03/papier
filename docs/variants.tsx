@@ -12,88 +12,88 @@ export interface Variant { title: string; description?: ReactNode; code: string;
 const variants: Record<string, Variant[]> = {
   knoppen: [
     {
-      title: 'Varianten',
-      description: 'Primary is de salie-actie, ink de donkere bediening voor de belangrijkste stap. Secondary en ghost voor alles daarnaast, danger voor wat niet terug kan.',
-      code: `<Button>Opslaan</Button>
-<Button variant="ink">Bekijk de case</Button>
-<Button variant="secondary">Annuleren</Button>
+      title: 'Variants',
+      description: 'Primary is the sage action, ink the dark control for the most important step. Secondary and ghost for everything alongside it, danger for what cannot be undone.',
+      code: `<Button>Save</Button>
+<Button variant="ink">View the case</Button>
+<Button variant="secondary">Cancel</Button>
 <Button variant="ghost">Later</Button>
-<Button variant="danger">Verwijderen</Button>`,
-      demo: <Stack direction="row" gap={2} wrap align="center"><Button>Opslaan</Button><Button variant="ink">Bekijk de case</Button><Button variant="secondary">Annuleren</Button><Button variant="ghost">Later</Button><Button variant="danger">Verwijderen</Button></Stack>,
+<Button variant="danger">Delete</Button>`,
+      demo: <Stack direction="row" gap={2} wrap align="center"><Button>Save</Button><Button variant="ink">View the case</Button><Button variant="secondary">Cancel</Button><Button variant="ghost">Later</Button><Button variant="danger">Delete</Button></Stack>,
     },
     {
-      title: 'Maten',
-      description: '36, 44 en 55 px hoog. md is de standaard en haalt het raakvlak van 44 px; gebruik sm alleen naast andere bediening.',
-      code: `<Button size="sm">Klein</Button>
-<Button size="md">Middel</Button>
-<Button size="lg">Groot</Button>`,
-      demo: <Stack direction="row" gap={2} wrap align="center"><Button size="sm" variant="secondary">Klein</Button><Button size="md" variant="secondary">Middel</Button><Button size="lg" variant="secondary">Groot</Button></Stack>,
+      title: 'Sizes',
+      description: '36, 44 and 55 px tall. md is the default and meets the 44 px target size; use sm only next to other controls.',
+      code: `<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>`,
+      demo: <Stack direction="row" gap={2} wrap align="center"><Button size="sm" variant="secondary">Small</Button><Button size="md" variant="secondary">Medium</Button><Button size="lg" variant="secondary">Large</Button></Stack>,
     },
     {
-      title: 'Iconen, laden en uitgeschakeld',
-      description: 'Een eindicoon schuift bij hover. Laden houdt de knop focusbaar en blokkeert de klik.',
-      code: `<Button iconStart={<icons.Play />}>Afspelen</Button>
-<Button variant="ink" iconEnd={<icons.ArrowRight />}>Verder</Button>
-<Button loading>Opslaan…</Button>
-<Button variant="secondary" disabled>Niet beschikbaar</Button>
-<IconButton label="Volgende" variant="disc" icon={<icons.ArrowRight />} />
-<IconButton label="Meer" variant="ghost" icon={<icons.More />} />`,
-      demo: <Stack direction="row" gap={2} wrap align="center"><Button iconStart={<icons.Play />}>Afspelen</Button><Button variant="ink" iconEnd={<icons.ArrowRight />}>Verder</Button><Button loading>Opslaan…</Button><Button variant="secondary" disabled>Niet beschikbaar</Button><IconButton label="Volgende" variant="disc" icon={<icons.ArrowRight />} /><IconButton label="Meer" variant="ghost" icon={<icons.More />} /></Stack>,
+      title: 'Icons, loading and disabled',
+      description: 'An end icon slides on hover. Loading keeps the button focusable and blocks the click.',
+      code: `<Button iconStart={<icons.Play />}>Play</Button>
+<Button variant="ink" iconEnd={<icons.ArrowRight />}>Continue</Button>
+<Button loading>Saving…</Button>
+<Button variant="secondary" disabled>Unavailable</Button>
+<IconButton label="Next" variant="disc" icon={<icons.ArrowRight />} />
+<IconButton label="More" variant="ghost" icon={<icons.More />} />`,
+      demo: <Stack direction="row" gap={2} wrap align="center"><Button iconStart={<icons.Play />}>Play</Button><Button variant="ink" iconEnd={<icons.ArrowRight />}>Continue</Button><Button loading>Saving…</Button><Button variant="secondary" disabled>Unavailable</Button><IconButton label="Next" variant="disc" icon={<icons.ArrowRight />} /><IconButton label="More" variant="ghost" icon={<icons.More />} /></Stack>,
     },
   ],
   formulieren: [
     {
-      title: 'Toestanden',
-      description: 'Hint, verplicht, fout en uitgeschakeld. De fout staat boven de hint en heeft een eigen teken, zodat kleur niet het enige signaal is.',
-      code: `<TextField label="Naam" required hint="Zoals op je cv" />
-<TextField label="E-mail" defaultValue="dion@" error="Vul een volledig e-mailadres in." />
-<TextField label="Lidnummer" defaultValue="PP-2041" disabled />`,
-      demo: <Stack gap={5} className="doc-narrow"><TextField label="Naam" required hint="Zoals op je cv" /><TextField label="E-mail" defaultValue="dion@" error="Vul een volledig e-mailadres in." /><TextField label="Lidnummer" defaultValue="PP-2041" disabled /></Stack>,
+      title: 'States',
+      description: 'Hint, required, error and disabled. The error sits above the hint and has its own icon, so colour is not the only signal.',
+      code: `<TextField label="Name" required hint="As on your CV" />
+<TextField label="Email" defaultValue="dion@" error="Enter a complete email address." />
+<TextField label="Member number" defaultValue="PP-2041" disabled />`,
+      demo: <Stack gap={5} className="doc-narrow"><TextField label="Name" required hint="As on your CV" /><TextField label="Email" defaultValue="dion@" error="Enter a complete email address." /><TextField label="Member number" defaultValue="PP-2041" disabled /></Stack>,
     },
   ],
   keuzes: [
     {
-      title: 'Toestanden',
-      description: 'Aangevinkt, half aangevinkt, met fout en uitgeschakeld. Switch voor instellingen die meteen gelden; Checkbox voor keuzes die je later bevestigt.',
-      code: `<Checkbox label="Nieuwsbrief" defaultChecked />
-<Checkbox label="Alle formaten" indeterminate />
-<Checkbox label="Ik ga akkoord" error="Vink dit aan om door te gaan." />
-<Checkbox label="Niet beschikbaar" disabled />
-<Switch label="Geluid" defaultChecked />
-<Switch label="Offline luisteren" disabled />`,
-      demo: <Stack gap={4} className="doc-narrow"><Checkbox label="Nieuwsbrief" defaultChecked /><Checkbox label="Alle formaten" indeterminate /><Checkbox label="Ik ga akkoord" error="Vink dit aan om door te gaan." /><Checkbox label="Niet beschikbaar" disabled /><Switch label="Geluid" defaultChecked /><Switch label="Offline luisteren" disabled /></Stack>,
+      title: 'States',
+      description: 'Checked, indeterminate, with an error and disabled. Switch for settings that apply immediately; Checkbox for choices you confirm later.',
+      code: `<Checkbox label="Newsletter" defaultChecked />
+<Checkbox label="All formats" indeterminate />
+<Checkbox label="I agree" error="Tick this to continue." />
+<Checkbox label="Unavailable" disabled />
+<Switch label="Sound" defaultChecked />
+<Switch label="Offline listening" disabled />`,
+      demo: <Stack gap={4} className="doc-narrow"><Checkbox label="Newsletter" defaultChecked /><Checkbox label="All formats" indeterminate /><Checkbox label="I agree" error="Tick this to continue." /><Checkbox label="Unavailable" disabled /><Switch label="Sound" defaultChecked /><Switch label="Offline listening" disabled /></Stack>,
     },
   ],
   select: [
     {
-      title: 'Horizontaal, met fout en uitgeschakeld',
-      code: `<RadioGroup legend="Snelheid" orientation="horizontal" defaultValue="33" options={…} />
-<Select label="Land" error="Kies een land" placeholder="Kies…" options={…} />
-<Select label="Valuta" disabled options={[{ value: 'eur', label: 'Euro' }]} />`,
-      demo: <Stack gap={5} className="doc-narrow"><RadioGroup legend="Snelheid" orientation="horizontal" defaultValue="33" options={[{ value: '33', label: '33 toeren' }, { value: '45', label: '45 toeren' }, { value: '78', label: '78 toeren' }]} /><Select label="Land" error="Kies een land" placeholder="Kies…" defaultValue="" options={[{ value: 'nl', label: 'Nederland' }, { value: 'be', label: 'België' }]} /><Select label="Valuta" disabled options={[{ value: 'eur', label: 'Euro' }]} /></Stack>,
+      title: 'Horizontal, with an error and disabled',
+      code: `<RadioGroup legend="Speed" orientation="horizontal" defaultValue="33" options={…} />
+<Select label="Country" error="Choose a country" placeholder="Choose…" options={…} />
+<Select label="Currency" disabled options={[{ value: 'eur', label: 'Euro' }]} />`,
+      demo: <Stack gap={5} className="doc-narrow"><RadioGroup legend="Speed" orientation="horizontal" defaultValue="33" options={[{ value: '33', label: '33 rpm' }, { value: '45', label: '45 rpm' }, { value: '78', label: '78 rpm' }]} /><Select label="Country" error="Choose a country" placeholder="Choose…" defaultValue="" options={[{ value: 'nl', label: 'Netherlands' }, { value: 'be', label: 'Belgium' }]} /><Select label="Currency" disabled options={[{ value: 'eur', label: 'Euro' }]} /></Stack>,
     },
   ],
   feedback: [
     {
-      title: 'Tonen',
-      description: 'Elke toon heeft een eigen teken en een titel. Danger is role="alert", de rest role="status".',
-      code: `<Notice tone="info" title="Nieuwe persing">Verwacht in maart.</Notice>
-<Notice tone="success" title="Opgeslagen" />
-<Notice tone="warning" title="Discogs reageert traag" />
-<Notice tone="danger" title="Synchronisatie mislukt" onDismiss={close} />`,
-      demo: <Stack gap={3}><Notice tone="info" title="Nieuwe persing">Verwacht in maart.</Notice><Notice tone="success" title="Opgeslagen" /><Notice tone="warning" title="Discogs reageert traag" /><Notice tone="danger" title="Synchronisatie mislukt" onDismiss={() => {}} /></Stack>,
+      title: 'Tones',
+      description: 'Each tone has its own icon and a title. Danger is role="alert", the rest role="status".',
+      code: `<Notice tone="info" title="New pressing">Expected in March.</Notice>
+<Notice tone="success" title="Saved" />
+<Notice tone="warning" title="Discogs is responding slowly" />
+<Notice tone="danger" title="Sync failed" onDismiss={close} />`,
+      demo: <Stack gap={3}><Notice tone="info" title="New pressing">Expected in March.</Notice><Notice tone="success" title="Saved" /><Notice tone="warning" title="Discogs is responding slowly" /><Notice tone="danger" title="Sync failed" onDismiss={() => {}} /></Stack>,
     },
     {
-      title: 'Voortgang',
-      code: `<Progress label="Hoezen ophalen" value={3} max={5} valueText="3 van 5" />
-<Progress label="Verbinden" tone="accent" />`,
-      demo: <Stack gap={4} className="doc-narrow"><Progress label="Hoezen ophalen" value={3} max={5} valueText="3 van 5" /><Progress label="Verbinden" tone="accent" /></Stack>,
+      title: 'Progress',
+      code: `<Progress label="Fetching sleeves" value={3} max={5} valueText="3 of 5" />
+<Progress label="Connecting" tone="accent" />`,
+      demo: <Stack gap={4} className="doc-narrow"><Progress label="Fetching sleeves" value={3} max={5} valueText="3 of 5" /><Progress label="Connecting" tone="accent" /></Stack>,
     },
   ],
   materiaal: [
     {
-      title: 'Materialen en hoogte',
-      description: 'Tekstkleur volgt het materiaal. Object is de tastbare schaduw voor dingen die je bedient; prose blijft flat.',
+      title: 'Materials and elevation',
+      description: 'Text colour follows the material. Object is the tactile shadow for things you operate; prose stays flat.',
       code: `<Surface material="paper" elevation="raised">…</Surface>
 <Surface material="sage" elevation="object">…</Surface>
 <Surface material="coral">…</Surface>
@@ -101,23 +101,23 @@ const variants: Record<string, Variant[]> = {
       demo: <div className="doc-variant-grid">{(['paper', 'sunken', 'sage', 'sage-soft', 'coral', 'ink'] as const).map((m) => <Surface key={m} material={m} elevation={m === 'paper' ? 'raised' : m === 'ink' || m === 'sage' ? 'object' : 'flat'} padding="sm"><Text variant="label" as="p">{m}</Text></Surface>)}</div>,
     },
     {
-      title: 'Tag-tonen',
-      code: `<Tag>Neutraal</Tag> <Tag tone="sage">Kotlin</Tag> <Tag tone="coral">Compose</Tag>
-<Tag tone="accent">Nieuw</Tag> <Tag tone="outline">2024</Tag>`,
-      demo: <Stack direction="row" gap={2} wrap><Tag>Neutraal</Tag><Tag tone="sage">Kotlin</Tag><Tag tone="coral">Compose</Tag><Tag tone="accent">Nieuw</Tag><Tag tone="outline">2024</Tag></Stack>,
+      title: 'Tag tones',
+      code: `<Tag>Neutral</Tag> <Tag tone="sage">Kotlin</Tag> <Tag tone="coral">Compose</Tag>
+<Tag tone="accent">New</Tag> <Tag tone="outline">2024</Tag>`,
+      demo: <Stack direction="row" gap={2} wrap><Tag>Neutral</Tag><Tag tone="sage">Kotlin</Tag><Tag tone="coral">Compose</Tag><Tag tone="accent">New</Tag><Tag tone="outline">2024</Tag></Stack>,
     },
   ],
   data: [
     {
-      title: 'Avatar: maten, vormen en terugval',
-      description: 'Zonder of met een kapotte afbeelding verschijnen de initialen, met de naam als toegankelijke naam.',
+      title: 'Avatar: sizes, shapes and fallback',
+      description: 'Without an image, or with a broken one, the initials appear, with the name as the accessible name.',
       code: `<Avatar name="Froukje Veenstra" size="sm" />
 <Avatar name="Froukje Veenstra" />
 <Avatar name="Blue Train" size="lg" shape="square" />`,
       demo: <Stack direction="row" gap={3} align="center"><Avatar name="Froukje Veenstra" size="sm" /><Avatar name="Froukje Veenstra" /><Avatar name="Blue Train" size="lg" shape="square" /></Stack>,
     },
     {
-      title: 'Skeleton-vormen',
+      title: 'Skeleton shapes',
       code: `<Skeleton lines={3} />
 <Skeleton shape="circle" width={48} height={48} />
 <Skeleton shape="block" height={96} />`,
@@ -126,42 +126,42 @@ const variants: Record<string, Variant[]> = {
   ],
   meerkeuze: [
     {
-      title: 'Toggles: maten en iconen',
-      code: `<Toggle size="sm" defaultPressed>Alleen vinyl</Toggle>
-<Toggle>Uitgeleend</Toggle>
-<Toggle aria-label="Favoriet" icon={<icons.Plus />} />
-<ToggleGroup label="Snelheid" size="sm" options={…} />`,
-      demo: <Stack gap={4}><Stack direction="row" gap={2} wrap align="center"><Toggle size="sm" defaultPressed>Alleen vinyl</Toggle><Toggle>Uitgeleend</Toggle><Toggle aria-label="Favoriet" icon={<icons.Plus />} /></Stack><ToggleGroup label="Snelheid" size="sm" defaultValue={['33']} options={[{ value: '33', label: '33' }, { value: '45', label: '45' }, { value: '78', label: '78', disabled: true }]} /></Stack>,
+      title: 'Toggles: sizes and icons',
+      code: `<Toggle size="sm" defaultPressed>Vinyl only</Toggle>
+<Toggle>On loan</Toggle>
+<Toggle aria-label="Favourite" icon={<icons.Plus />} />
+<ToggleGroup label="Speed" size="sm" options={…} />`,
+      demo: <Stack gap={4}><Stack direction="row" gap={2} wrap align="center"><Toggle size="sm" defaultPressed>Vinyl only</Toggle><Toggle>On loan</Toggle><Toggle aria-label="Favourite" icon={<icons.Plus />} /></Stack><ToggleGroup label="Speed" size="sm" defaultValue={['33']} options={[{ value: '33', label: '33' }, { value: '45', label: '45' }, { value: '78', label: '78', disabled: true }]} /></Stack>,
     },
   ],
   kopieren: [
     {
-      title: 'Met label en als icoon',
+      title: 'With a label and as an icon',
       code: `<CopyButton value={code} />
-<CopyButton value={code}>Kopieer code</CopyButton>
-<CopyButton value={link} variant="ink" size="md">Kopieer link</CopyButton>`,
-      demo: <Stack direction="row" gap={3} align="center" wrap><CopyButton value="npm install @dionbm/papier" /><CopyButton value="npm install @dionbm/papier">Kopieer code</CopyButton><CopyButton value="https://papier.dionbm.nl" variant="ink" size="md">Kopieer link</CopyButton></Stack>,
+<CopyButton value={code}>Copy code</CopyButton>
+<CopyButton value={link} variant="ink" size="md">Copy link</CopyButton>`,
+      demo: <Stack direction="row" gap={3} align="center" wrap><CopyButton value="npm install @dionbm/papier" /><CopyButton value="npm install @dionbm/papier">Copy code</CopyButton><CopyButton value="https://papier.dionbm.nl" variant="ink" size="md">Copy link</CopyButton></Stack>,
     },
   ],
   stappen: [
     {
-      title: 'Verticaal en met een fout',
-      description: 'Verticaal is er ruimte voor beschrijvingen, bijvoorbeeld in een zijkolom. Een stap met error krijgt een uitroepteken.',
+      title: 'Vertical and with an error',
+      description: 'Vertical leaves room for descriptions, for example in a side column. A step with error gets an exclamation mark.',
       code: `<Steps orientation="vertical" current={2} items={[
-  { title: 'Account', description: 'E-mail en wachtwoord' },
-  { title: 'Profiel', description: 'Naam en avatar', error: true },
-  { title: 'Collectie', description: 'Koppel Discogs' },
+  { title: 'Account', description: 'Email and password' },
+  { title: 'Profile', description: 'Name and avatar', error: true },
+  { title: 'Collection', description: 'Connect Discogs' },
 ]} />`,
-      demo: <Steps orientation="vertical" current={2} label="Aanmelden" items={[{ title: 'Account', description: 'E-mail en wachtwoord' }, { title: 'Profiel', description: 'Naam en avatar', error: true }, { title: 'Collectie', description: 'Koppel Discogs' }]} />,
+      demo: <Steps orientation="vertical" current={2} label="Sign up" items={[{ title: 'Account', description: 'Email and password' }, { title: 'Profile', description: 'Name and avatar', error: true }, { title: 'Collection', description: 'Connect Discogs' }]} />,
     },
   ],
   pincode: [
     {
-      title: 'Afgeschermd, letters en een fout',
-      code: `<PinInput label="Pincode" length={4} mask />
-<PinInput label="Kortingscode" type="alphanumeric" length={5} />
-<PinInput label="Inlogcode" defaultValue="123456" error="Deze code is verlopen." />`,
-      demo: <Stack gap={5}><PinInput label="Pincode" length={4} mask /><PinInput label="Kortingscode" type="alphanumeric" length={5} /><PinInput label="Inlogcode" defaultValue="123456" error="Deze code is verlopen." /></Stack>,
+      title: 'Masked, letters and an error',
+      code: `<PinInput label="PIN" length={4} mask />
+<PinInput label="Discount code" type="alphanumeric" length={5} />
+<PinInput label="Sign-in code" defaultValue="123456" error="This code has expired." />`,
+      demo: <Stack gap={5}><PinInput label="PIN" length={4} mask /><PinInput label="Discount code" type="alphanumeric" length={5} /><PinInput label="Sign-in code" defaultValue="123456" error="This code has expired." /></Stack>,
     },
   ],
 };

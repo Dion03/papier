@@ -127,10 +127,10 @@
     },
     {
       "name": "size",
-      "type": "'md' | 'lg'",
+      "type": "'sm' | 'md' | 'lg'",
       "required": false,
       "default": "'md'",
-      "doc": ""
+      "doc": "36, 44 or 48 px. Use `sm` only next to other controls; md and lg meet the 44 px target."
     },
     {
       "name": "variant",
@@ -1594,6 +1594,13 @@
       "doc": ""
     },
     {
+      "name": "onValueChange",
+      "type": "(value: string | null, option: ComboboxOption | null) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called with the chosen value and its option, or null and null when cleared."
+    },
+    {
       "name": "value",
       "type": "string | null",
       "required": false,
@@ -2251,6 +2258,13 @@
       "required": false,
       "default": null,
       "doc": ""
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string[], options: ComboboxOption[]) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called with the chosen values and their options, in the order they were chosen."
     },
     {
       "name": "value",

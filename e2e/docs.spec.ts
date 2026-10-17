@@ -7,7 +7,7 @@ const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/
 // Every route of the docs site; tests/docs.test.ts keeps docs/registry.tsx in step with the examples.
 const registry = readFileSync('docs/registry.tsx', 'utf8');
 const slugs = [...registry.matchAll(/\{ slug: '([^']+)', example: '([^']+)'/g)].map((m) => ({ slug: m[1], example: m[2] }));
-const guides = ['', 'start', 'thema', 'fundament', 'componenten', 'categorie/invoer'];
+const guides = ['', 'getting-started', 'theming', 'foundations', 'stability', 'components', 'category/inputs'];
 
 async function open(page: Page, theme: 'light' | 'dark', path = '') {
   await page.addInitScript((t) => { try { localStorage.setItem('papier-docs-theme', t); } catch { /* ignore */ } }, theme);
@@ -18,7 +18,7 @@ async function open(page: Page, theme: 'light' | 'dark', path = '') {
   await page.evaluate(() => document.fonts.ready);
 }
 /** A component page by its old example id, e.g. "knoppen". */
-const component = (example: string) => `componenten/${slugs.find((s) => s.example === example)!.slug}`;
+const component = (example: string) => `components/${slugs.find((s) => s.example === example)!.slug}`;
 
 /** Client-side navigation; waits until the new page's heading replaced the old one. */
 async function go(page: Page, path: string) {
@@ -41,10 +41,10 @@ async function axe(page: Page, options: Record<string, unknown> = {}) {
 }
 
 for (const theme of ['light', 'dark'] as const) {
-  test(`axe en geen horizontale scroll op elke pagina (${theme})`, async ({ page }) => {
+  test(`axe and no horizontal scroll on every page (${theme})`, async ({ page }) => {
     test.setTimeout(240_000);
     await open(page, theme);
-    for (const path of [...guides, ...slugs.map((s) => `componenten/${s.slug}`)]) {
+    for (const path of [...guides, ...slugs.map((s) => `components/${s.slug}`)]) {
       if (path) await go(page, path);
       expect(await axe(page), path || 'home').toEqual([]);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), path || 'home').toBeLessThanOrEqual(0);
@@ -52,8 +52,8 @@ for (const theme of ['light', 'dark'] as const) {
   });
 }
 
-test('hoogcontrastmodus: axe en elke knop zichtbaar begrensd', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'forced-colors emulatie werkt alleen in Chromium');
+test('forced colours: axe, and every button has a visible edge', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'forced-colors emulation only works in Chromium');
   await page.emulateMedia({ forcedColors: 'active' });
   await open(page, 'light', component('keuzes'));
   // axe reads author colours, not the forced system palette, so contrast is judged by the screenshot.
@@ -63,115 +63,118 @@ test('hoogcontrastmodus: axe en elke knop zichtbaar begrensd', async ({ page, br
   expect(borderless).toBe(0);
 });
 
-test('navigatie: zijbalk, focus op de kop, vorige en volgende', async ({ page, isMobile }) => {
-  test.skip(isMobile, 'de zijbalk zit op smalle schermen in het menu');
-  await open(page, 'light', 'componenten/button');
+test('navigation: sidebar, focus on the heading, previous and next', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'on narrow screens the sidebar lives in the menu');
+  await open(page, 'light', 'components/button');
   await expect(page).toHaveTitle('Button · Papier');
-  await page.getByRole('navigation', { name: 'Documentatie' }).getByRole('link', { name: 'Combobox', exact: true }).click();
-  await expect(page).toHaveURL(/#\/componenten\/combobox$/);
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Combobox', exact: true }).click();
+  await expect(page).toHaveURL(/#\/components\/combobox$/);
   await expect(page.locator('#page-title')).toBeFocused();
-  await expect(page.getByRole('navigation', { name: 'Documentatie' }).getByRole('link', { name: 'Combobox', exact: true })).toHaveAttribute('aria-current', 'page');
-  await page.getByRole('navigation', { name: 'Vorige en volgende component' }).getByRole('link', { name: /Volgende/ }).click();
-  await expect(page).toHaveURL(/#\/componenten\/multi-combobox$/);
+  await expect(page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Combobox', exact: true })).toHaveAttribute('aria-current', 'page');
+  await page.getByRole('navigation', { name: 'Previous and next component' }).getByRole('link', { name: /Next/ }).click();
+  await expect(page).toHaveURL(/#\/components\/multi-combobox$/);
   await page.goBack();
-  await expect(page).toHaveURL(/#\/componenten\/combobox$/);
-  // A section link from "Op deze pagina" scrolls to the API.
-  await page.goto('/#/componenten/date-picker/api');
+  await expect(page).toHaveURL(/#\/components\/combobox$/);
+  // A section link from "On this page" scrolls to the API.
+  await page.goto('/#/components/date-picker/api');
   await expect(page.locator('#api')).toBeInViewport();
 });
 
-test('zoeken: Ctrl+K, typen en Enter opent de pagina; focus keert terug na Escape', async ({ page }) => {
+test('search: Ctrl+K, typing and Enter opens the page; Escape closes it', async ({ page }) => {
   await open(page, 'light');
   await page.keyboard.press('Control+k');
-  const search = page.getByRole('combobox', { name: 'Zoek in de documentatie' });
+  const search = page.getByRole('combobox', { name: 'Search the documentation' });
   await expect(search).toBeFocused();
   await search.fill('daterange');
   await expect(page.getByRole('option').first()).toContainText('DateRangePicker');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/#\/componenten\/date-range-picker$/);
-  await page.getByRole('button', { name: 'Zoeken', exact: true }).click();
-  await page.getByRole('combobox', { name: 'Zoek in de documentatie' }).fill('donker');
+  await expect(page).toHaveURL(/#\/components\/date-range-picker$/);
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Search the documentation' }).fill('dark');
   await page.keyboard.press('Enter');
   await expect(page.locator('.papier').first()).toHaveAttribute('data-papier-theme', 'dark');
   await page.keyboard.press('/');
-  await expect(page.getByRole('combobox', { name: 'Zoek in de documentatie' })).toBeFocused();
+  await expect(page.getByRole('combobox', { name: 'Search the documentation' })).toBeFocused();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('combobox', { name: 'Zoek in de documentatie' })).toBeHidden();
+  await expect(page.getByRole('combobox', { name: 'Search the documentation' })).toBeHidden();
 });
 
-test('mobiel menu: het blad opent en een link sluit het', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'alleen op smalle schermen');
-  await open(page, 'light', 'start');
-  await page.getByRole('button', { name: 'Navigatie' }).click();
-  const sheet = page.getByRole('dialog', { name: 'Navigatie' });
+test('mobile menu: the sheet opens and a link closes it', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'narrow screens only');
+  await open(page, 'light', 'getting-started');
+  await page.getByRole('button', { name: 'Navigation' }).click();
+  const sheet = page.getByRole('dialog', { name: 'Navigation' });
   await expect(sheet).toBeVisible();
   await sheet.getByRole('link', { name: 'PinInput' }).click();
   await expect(sheet).toBeHidden();
-  await expect(page).toHaveURL(/#\/componenten\/pin-input$/);
+  await expect(page).toHaveURL(/#\/components\/pin-input$/);
 });
 
-test('oude ankers openen de juiste pagina en onbekende routes een lege toestand', async ({ page }) => {
+test('old anchors and Dutch routes open the right page, unknown routes an empty state', async ({ page }) => {
   await page.goto('/#knoppen');
-  await expect(page).toHaveURL(/#\/componenten\/button$/);
+  await expect(page).toHaveURL(/#\/components\/button$/);
   await expect(page.locator('#knoppen')).toBeVisible();
-  await page.goto('/#/componenten/bestaat-niet');
-  await expect(page.getByRole('heading', { name: 'Deze pagina bestaat niet (meer)' })).toBeVisible();
+  await page.goto('/#/componenten/date-picker/toegankelijkheid');
+  await expect(page).toHaveURL(/#\/components\/date-picker\/accessibility$/);
+  await expect(page.locator('#accessibility')).toBeInViewport();
+  await page.goto('/#/components/does-not-exist');
+  await expect(page.getByRole('heading', { name: 'This page does not exist (any more)' })).toBeVisible();
 });
 
-test('verkenner: filteren, lege toestand en een kaart opent de pagina', async ({ page }) => {
-  await open(page, 'light', 'componenten');
-  const filter = page.getByRole('searchbox', { name: 'Filter de componenten' });
+test('explorer: filtering, the empty state and a card opens its page', async ({ page }) => {
+  await open(page, 'light', 'components');
+  const filter = page.getByRole('searchbox', { name: 'Filter the components' });
   await filter.fill('upload');
   await expect(page.locator('.doc-card')).toHaveCount(1);
   await filter.fill('xyzzy');
-  await expect(page.getByRole('heading', { name: 'Niets gevonden' })).toBeVisible();
-  await page.getByRole('button', { name: 'Filter wissen' }).click();
-  await page.getByRole('link', { name: 'Steps', exact: true }).click();
-  await expect(page).toHaveURL(/#\/componenten\/steps$/);
+  await expect(page.getByRole('heading', { name: 'Nothing found' })).toBeVisible();
+  await page.getByRole('button', { name: 'Clear filter' }).click();
+  await page.locator('.doc-cards').getByRole('link', { name: 'Steps', exact: true }).click();
+  await expect(page).toHaveURL(/#\/components\/steps$/);
 });
 
-test('toetsenbord: menu, dialoog en terugkeer van focus', async ({ page }) => {
+test('keyboard: menu, dialog and focus return', async ({ page }) => {
   await open(page, 'light', component('overlays'));
-  const trigger = page.getByRole('button', { name: 'Acties', exact: true });
+  const trigger = page.getByRole('button', { name: 'Actions', exact: true });
   await trigger.focus();
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('menuitem', { name: 'Afspelen' })).toBeFocused();
+  await expect(page.getByRole('menuitem', { name: 'Play' })).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(trigger).toBeFocused();
 
   await go(page, component('dialoog'));
-  const opener = page.getByRole('button', { name: 'Plaat opbergen' });
+  const opener = page.getByRole('button', { name: 'Put record away' });
   await opener.click();
-  const dialog = page.getByRole('dialog', { name: 'Plaat terug in de hoes?' });
+  const dialog = page.getByRole('dialog', { name: 'Put the record back in its sleeve?' });
   await expect(dialog).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
   await expect(opener).toBeFocused();
 });
 
-test('menu in een tabel opent in de top layer en wordt niet afgeknipt', async ({ page }) => {
+test('a menu in a table opens in the top layer and is not clipped', async ({ page }) => {
   await open(page, 'light', component('data'));
-  const trigger = page.getByRole('button', { name: 'Acties voor Kleine Uren' });
+  const trigger = page.getByRole('button', { name: 'Actions for Kleine Uren' });
   // Room below the button, so the menu opens downwards and past the table's bottom edge.
   await trigger.evaluate((el) => window.scrollBy({ top: el.getBoundingClientRect().top - 140, behavior: 'instant' }));
   await trigger.click();
   const menu = page.getByRole('menu');
   await expect(menu).toBeVisible();
   expect(await menu.evaluate((el) => el.matches(':popover-open'))).toBe(true);
-  await expect(page.getByRole('menuitem', { name: 'Afspelen' })).toBeFocused();
-  const item = page.getByRole('menuitem', { name: 'Naar Discogs' });
+  await expect(page.getByRole('menuitem', { name: 'Play' })).toBeFocused();
+  const item = page.getByRole('menuitem', { name: 'Open in Discogs' });
   const wrap = await page.locator('#data .pp-table-wrap').boundingBox();
   const box = (await item.boundingBox())!;
   expect(box.y + box.height).toBeGreaterThan(wrap!.y + wrap!.height);
-  expect(await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('[role="menuitem"]')?.textContent, [box.x + box.width / 2, box.y + box.height / 2])).toBe('Naar Discogs');
+  expect(await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('[role="menuitem"]')?.textContent, [box.x + box.width / 2, box.y + box.height / 2])).toBe('Open in Discogs');
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();
   await expect(trigger).toBeFocused();
 });
 
-test('menu klapt omhoog onderaan het scherm', async ({ page }) => {
+test('a menu flips up at the bottom of the screen', async ({ page }) => {
   await open(page, 'light', component('overlays'));
-  const trigger = page.getByRole('button', { name: 'Acties', exact: true });
+  const trigger = page.getByRole('button', { name: 'Actions', exact: true });
   // Make the window end just below the button, whatever the length of the page.
   const bottom = await trigger.evaluate((el) => { window.scrollTo(0, 0); return el.getBoundingClientRect().bottom + window.scrollY; });
   await page.setViewportSize({ width: page.viewportSize()!.width, height: Math.ceil(bottom + 8) });
@@ -184,9 +187,9 @@ test('menu klapt omhoog onderaan het scherm', async ({ page }) => {
   expect(m.y + m.height).toBeLessThanOrEqual(t.y);
 });
 
-test('combobox: typen, kiezen met het toetsenbord en de lijst in de top layer', async ({ page }) => {
+test('combobox: typing, choosing with the keyboard and the list in the top layer', async ({ page }) => {
   await open(page, 'light', component('zoeken'));
-  const input = page.getByRole('combobox', { name: 'Plaat op de draaitafel' });
+  const input = page.getByRole('combobox', { name: 'Record on the turntable' });
   await input.fill('');
   await input.pressSequentially('bjork');
   const list = page.getByRole('listbox');
@@ -199,16 +202,16 @@ test('combobox: typen, kiezen met het toetsenbord en de lijst in de top layer', 
   await expect(input).toHaveValue('Vespertine');
   await expect(list).toBeHidden();
   await expect(input).toBeFocused();
-  await expect(page.locator('#zoeken').getByText('Gekozen: Vespertine.')).toBeVisible();
+  await expect(page.locator('#zoeken').getByText('Selected: Vespertine.')).toBeVisible();
 });
 
-test('alertdialog: focus op Annuleren, klik ernaast sluit niet, focus keert terug', async ({ page }) => {
+test('alertdialog: focus on Cancel, a click outside does not close it, focus returns', async ({ page }) => {
   await open(page, 'light', component('bevestigen'));
-  const opener = page.getByRole('button', { name: 'Uit collectie halen' });
+  const opener = page.getByRole('button', { name: 'Remove from collection' });
   await opener.click();
-  const dialog = page.getByRole('alertdialog', { name: 'Blue Train uit je collectie halen?' });
+  const dialog = page.getByRole('alertdialog', { name: 'Remove Blue Train from your collection?' });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole('button', { name: 'Annuleren' })).toBeFocused();
+  await expect(dialog.getByRole('button', { name: 'Cancel' })).toBeFocused();
   await page.mouse.click(5, 5);
   await expect(dialog).toBeVisible();
   await page.keyboard.press('Escape');
@@ -216,7 +219,7 @@ test('alertdialog: focus op Annuleren, klik ernaast sluit niet, focus keert teru
   await expect(opener).toBeFocused();
 });
 
-test('rechts-naar-links: geen horizontale scroll, axe schoon, menu en pijlen gespiegeld', async ({ page }) => {
+test('right to left: no horizontal scroll, axe clean, menu and arrows mirrored', async ({ page }) => {
   // As an app would: dir="rtl" in the HTML itself, before anything renders.
   await page.route('/', async (route) => {
     const res = await route.fetch();
@@ -225,13 +228,13 @@ test('rechts-naar-links: geen horizontale scroll, axe schoon, menu en pijlen ges
   await open(page, 'light', component('overlays'));
   expect(await page.evaluate(() => getComputedStyle(document.body).direction)).toBe('rtl');
   for (const path of ['', component('overlays'), component('keuzes')]) {
-    await go(page, path || 'start');
+    await go(page, path || 'getting-started');
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
     expect(await axe(page)).toEqual([]);
   }
   await go(page, component('overlays'));
   // align="start" lines the menu up with the button's start edge, which is now the right edge.
-  const trigger = page.getByRole('button', { name: 'Acties', exact: true });
+  const trigger = page.getByRole('button', { name: 'Actions', exact: true });
   await trigger.click();
   const m = (await page.getByRole('menu').boundingBox())!;
   const t = (await trigger.boundingBox())!;
@@ -249,94 +252,94 @@ test('rechts-naar-links: geen horizontale scroll, axe schoon, menu en pijlen ges
   expect(thumb.x + thumb.width / 2).toBeLessThan(box.x + box.width / 2);
 });
 
-test('eigen CSS wint van Papier dankzij @layer papier', async ({ page }) => {
+test('your own CSS beats Papier thanks to @layer papier', async ({ page }) => {
   await open(page, 'light', component('knoppen'));
   await page.addStyleTag({ content: '.pp-button { background: rgb(1, 2, 3); }' });
   expect(await page.locator('#knoppen .doc-example__stage .pp-button').first().evaluate((el) => getComputedStyle(el).backgroundColor)).toBe('rgb(1, 2, 3)');
 });
 
-test('thema wisselen werkt en blijft bewaard', async ({ page }) => {
+test('switching the theme works and is remembered', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('radio', { name: 'Donker' }).click();
+  await page.getByRole('radio', { name: 'Dark' }).click();
   await expect(page.locator('.papier').first()).toHaveAttribute('data-papier-theme', 'dark');
   await page.reload();
   await expect(page.locator('.papier').first()).toHaveAttribute('data-papier-theme', 'dark');
 });
 
-test('voorbeeld en code: de codetab toont de code en de kopieerknop kopieert', async ({ page, context, browserName }) => {
-  test.skip(browserName !== 'chromium', 'klembordrechten alleen in Chromium');
+test('example and code: the code tab shows the code and the copy button copies it', async ({ page, context, browserName }) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions only in Chromium');
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await open(page, 'light', component('knoppen'));
-  const demo = page.locator('#voorbeeld');
+  const demo = page.locator('#example');
   await demo.getByRole('tab', { name: 'Code' }).click();
-  await expect(demo.getByRole('region', { name: /Code van/ }).or(demo.locator('pre'))).toContainText('<Button');
-  await demo.getByRole('button', { name: 'Kopiëren' }).first().click();
+  await expect(demo.getByRole('region', { name: /Code of/ }).or(demo.locator('pre'))).toContainText('<Button');
+  await demo.getByRole('button', { name: 'Copy' }).first().click();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('<Button');
 });
 
-test('popover: focus erin, Escape zet hem terug, het paneel staat in de top layer', async ({ page }) => {
+test('popover: focus moves in, Escape returns it, the panel is in the top layer', async ({ page }) => {
   await open(page, 'light', component('popover'));
   const trigger = page.locator('#popover').getByRole('button', { name: /^Filters/ });
   await trigger.click();
-  const panel = page.getByRole('dialog', { name: 'Filter de bak' });
+  const panel = page.getByRole('dialog', { name: 'Filter the crate' });
   await expect(panel).toBeVisible();
   await expect(panel.getByRole('checkbox', { name: 'Jazz' })).toBeFocused();
   expect(await panel.evaluate((el) => { try { return el.matches(':popover-open'); } catch { return true; } })).toBe(true);
   await page.keyboard.press('Space');
-  await panel.getByRole('button', { name: 'Toepassen' }).click();
+  await panel.getByRole('button', { name: 'Apply' }).click();
   await expect(panel).toBeHidden();
-  await expect(page.locator('#popover').getByText('Je ziet alle genres, vanaf 1960.')).toBeVisible();
+  await expect(page.locator('#popover').getByText('Showing all genres, from 1960.')).toBeVisible();
   await trigger.click();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog', { name: 'Filter de bak' })).toBeHidden();
+  await expect(page.getByRole('dialog', { name: 'Filter the crate' })).toBeHidden();
   await expect(trigger).toBeFocused();
 });
 
-test('numberfield: typen in het Nederlands, pijltjes en opmaak bij verlaten', async ({ page }) => {
+test('numberfield: typing in the app’s locale, arrows and formatting on blur', async ({ page }) => {
   await open(page, 'light', component('getallen'));
-  const price = page.getByRole('spinbutton', { name: 'Prijs per plaat' });
-  await price.fill('19,5');
+  const price = page.getByRole('spinbutton', { name: 'Price per record' });
+  await price.fill('19.5');
   await page.keyboard.press('Tab');
-  await expect(price).toHaveValue(/19,50/);
+  await expect(price).toHaveValue(/19\.50/);
   await price.focus();
   await page.keyboard.press('ArrowUp');
-  await expect(price).toHaveValue(/20,00/);
+  await expect(price).toHaveValue(/20\.00/);
   await expect(price).toHaveAttribute('aria-valuenow', '20');
 });
 
-test('filefield: een gekozen bestand verschijnt en is te verwijderen', async ({ page }) => {
+test('filefield: a chosen file appears and can be removed', async ({ page }) => {
   await open(page, 'light', component('bestanden'));
-  const input = page.getByLabel("Foto's van de hoes");
-  await input.setInputFiles([{ name: 'hoes.png', mimeType: 'image/png', buffer: Buffer.from('89504e47', 'hex') }, { name: 'notities.txt', mimeType: 'text/plain', buffer: Buffer.from('x') }]);
-  await expect(page.locator('#bestanden').getByText('hoes.png')).toBeVisible();
-  await expect(page.locator('#bestanden').getByText('notities.txt heeft een bestandstype dat hier niet kan.')).toBeVisible();
+  const input = page.getByLabel('Photos of the sleeve');
+  await input.setInputFiles([{ name: 'sleeve.png', mimeType: 'image/png', buffer: Buffer.from('89504e47', 'hex') }, { name: 'notes.txt', mimeType: 'text/plain', buffer: Buffer.from('x') }]);
+  await expect(page.locator('#bestanden').getByText('sleeve.png')).toBeVisible();
+  await expect(page.locator('#bestanden').getByText('notes.txt is a file type that is not allowed here.')).toBeVisible();
   expect(await input.evaluate((el) => (el as HTMLInputElement).files?.length)).toBe(1);
-  await page.getByRole('button', { name: 'hoes.png verwijderen' }).click();
+  await page.getByRole('button', { name: 'Remove sleeve.png' }).click();
   await expect(input).toBeFocused();
   expect(await input.evaluate((el) => (el as HTMLInputElement).files?.length)).toBe(0);
 });
 
-test('datepicker: typen, de kalender met het toetsenbord en focus terug', async ({ page }) => {
+test('datepicker: typing, the calendar by keyboard and focus back', async ({ page }) => {
   await open(page, 'light', component('datum'));
-  const input = page.getByRole('textbox', { name: 'Releasedatum' });
+  const input = page.getByRole('textbox', { name: 'Release date' });
   await input.fill('7/4/72');
   await page.keyboard.press('Tab');
-  await expect(input).toHaveValue('07-04-1972');
+  await expect(input).toHaveValue('07/04/1972');
   await expect(page.locator('#datum').getByText('Release: 1972-04-07')).toBeVisible();
-  const toggle = page.locator('#datum').getByRole('button', { name: /^Kies een datum, vrijdag 7 april 1972/ });
+  const toggle = page.locator('#datum').getByRole('button', { name: /^Choose a date, Friday,? 7 April 1972/ });
   await toggle.click();
-  const dialog = page.getByRole('dialog', { name: 'Kies een datum' });
-  await expect(dialog.getByRole('gridcell', { name: 'vrijdag 7 april 1972' })).toBeFocused();
+  const dialog = page.getByRole('dialog', { name: 'Choose a date' });
+  await expect(dialog.getByRole('gridcell', { name: /^Friday,? 7 April 1972$/ })).toBeFocused();
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
   await expect(dialog).toBeHidden();
-  await expect(input).toHaveValue('14-04-1972');
+  await expect(input).toHaveValue('14/04/1972');
   await expect(input).toBeFocused();
 });
 
-test('multicombobox: meerdere kiezen, Backspace, en de pijl blijft op de eerste regel', async ({ page }) => {
+test('multicombobox: choosing several, Backspace, and the arrow stays on the first line', async ({ page }) => {
   await open(page, 'light', component('meerdere'));
-  const input = page.getByRole('combobox', { name: 'Artiesten in je mix' });
+  const input = page.getByRole('combobox', { name: 'Artists in your mix' });
   await input.click();
   await input.pressSequentially('bjork');
   await page.keyboard.press('Enter');
@@ -355,19 +358,19 @@ test('multicombobox: meerdere kiezen, Backspace, en de pijl blijft op de eerste 
   expect(Math.abs((toggle.y + toggle.height / 2) - (first.y + first.height / 2))).toBeLessThan(4);
 });
 
-test('rangeslider: de duimen bewegen met pijltjes en passeren elkaar niet', async ({ page }) => {
+test('rangeslider: the thumbs move with arrows and never pass each other', async ({ page }) => {
   await open(page, 'light', component('bereik'));
-  const from = page.getByRole('slider', { name: 'Prijs Van' });
+  const from = page.getByRole('slider', { name: 'Price From' });
   await from.focus();
   for (let i = 0; i < 10; i++) await page.keyboard.press('ArrowRight');
   await expect(from).toHaveAttribute('aria-valuetext', /35/);
-  await expect(page.getByRole('slider', { name: 'Prijs Tot' })).toHaveAttribute('aria-valuetext', /40/);
+  await expect(page.getByRole('slider', { name: 'Price To' })).toHaveAttribute('aria-valuetext', /40/);
 });
 
-test('checkboxes: een echte klik op het vakje werkt, ook in een tabel en een popover', async ({ page }) => {
+test('checkboxes: a real click on the box works, also in a table and a popover', async ({ page }) => {
   await open(page, 'light', component('meerkeuze'));
   // check() clicks the input itself and fails when another element would catch the click.
-  const all = page.getByRole('checkbox', { name: 'Alle formaten' });
+  const all = page.getByRole('checkbox', { name: 'All formats' });
   await all.check();
   await expect(page.locator('#meerkeuze').getByRole('checkbox', { name: /^EP/ })).toBeChecked();
   await all.uncheck();
@@ -379,78 +382,78 @@ test('checkboxes: een echte klik op het vakje werkt, ook in een tabel en een pop
   await go(page, component('keuzes'));
   await page.locator('#keuzes').getByRole('checkbox').first().check();
   await go(page, component('sorteren'));
-  await page.getByRole('checkbox', { name: 'Selecteer Rumours' }).check();
-  await expect(page.getByRole('checkbox', { name: 'Selecteer alle zichtbare platen' })).toHaveJSProperty('indeterminate', true);
-  await page.getByRole('checkbox', { name: 'Selecteer alle zichtbare platen' }).check();
-  await expect(page.locator('#sorteren').getByText('5 geselecteerd.')).toBeVisible();
+  await page.getByRole('checkbox', { name: 'Select Rumours' }).check();
+  await expect(page.getByRole('checkbox', { name: 'Select all visible records' })).toHaveJSProperty('indeterminate', true);
+  await page.getByRole('checkbox', { name: 'Select all visible records' }).check();
+  await expect(page.locator('#sorteren').getByText('5 selected.')).toBeVisible();
   await go(page, component('popover'));
   await page.locator('#popover').getByRole('button', { name: /^Filters/ }).click();
-  await page.getByRole('dialog', { name: 'Filter de bak' }).getByRole('checkbox', { name: 'Soul' }).check();
+  await page.getByRole('dialog', { name: 'Filter the crate' }).getByRole('checkbox', { name: 'Soul' }).check();
 });
 
-test('command en pincode: zoeken in de pagina en een code via autofill in de vakjes', async ({ page }) => {
+test('command and pin code: searching inline, and a code via autofill in the boxes', async ({ page }) => {
   await open(page, 'light', component('command'));
   const inline = page.locator('#command .doc-command-inline').getByRole('combobox');
   await inline.fill('csv');
-  await expect(page.locator('#command .doc-command-inline').getByRole('option')).toHaveText([/Exporteer als CSV/]);
+  await expect(page.locator('#command .doc-command-inline').getByRole('option')).toHaveText([/Export as CSV/]);
   await go(page, component('pincode'));
-  const first = page.locator('#voorbeeld').getByRole('textbox', { name: 'Teken 1 van 6' });
+  const first = page.locator('#example').getByRole('textbox', { name: 'Character 1 of 6' });
   // As the phone's SMS suggestion does: the whole code lands in the first box and spreads out.
   // (Pasting is covered by the unit tests; Firefox drops the data of a synthetic paste event.)
   await first.fill('424242');
-  await expect(page.getByText('Ingelogd')).toBeVisible();
+  await expect(page.getByText('Signed in')).toBeVisible();
 });
 
-test('responsief: elke pagina op telefoon, tablet, laptop en breed zonder horizontale scroll', async ({ page, isMobile }) => {
-  test.skip(isMobile, 'de breedtes worden hier zelf gezet');
+test('responsive: every page on phone, tablet, laptop and wide without horizontal scroll', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'this test sets its own widths');
   test.setTimeout(300_000);
   await open(page, 'light');
   for (const [width, height] of [[360, 740], [768, 1024], [1024, 768], [1440, 900]]) {
     await page.setViewportSize({ width, height });
-    for (const path of [...guides, ...slugs.map((s) => `componenten/${s.slug}`)]) {
-      await go(page, path || 'start');
+    for (const path of [...guides, ...slugs.map((s) => `components/${s.slug}`)]) {
+      await go(page, path || 'getting-started');
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, `${width}px ${path || 'home'}`).toBeLessThanOrEqual(0);
       await expect(page.locator('#page-title'), `${width}px ${path}`).toBeInViewport({ ratio: 0.5 });
     }
     // Navigation is reachable at every width: the top nav, or the menu button below 900 px.
-    await go(page, 'componenten');
-    const nav = width < 900 ? page.getByRole('button', { name: 'Navigatie' }) : page.getByRole('navigation', { name: 'Hoofdnavigatie' });
-    await expect(nav, `${width}px navigatie`).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Zoeken' }), `${width}px zoeken`).toBeVisible();
+    await go(page, 'components');
+    const nav = width < 900 ? page.getByRole('button', { name: 'Navigation' }) : page.getByRole('navigation', { name: 'Main', exact: true });
+    await expect(nav, `${width}px navigation`).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Search', exact: true }), `${width}px search`).toBeVisible();
   }
 });
 
-test('toetsenbord: de skiplink zet de focus op de kop van de pagina', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit', 'Safari slaat links over met Tab');
-  await open(page, 'light', 'componenten/command');
+test('keyboard: the skip link moves focus to the page heading', async ({ page, browserName }) => {
+  test.skip(browserName === 'webkit', 'Safari skips links with Tab');
+  await open(page, 'light', 'components/command');
   // The inline Command on this page must not scroll the page when it appears.
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
   await page.keyboard.press('Tab');
-  const skip = page.getByRole('link', { name: 'Naar de inhoud' });
+  const skip = page.getByRole('link', { name: 'Skip to content' });
   await expect(skip).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#page-title')).toBeFocused();
 });
 
-test('gerelateerde componenten en categorieën zijn met elkaar verbonden', async ({ page }) => {
-  await open(page, 'light', 'componenten/date-picker');
-  const related = page.locator('#gerelateerd');
+test('related components and categories link to each other', async ({ page }) => {
+  await open(page, 'light', 'components/date-picker');
+  const related = page.locator('#related');
   await expect(related.getByRole('link')).not.toHaveCount(0);
   await related.getByRole('link', { name: /DateRangePicker/ }).click();
-  await expect(page).toHaveURL(/#\/componenten\/date-range-picker$/);
-  await page.getByRole('navigation', { name: 'Je bent hier' }).getByRole('link', { name: 'Datums' }).click();
-  await expect(page).toHaveURL(/#\/categorie\/datums$/);
+  await expect(page).toHaveURL(/#\/components\/date-range-picker$/);
+  await page.getByRole('navigation', { name: 'You are here' }).getByRole('link', { name: 'Dates' }).click();
+  await expect(page).toHaveURL(/#\/category\/dates$/);
   await expect(page.locator('.doc-card')).toHaveCount(2);
 });
 
-test('laadtoestand: een skelet terwijl een pagina laadt, daarna de inhoud', async ({ page }) => {
+test('loading state: a skeleton while a page loads, then the content', async ({ page }) => {
   await open(page, 'light');
   // Hold back the chunk with the component pages, as on a slow connection.
   let release!: () => void;
   const held = new Promise<void>((r) => { release = r; });
   await page.route(/Components-.*\.js$/, async (route) => { await held; await route.continue(); });
-  await page.evaluate(() => { window.location.hash = '#/componenten/steps'; });
+  await page.evaluate(() => { window.location.hash = '#/components/steps'; });
   await expect(page.locator('.doc-loading')).toBeVisible();
   await expect(page.locator('.doc-loading')).toHaveAttribute('aria-busy', 'true');
   release();
@@ -463,7 +466,7 @@ const sections = ['knoppen', 'formulieren', 'velden', 'zoeken', 'keuzes', 'slide
   'popover', 'menu-keuzes', 'getallen', 'account', 'bestanden', 'meerkeuze', 'structuur-plus', 'sorteren', 'details', 'meerdere', 'bereik', 'periode',
   'kopieren', 'stappen', 'pincode'];
 for (const theme of ['light', 'dark'] as const) {
-  test(`visuele regressie (${theme})`, async ({ page }) => {
+  test(`visual regression (${theme})`, async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, theme);
     await expect(page.locator('.doc-hero')).toHaveScreenshot(`hero-${theme}.png`);

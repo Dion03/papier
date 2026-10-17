@@ -60,7 +60,8 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   icon: ReactNode;
   /** `disc` is the portfolio's ink circle that turns vermilion on hover. */
   variant?: 'disc' | 'outline' | 'ghost';
-  size?: 'md' | 'lg';
+  /** 36, 44 or 48 px. Use `sm` only next to other controls; md and lg meet the 44 px target. */
+  size?: 'sm' | 'md' | 'lg';
   /** Render this element (e.g. a router link) instead of a <button>; it shows the icon. */
   asChild?: boolean;
   /** Only with `asChild`: the element to render. */

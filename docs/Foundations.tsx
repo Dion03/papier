@@ -8,17 +8,17 @@ type ThemeName = 'light' | 'dark';
 type Palette = Record<string, string>;
 
 const swatchGroups: Array<{ title: string; roles: string[] }> = [
-  { title: 'Ondergrond', roles: ['bg', 'surface', 'surface-sunken', 'line'] },
-  { title: 'Inkt', roles: ['text', 'text-muted', 'line-strong', 'action-strong'] },
-  { title: 'Accent en actie', roles: ['accent', 'accent-text', 'action', 'focus'] },
-  { title: 'Materialen', roles: ['sage', 'sage-soft', 'coral', 'on-sage'] },
+  { title: 'Ground', roles: ['bg', 'surface', 'surface-sunken', 'line'] },
+  { title: 'Ink', roles: ['text', 'text-muted', 'line-strong', 'action-strong'] },
+  { title: 'Accent and action', roles: ['accent', 'accent-text', 'action', 'focus'] },
+  { title: 'Materials', roles: ['sage', 'sage-soft', 'coral', 'on-sage'] },
   { title: 'Status', roles: ['success', 'warning', 'danger', 'danger-soft'] },
 ];
 
 const typeSamples: Record<string, string> = {
-  display: 'Papier.', headline: 'Eén wereld.', title: 'Werk dat je kunt proberen', subtitle: 'Warm papier en tastbare interfaces',
-  'body-lg': 'Introducties en uitleg die rustig leest.', body: 'Lopende tekst in DM Sans met een open regelafstand.',
-  control: 'Bediening', small: 'Toelichting en metadata', label: 'LABEL · 13 PX',
+  display: 'Papier.', headline: 'One world.', title: 'Work you can try', subtitle: 'Warm paper and tactile interfaces',
+  'body-lg': 'Introductions and explanations that read calmly.', body: 'Running text in DM Sans with open line spacing.',
+  control: 'Controls', small: 'Notes and metadata', label: 'LABEL · 13 PX',
 };
 
 function Swatches({ palette }: { palette: Palette }) {
@@ -44,10 +44,10 @@ function Swatches({ palette }: { palette: Palette }) {
 
 function ContrastTable({ palette, theme }: { palette: Palette; theme: ThemeName }) {
   return (
-    <div className="doc-table-wrap" tabIndex={0} role="region" aria-label={`Contrasttabel ${theme === 'light' ? 'licht' : 'donker'}`}>
+    <div className="doc-table-wrap" tabIndex={0} role="region" aria-label={`Contrast table, ${theme}`}>
       <table className="doc-contrast">
-        <caption className="pp-visually-hidden">Contrast van elk tekst- en bedieningspaar volgens WCAG 2.2</caption>
-        <thead><tr><th scope="col">Voorbeeld</th><th scope="col">Gebruik</th><th scope="col">Paar</th><th scope="col">Ratio</th><th scope="col">Eis</th></tr></thead>
+        <caption className="pp-visually-hidden">Contrast of every text and control pair under WCAG 2.2</caption>
+        <thead><tr><th scope="col">Sample</th><th scope="col">Use</th><th scope="col">Pair</th><th scope="col">Ratio</th><th scope="col">Requirement</th></tr></thead>
         <tbody>
           {(pairs as Array<[string, string, number, string]>).map(([fg, bg, min, use]) => {
             const r = contrast(palette[fg], palette[bg]);
@@ -57,9 +57,9 @@ function ContrastTable({ palette, theme }: { palette: Palette; theme: ThemeName 
                   ? <span className="doc-contrast__sample" style={{ background: palette[bg] }} aria-hidden="true"><span className="doc-contrast__mark" style={{ borderColor: palette[fg] }} /></span>
                   : <span className="doc-contrast__sample" style={{ color: palette[fg], background: palette[bg] }} aria-hidden="true">Aa</span>}</td>
                 <td>{use}</td>
-                <td><code>{fg}</code> op <code>{bg}</code></td>
+                <td><code>{fg}</code> on <code>{bg}</code></td>
                 <td className="doc-num">{r.toFixed(2)}</td>
-                <td>{r >= min ? <Tag tone="sage">≥ {min} gehaald</Tag> : <Tag tone="accent">onder {min}</Tag>}</td>
+                <td>{r >= min ? <Tag tone="sage">≥ {min} passes</Tag> : <Tag tone="accent">below {min}</Tag>}</td>
               </tr>
             );
           })}
@@ -72,10 +72,10 @@ function ContrastTable({ palette, theme }: { palette: Palette; theme: ThemeName 
 function MotionDemo() {
   const [run, setRun] = useState(0);
   const rows: Array<[string, string, string]> = [
-    ['dur-press', motion['dur-press'], 'Indrukken'],
-    ['dur-color', motion['dur-color'], 'Kleur en materiaal'],
-    ['dur-close', motion['dur-close'], 'Dichtvouwen'],
-    ['dur-open', motion['dur-open'], 'Ontvouwen en schuiven'],
+    ['dur-press', motion['dur-press'], 'Press'],
+    ['dur-color', motion['dur-color'], 'Colour and material'],
+    ['dur-close', motion['dur-close'], 'Fold closed'],
+    ['dur-open', motion['dur-open'], 'Unfold and slide'],
   ];
   return (
     <Surface material="sunken" padding="lg" className="doc-motion">
@@ -88,8 +88,8 @@ function MotionDemo() {
         ))}
       </div>
       <div className="doc-row">
-        <Button size="sm" variant="ink" onClick={() => setRun((r) => r + 1)}>Speel de curves af</Button>
-        <Text variant="small" tone="muted">Alles gebruikt de aankomstcurve <code>{motion['ease-arrive']}</code>. Bij minder beweging staan alle duren op 0.</Text>
+        <Button size="sm" variant="ink" onClick={() => setRun((r) => r + 1)}>Play the curves</Button>
+        <Text variant="small" tone="muted">Everything uses the arrival curve <code>{motion['ease-arrive']}</code>. With reduced motion every duration is 0.</Text>
       </div>
     </Surface>
   );
@@ -98,25 +98,25 @@ function MotionDemo() {
 export function Foundations({ theme }: { theme: ThemeName }) {
   const palette = themes[theme] as unknown as Palette;
   return (
-    <article id="fundament" className="doc-page doc-guide" aria-labelledby="page-title">
+    <article id="foundations" className="doc-page doc-guide" aria-labelledby="page-title">
       <div className="doc-page__head">
-        <Text variant="label" as="p" className="doc-eyebrow">Fundament</Text>
-        <Text variant="headline" as="h1" id="page-title" tabIndex={-1} className="doc-page__title">Eén bron, elke vorm.</Text>
+        <Text variant="label" as="p" className="doc-eyebrow">Foundations</Text>
+        <Text variant="headline" as="h1" id="page-title" tabIndex={-1} className="doc-page__title">One source, every form.</Text>
         <Text variant="body-lg" tone="muted">
-          Alle waarden staan in één bestand. Een script maakt er CSS-variabelen en JSON van, en een tweede script controleert bij elke build of elk paar leesbaar blijft. Dezelfde berekening vult de tabel hieronder.
+          Every value lives in one file. A script turns it into CSS variables and JSON, and a second script checks on every build that each pair stays readable. The same calculation fills the table below.
         </Text>
       </div>
 
-      <div className="doc-block" id="kleur">
-        <Text variant="title" as="h2">Kleur en contrast</Text>
-        <Text tone="muted" className="doc-block__intro">Je ziet nu het {theme === 'light' ? 'lichte' : 'donkere'} thema. Componenten gebruiken alleen rollen, nooit hexwaarden, dus een thema is een nieuwe set rollen.</Text>
+      <div className="doc-block" id="color">
+        <Text variant="title" as="h2">Colour and contrast</Text>
+        <Text tone="muted" className="doc-block__intro">You are looking at the {theme} theme. Components only use roles, never hex values, so a theme is a new set of roles.</Text>
         <Swatches palette={palette} />
         <ContrastTable palette={palette} theme={theme} />
       </div>
 
-      <div className="doc-block" id="typografie">
-        <Text variant="title" as="h2">Typografie</Text>
-        <Text tone="muted" className="doc-block__intro">Manrope draagt de koppen, DM Sans de uitleg. Beide lokaal als variabel font, onder de OFL-licentie.</Text>
+      <div className="doc-block" id="typography">
+        <Text variant="title" as="h2">Typography</Text>
+        <Text tone="muted" className="doc-block__intro">Manrope carries the headings, DM Sans the explanations. Both are bundled as variable fonts under the OFL licence.</Text>
         <ul className="doc-type">
           {Object.entries(typeScale).map(([role, [size, line, weight]]) => (
             <li key={role} className="doc-type__row">
@@ -129,9 +129,9 @@ export function Foundations({ theme }: { theme: ThemeName }) {
         </ul>
       </div>
 
-      <div className="doc-block doc-grid-2" id="ruimte">
+      <div className="doc-block doc-grid-2" id="space">
         <div>
-          <Text variant="title" as="h2">Ruimte</Text>
+          <Text variant="title" as="h2">Space</Text>
           <ul className="doc-space">
             {Object.entries(space).filter(([k]) => k !== '0').map(([k, v]) => (
               <li key={k}><code>space-{k}</code><span className="doc-space__bar" style={{ width: v }} /><span className="doc-num">{v}</span></li>
@@ -139,7 +139,7 @@ export function Foundations({ theme }: { theme: ThemeName }) {
           </ul>
         </div>
         <div>
-          <Text variant="title" as="h2">Vorm</Text>
+          <Text variant="title" as="h2">Shape</Text>
           <ul className="doc-radius">
             {Object.entries(radius).map(([k, v]) => (
               <li key={k}><span className="doc-radius__box" style={{ borderRadius: v }} /><code>radius-{k}</code><span className="doc-num">{v}</span></li>
@@ -148,9 +148,9 @@ export function Foundations({ theme }: { theme: ThemeName }) {
         </div>
       </div>
 
-      <div className="doc-block" id="beweging">
-        <Text variant="title" as="h2">Beweging</Text>
-        <Text tone="muted" className="doc-block__intro">Korte reacties met één aankomstcurve. Beweging ondersteunt de volgorde; zonder animatie blijft alles bruikbaar.</Text>
+      <div className="doc-block" id="motion">
+        <Text variant="title" as="h2">Motion</Text>
+        <Text tone="muted" className="doc-block__intro">Short responses with one arrival curve. Motion supports the order of things; without animation everything stays usable.</Text>
         <MotionDemo />
       </div>
     </article>

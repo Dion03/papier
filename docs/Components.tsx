@@ -16,12 +16,12 @@ function ButtonDemo() {
   const save = () => { setSaving(true); window.setTimeout(() => setSaving(false), 1600); };
   return (
     <div className="doc-row">
-      <Button onClick={save} loading={saving} iconEnd={<icons.ArrowRight />}>{saving ? 'Opslaan…' : 'Opslaan'}</Button>
-      <Button variant="ink">Bekijk de case</Button>
-      <Button variant="secondary">Annuleren</Button>
+      <Button onClick={save} loading={saving} iconEnd={<icons.ArrowRight />}>{saving ? 'Saving…' : 'Save'}</Button>
+      <Button variant="ink">View the case</Button>
+      <Button variant="secondary">Cancel</Button>
       <Button variant="ghost">Later</Button>
-      <IconButton label="Volgende plaat" variant="disc" size="lg" icon={<icons.ArrowRight />} />
-      <IconButton label="Sluiten" icon={<icons.Close />} />
+      <IconButton label="Next record" variant="disc" size="lg" icon={<icons.ArrowRight />} />
+      <IconButton label="Close" icon={<icons.Close />} />
     </div>
   );
 }
@@ -31,10 +31,10 @@ function FormDemo() {
   const invalid = mail.length > 0 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail);
   return (
     <div className="doc-stack doc-narrow">
-      <TextField label="Naam" placeholder="Hoe heet je?" autoComplete="name" required />
-      <TextField label="E-mailadres" type="email" value={mail} onChange={(e) => setMail(e.target.value)} hint="Alleen voor een antwoord, nooit voor een nieuwsbrief."
-        error={invalid ? 'Vul een volledig e-mailadres in, zoals naam@voorbeeld.nl.' : undefined} autoComplete="email" />
-      <TextArea label="Bericht" placeholder="Waar wil je het over hebben?" />
+      <TextField label="Name" placeholder="What's your name?" autoComplete="name" required />
+      <TextField label="Email address" type="email" value={mail} onChange={(e) => setMail(e.target.value)} hint="Only for a reply, never for a newsletter."
+        error={invalid ? 'Enter a full email address, such as name@example.com.' : undefined} autoComplete="email" />
+      <TextArea label="Message" placeholder="What would you like to talk about?" />
     </div>
   );
 }
@@ -44,11 +44,11 @@ function FieldsDemo() {
   const heavy = Number(weight) > 220;
   return (
     <div className="doc-stack doc-narrow">
-      <TextField label="Zoek in je bak" hideLabel type="search" placeholder="Zoek op artiest of titel" prefix={<icons.Search />} />
-      <TextField label="Prijs in euro" inputMode="decimal" prefix="€" defaultValue="24,95" />
-      <TextField label="Gewicht in gram" inputMode="numeric" suffix="g" value={weight} onChange={(e) => setWeight(e.target.value)}
-        hint="Een gewone plaat weegt 140 tot 180 gram." error={heavy ? 'Zwaarder dan 220 gram past niet in de hoes.' : undefined} />
-      <Field label="Toerental" hint="Een eigen input, met dezelfde opmaak en koppelingen.">
+      <TextField label="Search your crate" hideLabel type="search" placeholder="Search by artist or title" prefix={<icons.Search />} />
+      <TextField label="Price in euros" inputMode="decimal" prefix="€" defaultValue="24.95" />
+      <TextField label="Weight in grams" inputMode="numeric" suffix="g" value={weight} onChange={(e) => setWeight(e.target.value)}
+        hint="A standard record weighs 140 to 180 grams." error={heavy ? 'Over 220 grams won’t fit in the sleeve.' : undefined} />
+      <Field label="Speed in rpm" hint="Your own input, with the same styling and wiring.">
         {(control) => <input {...control} className="pp-field__control" type="number" min={33} max={78} defaultValue={33} />}
       </Field>
     </div>
@@ -56,14 +56,14 @@ function FieldsDemo() {
 }
 
 function ChoicesDemo() {
-  const [period, setPeriod] = useState('maand');
+  const [period, setPeriod] = useState('month');
   return (
     <div className="doc-stack doc-narrow">
-      <SegmentedControl label="Periode" value={period} onValueChange={setPeriod}
-        options={[{ value: 'week', label: 'Week' }, { value: 'maand', label: 'Maand' }, { value: 'jaar', label: 'Jaar' }, { value: 'alles', label: 'Alles' }]} />
-      <Text tone="muted" variant="small" aria-live="polite">Je bekijkt: {period}.</Text>
-      <Checkbox label="Toon ook geskipte nummers" description="Nummers die je binnen 30 seconden oversloeg." />
-      <Switch label="Geluidseffecten" description="Alleen korte effecten, geen achtergrondmuziek." defaultChecked />
+      <SegmentedControl label="Period" value={period} onValueChange={setPeriod}
+        options={[{ value: 'week', label: 'Week' }, { value: 'month', label: 'Month' }, { value: 'year', label: 'Year' }, { value: 'all', label: 'All' }]} />
+      <Text tone="muted" variant="small" aria-live="polite">Showing: {period}.</Text>
+      <Checkbox label="Also show skipped tracks" description="Tracks you skipped within 30 seconds." />
+      <Switch label="Sound effects" description="Short effects only, no background music." defaultChecked />
     </div>
   );
 }
@@ -77,10 +77,10 @@ function PlayerDemo() {
         <span className="doc-player__disc" aria-hidden="true" />
         <div>
           <Text variant="subtitle" as="p">Uitzinnig</Text>
-          <Text variant="small" as="p" className="doc-player__artist">Froukje · kant A</Text>
+          <Text variant="small" as="p" className="doc-player__artist">Froukje · side A</Text>
         </div>
       </div>
-      <Slider label="Positie" min={0} max={213} value={pos} onValueChange={setPos} formatValue={time} />
+      <Slider label="Position" min={0} max={213} value={pos} onValueChange={setPos} formatValue={time} />
       <Slider label="Volume" value={vol} onValueChange={setVol} formatValue={(v) => `${v}%`} />
     </Surface>
   );
@@ -91,13 +91,13 @@ function FeedbackDemo() {
   const [step, setStep] = useState(2);
   return (
     <div className="doc-stack doc-narrow">
-      {shown && <Notice tone="success" title="Collectie bijgewerkt" onDismiss={() => setShown(false)}>Drie nieuwe platen uit Discogs toegevoegd.</Notice>}
-      {!shown && <Button size="sm" variant="secondary" onClick={() => setShown(true)}>Melding terugzetten</Button>}
-      <Notice tone="warning" title="Discogs reageert traag">De catalogus laat de laatst opgeslagen versie zien.</Notice>
-      <Notice tone="danger" title="Synchronisatie mislukt" action={<Button size="sm" variant="secondary">Opnieuw proberen</Button>}>Er is geen verbinding met de server.</Notice>
-      <Progress label="Hoezen ophalen" value={step} max={5} valueText={`${step} van 5`} />
-      <div className="doc-row"><Button size="sm" variant="secondary" onClick={() => setStep((s) => (s % 5) + 1)}>Volgende stap</Button></div>
-      <Progress label="Verbinden met Discogs" tone="accent" />
+      {shown && <Notice tone="success" title="Collection updated" onDismiss={() => setShown(false)}>Three new records added from Discogs.</Notice>}
+      {!shown && <Button size="sm" variant="secondary" onClick={() => setShown(true)}>Restore notice</Button>}
+      <Notice tone="warning" title="Discogs is responding slowly">The catalogue shows the last saved version.</Notice>
+      <Notice tone="danger" title="Sync failed" action={<Button size="sm" variant="secondary">Try again</Button>}>There is no connection to the server.</Notice>
+      <Progress label="Fetching sleeves" value={step} max={5} valueText={`${step} of 5`} />
+      <div className="doc-row"><Button size="sm" variant="secondary" onClick={() => setStep((s) => (s % 5) + 1)}>Next step</Button></div>
+      <Progress label="Connecting to Discogs" tone="accent" />
     </div>
   );
 }
@@ -107,13 +107,13 @@ function DialogDemo() {
   const [result, setResult] = useState('');
   return (
     <div className="doc-stack">
-      <div className="doc-row"><Button variant="ink" onClick={() => setOpen(true)}>Plaat opbergen</Button></div>
+      <div className="doc-row"><Button variant="ink" onClick={() => setOpen(true)}>Put record away</Button></div>
       <Text variant="small" tone="muted" role="status">{result}</Text>
-      <Dialog open={open} onClose={() => { setOpen(false); setResult('Geannuleerd: de plaat ligt nog op de draaitafel.'); }}
-        title="Plaat terug in de hoes?" description="De muziek stopt en de plaat gaat terug in de bak."
+      <Dialog open={open} onClose={() => { setOpen(false); setResult('Cancelled: the record is still on the turntable.'); }}
+        title="Put the record back in its sleeve?" description="The music stops and the record goes back in the crate."
         footer={<>
-          <Button variant="secondary" onClick={() => { setOpen(false); setResult('Geannuleerd: de plaat ligt nog op de draaitafel.'); }}>Laten liggen</Button>
-          <Button onClick={() => { setOpen(false); setResult('De plaat zit weer in de hoes.'); }}>Opbergen</Button>
+          <Button variant="secondary" onClick={() => { setOpen(false); setResult('Cancelled: the record is still on the turntable.'); }}>Leave it out</Button>
+          <Button onClick={() => { setOpen(false); setResult('The record is back in its sleeve.'); }}>Put away</Button>
         </>}
       />
     </div>
@@ -124,17 +124,17 @@ function StructureDemo() {
   return (
     <div className="doc-stack">
       <Tabs defaultValue="nu">
-        <TabList label="Luisterweergave">
-          <Tab value="nu">Nu</Tab><Tab value="vandaag">Vandaag</Tab><Tab value="week">Week</Tab><Tab value="top">Top</Tab>
+        <TabList label="Listening view">
+          <Tab value="nu">Now</Tab><Tab value="vandaag">Today</Tab><Tab value="week">Week</Tab><Tab value="top">Top</Tab>
         </TabList>
-        <TabPanel value="nu"><Text>Op de draaitafel: <strong>Uitzinnig</strong> van Froukje.</Text></TabPanel>
-        <TabPanel value="vandaag"><Text>Vandaag 2 uur en 14 minuten geluisterd.</Text></TabPanel>
-        <TabPanel value="week"><Text>Je drukste dag deze week was donderdag.</Text></TabPanel>
-        <TabPanel value="top"><Text>Je meest gedraaide plaat van de maand staat bovenaan.</Text></TabPanel>
+        <TabPanel value="nu"><Text>On the turntable: <strong>Uitzinnig</strong> by Froukje.</Text></TabPanel>
+        <TabPanel value="vandaag"><Text>2 hours and 14 minutes of listening today.</Text></TabPanel>
+        <TabPanel value="week"><Text>Your busiest day this week was Thursday.</Text></TabPanel>
+        <TabPanel value="top"><Text>Your most played record of the month is at the top.</Text></TabPanel>
       </Tabs>
       <div>
-        <Disclosure summary="Waarom geen eigen dropdowns?"><p>Native elementen geven gratis toetsenbordbediening, zoeken in de pagina en ondersteuning voor hulpmiddelen. Papier stijlt ze en voegt alleen beweging toe.</p></Disclosure>
-        <Disclosure summary="Hoe werkt de vouwbeweging?"><p>De open-status wisselt meteen, zodat hulpmiddelen niet hoeven te wachten. Alleen de hoogte beweegt: 420 ms open, 290 ms dicht.</p></Disclosure>
+        <Disclosure summary="Why no custom dropdowns?"><p>Native elements give you keyboard support, find-in-page and assistive technology support for free. Papier styles them and only adds motion.</p></Disclosure>
+        <Disclosure summary="How does the fold animation work?"><p>The open state changes immediately, so assistive technology never has to wait. Only the height animates: 420 ms to open, 290 ms to close.</p></Disclosure>
       </div>
     </div>
   );
@@ -144,15 +144,15 @@ function SurfaceDemo() {
   return (
     <div className="doc-surfaces">
       <Surface material="paper" elevation="object"><Text variant="label" as="p">paper</Text><Text variant="subtitle" as="p">Module</Text></Surface>
-      <Surface material="sage" elevation="object"><Text variant="label" as="p">sage</Text><Text variant="subtitle" as="p">Werk</Text></Surface>
-      <Surface material="coral" elevation="object"><Text variant="label" as="p">coral</Text><Text variant="subtitle" as="p">Bediening</Text></Surface>
-      <Surface material="ink" elevation="object"><Text variant="label" as="p">ink</Text><Text variant="subtitle" as="p">Nadruk</Text></Surface>
+      <Surface material="sage" elevation="object"><Text variant="label" as="p">sage</Text><Text variant="subtitle" as="p">Work</Text></Surface>
+      <Surface material="coral" elevation="object"><Text variant="label" as="p">coral</Text><Text variant="subtitle" as="p">Controls</Text></Surface>
+      <Surface material="ink" elevation="object"><Text variant="label" as="p">ink</Text><Text variant="subtitle" as="p">Emphasis</Text></Surface>
       <div className="doc-row doc-tags">
-        <Tag>Neutraal</Tag><Tag tone="sage">Kotlin</Tag><Tag tone="coral">Live</Tag><Tag tone="accent">Nieuw</Tag><Tag tone="outline">Prototype</Tag>
+        <Tag>Neutral</Tag><Tag tone="sage">Kotlin</Tag><Tag tone="coral">Live</Tag><Tag tone="accent">New</Tag><Tag tone="outline">Prototype</Tag>
       </div>
       <div className="doc-row">
-        <Link href="#componenten">Interne link</Link>
-        <Link href="#componenten" variant="arrow">Verken het werk</Link>
+        <Link href="#componenten">Internal link</Link>
+        <Link href="#componenten" variant="arrow">Explore the work</Link>
         <Link href="https://www.discogs.com" external variant="arrow">Discogs</Link>
       </div>
     </div>
@@ -163,11 +163,11 @@ function SurfaceDemo() {
 function SelectRadioDemo() {
   return (
     <div className="doc-stack doc-narrow">
-      <Select label="Sorteer de bak op" defaultValue="artist" options={[{ value: 'artist', label: 'Artiest' }, { value: 'year', label: 'Jaar' }, { value: 'plays', label: 'Meest gedraaid' }]} hint="Native: op je telefoon opent de eigen kiezer." />
-      <RadioGroup legend="Snelheid" orientation="horizontal" defaultValue="33" options={[{ value: '33', label: '33⅓' }, { value: '45', label: '45' }, { value: '78', label: '78' }]} />
-      <RadioGroup legend="Weergave" appearance="card" defaultValue="bak" options={[
-        { value: 'bak', label: 'Platenbak', description: 'Blader door hoezen zoals in een winkel.' },
-        { value: 'lijst', label: 'Lijst', description: 'Sneller zoeken op titel en jaar.' },
+      <Select label="Sort the crate by" defaultValue="artist" options={[{ value: 'artist', label: 'Artist' }, { value: 'year', label: 'Year' }, { value: 'plays', label: 'Most played' }]} hint="Native: your phone opens its own picker." />
+      <RadioGroup legend="Speed" orientation="horizontal" defaultValue="33" options={[{ value: '33', label: '33⅓' }, { value: '45', label: '45' }, { value: '78', label: '78' }]} />
+      <RadioGroup legend="View" appearance="card" defaultValue="bak" options={[
+        { value: 'bak', label: 'Record crate', description: 'Flip through sleeves like in a shop.' },
+        { value: 'lijst', label: 'List', description: 'Faster searching by title and year.' },
       ]} />
     </div>
   );
@@ -179,20 +179,20 @@ function OverlayDemo() {
   return (
     <div className="doc-stack">
       <div className="doc-row">
-        <Tooltip content="Zet de plaat terug in de hoes"><IconButton label="Opbergen" icon={<icons.Close />} /></Tooltip>
-        <Tooltip content="Kopieer de link naar deze plaat"><IconButton label="Delen" icon={<icons.Copy />} /></Tooltip>
-        <Menu trigger={<>Acties <icons.ChevronDown /></>} items={[
-          { label: 'Afspelen', icon: <icons.Play />, onSelect: () => setLast('Afspelen gekozen.') },
-          { label: 'Naar Discogs', icon: <icons.External />, onSelect: () => setLast('Discogs gekozen.') },
-          { label: 'Kopiëren', icon: <icons.Copy />, onSelect: () => {}, disabled: true },
-          { label: 'Uit collectie halen', tone: 'danger', onSelect: () => setLast('Verwijderen gekozen.') },
+        <Tooltip content="Put the record back in its sleeve"><IconButton label="Put away" icon={<icons.Close />} /></Tooltip>
+        <Tooltip content="Copy the link to this record"><IconButton label="Share" icon={<icons.Copy />} /></Tooltip>
+        <Menu trigger={<>Actions <icons.ChevronDown /></>} items={[
+          { label: 'Play', icon: <icons.Play />, onSelect: () => setLast('Play selected.') },
+          { label: 'Open in Discogs', icon: <icons.External />, onSelect: () => setLast('Discogs selected.') },
+          { label: 'Copy', icon: <icons.Copy />, onSelect: () => {}, disabled: true },
+          { label: 'Remove from collection', tone: 'danger', onSelect: () => setLast('Remove selected.') },
         ]} />
-        <Button variant="secondary" iconStart={<icons.Menu />} onClick={() => setSheet(true)}>Navigatie</Button>
+        <Button variant="secondary" iconStart={<icons.Menu />} onClick={() => setSheet(true)}>Navigation</Button>
       </div>
       <Text variant="small" tone="muted" role="status">{last}</Text>
-      <Sheet open={sheet} onClose={() => setSheet(false)} title="Navigatie" hideTitle>
-        <nav aria-label="Voorbeeldnavigatie" className="doc-sheet-nav">
-          {['Werk', 'Over mij', 'Luisterkamer', 'Contact'].map((l) => <a key={l} href="#overlays" onClick={() => setSheet(false)}>{l}</a>)}
+      <Sheet open={sheet} onClose={() => setSheet(false)} title="Navigation" hideTitle>
+        <nav aria-label="Example navigation" className="doc-sheet-nav">
+          {['Work', 'About me', 'Listening room', 'Contact'].map((l) => <a key={l} href="#overlays" onClick={() => setSheet(false)}>{l}</a>)}
         </nav>
       </Sheet>
     </div>
@@ -203,8 +203,8 @@ function ToastDemo() {
   const { toast } = useToast();
   return (
     <div className="doc-row">
-      <Button onClick={() => toast({ title: 'Plaat toegevoegd', description: 'Uitzinnig staat nu in je collectie.' })}>Toevoegen</Button>
-      <Button variant="secondary" onClick={() => toast({ tone: 'danger', title: 'Discogs niet bereikbaar', description: 'Blijft staan tot je hem sluit.' })}>Fout tonen</Button>
+      <Button onClick={() => toast({ title: 'Record added', description: 'Uitzinnig is now in your collection.' })}>Add</Button>
+      <Button variant="secondary" onClick={() => toast({ tone: 'danger', title: 'Discogs unreachable', description: 'Stays until you close it.' })}>Show error</Button>
     </div>
   );
 }
@@ -214,19 +214,19 @@ function DataDemo() {
   const rows: Array<[string, string, number]> = [['Uitzinnig', 'Froukje', 42], ['Zachte Landing', 'Lieve Kamer', 17], ['Kleine Uren', 'Het Noordlicht', 9]];
   return (
     <div className="doc-stack">
-      <Table caption="Meest gedraaid deze maand (voorbeelddata)" showCaption>
-        <thead><tr><th scope="col">Plaat</th><th scope="col">Artiest</th><th scope="col" className="pp-num">Keer</th><th scope="col"><span className="pp-visually-hidden">Acties</span></th></tr></thead>
+      <Table caption="Most played this month (sample data)" showCaption>
+        <thead><tr><th scope="col">Record</th><th scope="col">Artist</th><th scope="col" className="pp-num">Plays</th><th scope="col"><span className="pp-visually-hidden">Actions</span></th></tr></thead>
         <tbody>{rows.map(([t, a, n]) => <tr key={t}><th scope="row"><Stack direction="row" gap={3} align="center"><Avatar name={a} size="sm" shape="square" decorative />{t}</Stack></th><td>{a}</td><td className="pp-num">{n}</td>
-          <td className="doc-row-actions"><Menu trigger={<icons.More />} triggerLabel={`Acties voor ${t}`} triggerVariant="icon" align="end" items={[
-            { label: 'Afspelen', icon: <icons.Play />, onSelect: () => {} },
-            { label: 'Naar Discogs', icon: <icons.External />, onSelect: () => {} },
+          <td className="doc-row-actions"><Menu trigger={<icons.More />} triggerLabel={`Actions for ${t}`} triggerVariant="icon" align="end" items={[
+            { label: 'Play', icon: <icons.Play />, onSelect: () => {} },
+            { label: 'Open in Discogs', icon: <icons.External />, onSelect: () => {} },
           ]} /></td></tr>)}</tbody>
       </Table>
-      <div className="doc-row"><Button size="sm" variant="secondary" onClick={() => setLoading((l) => !l)}>{loading ? 'Laad inhoud' : 'Toon skelet'}</Button>{loading && <Spinner label="Hoezen laden" />}</div>
+      <div className="doc-row"><Button size="sm" variant="secondary" onClick={() => setLoading((l) => !l)}>{loading ? 'Load content' : 'Show skeleton'}</Button>{loading && <Spinner label="Loading sleeves" />}</div>
       <div aria-busy={loading} aria-live="polite" className="doc-skeleton-card">
         {loading
           ? <Stack direction="row" gap={4} align="center"><Skeleton shape="circle" /><div style={{ flex: 1 }}><Skeleton lines={2} /></div></Stack>
-          : <Stack direction="row" gap={4} align="center"><Avatar name="Froukje Veenstra" /><div><Text as="p">Froukje</Text><Text variant="small" tone="muted" as="p">42 keer gedraaid</Text></div></Stack>}
+          : <Stack direction="row" gap={4} align="center"><Avatar name="Froukje Veenstra" /><div><Text as="p">Froukje</Text><Text variant="small" tone="muted" as="p">Played 42 times</Text></div></Stack>}
       </div>
     </div>
   );
@@ -245,8 +245,8 @@ function LayoutDemo() {
 
 const records: ComboboxOption[] = [
   { value: 'uitzinnig', label: 'Uitzinnig', description: 'Froukje · 2023' },
-  { value: 'cafe', label: 'Café Brazil', description: 'Diverse artiesten · 1998' },
-  { value: 'kind', label: 'Kind of Blue', description: 'Miles Davis · uitgeleend', disabled: true },
+  { value: 'cafe', label: 'Café Brazil', description: 'Various artists · 1998' },
+  { value: 'kind', label: 'Kind of Blue', description: 'Miles Davis · on loan', disabled: true },
   { value: 'blue', label: 'Blue Train', description: 'John Coltrane · 1957' },
   { value: 'rumours', label: 'Rumours', description: 'Fleetwood Mac · 1977' },
   { value: 'ok', label: 'OK Computer', description: 'Radiohead · 1997' },
@@ -257,9 +257,9 @@ function ComboboxDemo() {
   const [record, setRecord] = useState<string | null>('blue');
   return (
     <div className="doc-stack doc-narrow">
-      <Combobox label="Plaat op de draaitafel" options={records} value={record} onChange={setRecord} placeholder="Zoek op titel of artiest"
-        hint="Typ bijvoorbeeld bjork of cafe: accenten en hoofdletters tellen niet mee." />
-      <Text variant="small" tone="muted" role="status">{record ? `Gekozen: ${records.find((r) => r.value === record)?.label}.` : 'Nog niets gekozen.'}</Text>
+      <Combobox label="Record on the turntable" options={records} value={record} onValueChange={setRecord} placeholder="Search by title or artist"
+        hint="Try typing bjork or cafe: accents and capitals are ignored." />
+      <Text variant="small" tone="muted" role="status">{record ? `Selected: ${records.find((r) => r.value === record)?.label}.` : 'Nothing selected yet.'}</Text>
     </div>
   );
 }
@@ -269,12 +269,12 @@ function AlertDialogDemo() {
   const [result, setResult] = useState('');
   return (
     <div className="doc-stack">
-      <div className="doc-row"><Button variant="danger" iconStart={<icons.Close />} onClick={() => setOpen(true)}>Uit collectie halen</Button></div>
+      <div className="doc-row"><Button variant="danger" iconStart={<icons.Close />} onClick={() => setOpen(true)}>Remove from collection</Button></div>
       <Text variant="small" tone="muted" role="status">{result}</Text>
       <AlertDialog open={open} onClose={() => setOpen(false)} tone="danger"
-        title="Blue Train uit je collectie halen?" description="De plaat en je luistergeschiedenis verdwijnen. Dit kun je niet ongedaan maken."
-        confirmLabel="Uit collectie halen"
-        onConfirm={() => new Promise<void>((done) => window.setTimeout(() => { setResult('Blue Train is uit je collectie gehaald.'); done(); }, 900))} />
+        title="Remove Blue Train from your collection?" description="The record and your listening history will be deleted. This cannot be undone."
+        confirmLabel="Remove from collection"
+        onConfirm={() => new Promise<void>((done) => window.setTimeout(() => { setResult('Blue Train has been removed from your collection.'); done(); }, 900))} />
     </div>
   );
 }
@@ -285,11 +285,11 @@ function NavigationDemo() {
     <div className="doc-stack">
       <Breadcrumb>
         <BreadcrumbItem href="#navigatie">Home</BreadcrumbItem>
-        <BreadcrumbItem href="#navigatie">Collectie</BreadcrumbItem>
+        <BreadcrumbItem href="#navigatie">Collection</BreadcrumbItem>
         <BreadcrumbItem href="#navigatie">Jazz</BreadcrumbItem>
         <BreadcrumbItem>Blue Train</BreadcrumbItem>
       </Breadcrumb>
-      <Pagination page={page} pageCount={12} onPageChange={setPage} label="Pagina's van de collectie" />
+      <Pagination page={page} pageCount={12} onPageChange={setPage} label="Collection pages" />
     </div>
   );
 }
@@ -299,244 +299,244 @@ export function Components() {
   return (
     <>
 
-      <Example id="knoppen" api={['Button', 'IconButton']} name="Button en IconButton" intro="De salie-groene actie uit de cases, de inktknop en rustige secundaire varianten. Tijdens laden blijft de knop focusbaar."
-        code={`<Button loading={saving} iconEnd={<icons.ArrowRight />}>Opslaan</Button>
-<Button variant="ink">Bekijk de case</Button>
-<IconButton label="Volgende plaat" variant="disc" icon={<icons.ArrowRight />} />
+      <Example id="knoppen" api={['Button', 'IconButton']} name="Button and IconButton" intro="The sage-green action from the case studies, the ink button and calm secondary variants. While loading, the button stays focusable."
+        code={`<Button loading={saving} iconEnd={<icons.ArrowRight />}>Save</Button>
+<Button variant="ink">View the case</Button>
+<IconButton label="Next record" variant="disc" icon={<icons.ArrowRight />} />
 
-// Als link van Next.js of React Router
+// As a link from Next.js or React Router
 <Button asChild variant="ink">
-  <NextLink href="/werk">Bekijk het werk</NextLink>
+  <NextLink href="/work">View the work</NextLink>
 </Button>`}
-        a11y={['Laden gebruikt aria-busy en aria-disabled, dus de focus springt nooit weg.', 'Met asChild blijft een link een link: Enter volgt hem, de knopvorm is alleen uiterlijk.', 'IconButton vereist een label; dat wordt de toegankelijke naam en de tooltip.', 'Elk raakvlak is minimaal 44 × 44 px.']}
+        a11y={['Loading uses aria-busy and aria-disabled, so focus never jumps away.', 'With asChild a link stays a link: Enter follows it, and the button shape is purely visual.', 'IconButton requires a label; it becomes the accessible name and the tooltip.', 'Every target is at least 44 × 44 px.']}
         props={[
-          { name: 'variant', type: "'primary' | 'ink' | 'secondary' | 'ghost' | 'danger'", note: 'Visuele rol. Standaard primary.' },
-          { name: 'size', type: "'sm' | 'md' | 'lg'", note: 'Hoogte 36, 44 of 55 px.' },
-          { name: 'loading', type: 'boolean', note: 'Toont een spinner en blokkeert activeren.' },
-          { name: 'iconStart / iconEnd', type: 'ReactNode', note: 'Het eindicoon schuift 3 px bij hover.' },
-          { name: 'asChild', type: 'boolean', note: 'Rendert het enige kind (bv. een routerlink) met de stijl en het gedrag van de knop. Ook op IconButton en Link.' },
+          { name: 'variant', type: "'primary' | 'ink' | 'secondary' | 'ghost' | 'danger'", note: 'Visual role. Defaults to primary.' },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", note: 'Height of 36, 44 or 55 px.' },
+          { name: 'loading', type: 'boolean', note: 'Shows a spinner and blocks activation.' },
+          { name: 'iconStart / iconEnd', type: 'ReactNode', note: 'The end icon shifts 3 px on hover.' },
+          { name: 'asChild', type: 'boolean', note: 'Renders the only child (e.g. a router link) with the style and behaviour of the button. Also on IconButton and Link.' },
         ]}>
         <ButtonDemo />
       </Example>
 
-      <Example id="formulieren" api={['TextField', 'TextArea']} name="TextField en TextArea" intro="Het onderstreepte invoerveld uit de portfoliowidget. Label, hint en fout horen bij het veld en worden samen voorgelezen."
+      <Example id="formulieren" api={['TextField', 'TextArea']} name="TextField and TextArea" intro="The underlined input field from the portfolio widget. Label, hint and error belong to the field and are read out together."
         code={`<TextField
-  label="E-mailadres"
-  hint="Alleen voor een antwoord."
-  error={invalid ? 'Vul een volledig e-mailadres in.' : undefined}
+  label="Email address"
+  hint="Only for a reply."
+  error={invalid ? 'Enter a full email address.' : undefined}
 />`}
-        a11y={['Het label is een echt <label> en blijft zichtbaar; hideLabel verbergt het alleen visueel.', 'Fout en hint staan in aria-describedby, de fout eerst.', 'aria-invalid wordt alleen gezet als er een fout is; kleur is nooit het enige signaal.']}
+        a11y={['The label is a real <label> and stays visible; hideLabel only hides it visually.', 'The error and hint are in aria-describedby, error first.', 'aria-invalid is only set when there is an error; colour is never the only signal.']}
         props={[
-          { name: 'label', type: 'ReactNode', note: 'Verplicht.' },
-          { name: 'hint', type: 'ReactNode', note: 'Uitleg onder het veld.' },
-          { name: 'error', type: 'ReactNode', note: 'Foutmelding; zet aria-invalid.' },
-          { name: 'hideLabel', type: 'boolean', note: 'Alleen voor velden met een duidelijke context.' },
+          { name: 'label', type: 'ReactNode', note: 'Required.' },
+          { name: 'hint', type: 'ReactNode', note: 'Explanation below the field.' },
+          { name: 'error', type: 'ReactNode', note: 'Error message; sets aria-invalid.' },
+          { name: 'hideLabel', type: 'boolean', note: 'Only for fields with clear context.' },
         ]}>
         <FormDemo />
       </Example>
 
-      <Example id="velden" api={['Field', 'FieldLabel']} name="Field, prefix en suffix" intro="Een icoon of eenheid in het veld, en de bouwstenen achter TextField en Select voor je eigen of een externe input."
-        code={`<TextField label="Prijs in euro" prefix="€" />
-<TextField label="Gewicht in gram" suffix="g" />
+      <Example id="velden" api={['Field', 'FieldLabel']} name="Field, prefix and suffix" intro="An icon or unit inside the field, and the building blocks behind TextField and Select for your own or a third-party input."
+        code={`<TextField label="Price in euros" prefix="€" />
+<TextField label="Weight in grams" suffix="g" />
 
-<Field label="Toerental" hint="Een eigen input">
-  {(control) => <MijnInput {...control} />}
+<Field label="Speed in rpm" hint="Your own input">
+  {(control) => <MyInput {...control} />}
 </Field>
 
-// Of helemaal los:
+// Or fully standalone:
 const f = useField({ hint, error });
-<FieldLabel {...f.labelProps}>Artiest</FieldLabel>
-<MijnCombobox {...f.controlProps} aria-labelledby={f.ids.label} />
+<FieldLabel {...f.labelProps}>Artist</FieldLabel>
+<MyCombobox {...f.controlProps} aria-labelledby={f.ids.label} />
 <FieldError {...f.errorProps}>{error}</FieldError>
 <FieldHint {...f.hintProps}>{hint}</FieldHint>`}
-        a11y={['Prefix en suffix zijn decoratief (aria-hidden); zet de eenheid ook in het label, zoals "Prijs in euro".', 'Field geeft id, aria-describedby (fout eerst) en aria-invalid door aan elk control.', 'Een klik op het icoon of de eenheid zet de focus in het veld.']}
+        a11y={['Prefix and suffix are decorative (aria-hidden); put the unit in the label as well, as in "Price in euros".', 'Field passes id, aria-describedby (error first) and aria-invalid to any control.', 'Clicking the icon or unit moves focus into the field.']}
         props={[
-          { name: 'prefix / suffix', type: 'ReactNode', note: 'Op TextField: icoon of eenheid voor of na de waarde.' },
-          { name: 'Field children', type: 'ReactNode | (control) => ReactNode', note: 'Renderfunctie, of kinderen die useFieldControl() gebruiken.' },
-          { name: 'useField', type: '({ id, hint, error, describedBy }) => FieldState', note: 'ids, controlProps, labelProps, hintProps en errorProps.' },
-          { name: 'FieldLabel / FieldHint / FieldError', type: 'component', note: 'De losse onderdelen met Papier-opmaak.' },
+          { name: 'prefix / suffix', type: 'ReactNode', note: 'On TextField: an icon or unit before or after the value.' },
+          { name: 'Field children', type: 'ReactNode | (control) => ReactNode', note: 'A render function, or children that use useFieldControl().' },
+          { name: 'useField', type: '({ id, hint, error, describedBy }) => FieldState', note: 'ids, controlProps, labelProps, hintProps and errorProps.' },
+          { name: 'FieldLabel / FieldHint / FieldError', type: 'component', note: 'The individual parts with Papier styling.' },
         ]}>
         <FieldsDemo />
       </Example>
 
-      <Example id="keuzes" api={['SegmentedControl', 'Checkbox', 'Switch']} name="SegmentedControl, Checkbox en Switch" intro="Een keuze tussen een paar periodes, met de schuivende markering uit de Auralis-films. Switch voor instellingen die meteen gelden."
+      <Example id="keuzes" api={['SegmentedControl', 'Checkbox', 'Switch']} name="SegmentedControl, Checkbox and Switch" intro="A choice between a few periods, with the sliding marker from the Auralis films. Switch is for settings that apply immediately."
         code={`<SegmentedControl
-  label="Periode"
+  label="Period"
   value={period}
   onValueChange={setPeriod}
-  options={[{ value: 'week', label: 'Week' }, { value: 'maand', label: 'Maand' }]}
+  options={[{ value: 'week', label: 'Week' }, { value: 'month', label: 'Month' }]}
 />
-<Switch label="Geluidseffecten" defaultChecked />`}
-        a11y={['SegmentedControl is een radiogroup met roving tabindex: Tab gaat erin, pijltjes kiezen, Home en End springen.', 'Uitgeschakelde opties worden overgeslagen.', 'Switch gebruikt role="switch" met aria-checked; Checkbox is een echte native checkbox.']}>
+<Switch label="Sound effects" defaultChecked />`}
+        a11y={['SegmentedControl is a radiogroup with a roving tabindex: Tab moves in, arrow keys choose, Home and End jump.', 'Disabled options are skipped.', 'Switch uses role="switch" with aria-checked; Checkbox is a real native checkbox.']}>
         <ChoicesDemo />
       </Example>
 
-      <Example id="slider" api={['Slider']} name="Slider" intro="Een native range met gevuld spoor en leesbare waarde. Gebouwd voor de luisterkamer: positie in minuten, volume in procenten."
+      <Example id="slider" api={['Slider']} name="Slider" intro="A native range with a filled track and a readable value. Built for the listening room: position in minutes, volume as a percentage."
         code={`<Slider
-  label="Positie"
+  label="Position"
   max={213}
   value={pos}
   onValueChange={setPos}
   formatValue={(s) => \`\${Math.floor(s / 60)}:\${String(s % 60).padStart(2, '0')}\`}
 />`}
-        a11y={['aria-valuetext gebruikt dezelfde opmaak als de zichtbare waarde, dus "1:24" in plaats van "84".', 'De duim krijgt de focusring; het raakvlak is 44 px hoog.']}>
+        a11y={['aria-valuetext uses the same format as the visible value, so "1:24" instead of "84".', 'The thumb gets the focus ring; the target is 44 px tall.']}>
         <PlayerDemo />
       </Example>
 
-      <Example id="feedback" api={['Notice', 'Progress']} name="Notice en Progress" intro="Statusmeldingen met eigen icoon en woorden, en voortgang met een echte waardetekst."
-        code={`<Notice tone="danger" title="Synchronisatie mislukt"
-  action={<Button size="sm" variant="secondary">Opnieuw proberen</Button>}>
-  Er is geen verbinding met de server.
+      <Example id="feedback" api={['Notice', 'Progress']} name="Notice and Progress" intro="Status messages with their own icon and wording, and progress with a real value text."
+        code={`<Notice tone="danger" title="Sync failed"
+  action={<Button size="sm" variant="secondary">Try again</Button>}>
+  There is no connection to the server.
 </Notice>
-<Progress label="Hoezen ophalen" value={2} max={5} valueText="2 van 5" />`}
-        a11y={['Info, succes en waarschuwing gebruiken role="status"; alleen blokkerende fouten zijn role="alert".', 'Elke toon heeft een eigen icoon en titel, zodat kleur niet het enige signaal is.', 'Progress zonder waarde is indeterminate en laat aria-valuenow weg.']}>
+<Progress label="Fetching sleeves" value={2} max={5} valueText="2 of 5" />`}
+        a11y={['Info, success and warning use role="status"; only blocking errors are role="alert".', 'Each tone has its own icon and title, so colour is not the only signal.', 'Progress without a value is indeterminate and omits aria-valuenow.']}>
         <FeedbackDemo />
       </Example>
 
-      <Example id="dialoog" api={['Dialog']} name="Dialog" intro="Een modaal venster op het native dialog-element. Escape, de sluitknop en een klik naast het venster sluiten het."
+      <Example id="dialoog" api={['Dialog']} name="Dialog" intro="A modal window on the native dialog element. Escape, the close button and a click outside the window close it."
         code={`<Dialog
   open={open}
   onClose={() => setOpen(false)}
-  title="Plaat terug in de hoes?"
-  footer={<Button onClick={store}>Opbergen</Button>}
+  title="Put the record back in its sleeve?"
+  footer={<Button onClick={store}>Put away</Button>}
 />`}
-        a11y={['showModal() geeft een echte focusval en maakt de achtergrond inert.', 'De titel is de toegankelijke naam, de beschrijving staat in aria-describedby.', 'Na sluiten keert de focus terug naar de knop die het venster opende, ook in Safari, waar een klik een knop niet focust. Met returnFocusTo kies je zelf een doel.']}>
+        a11y={['showModal() provides a real focus trap and makes the background inert.', 'The title is the accessible name; the description is in aria-describedby.', 'After closing, focus returns to the button that opened the window, also in Safari, where a click does not focus a button. Use returnFocusTo to choose a different target.']}>
         <DialogDemo />
       </Example>
 
-      <Example id="structuur" api={['Tabs', 'TabList', 'Tab', 'TabPanel', 'Disclosure']} name="Tabs en Disclosure" intro="Tabs voor weergaven van dezelfde inhoud. Disclosure is een native uitklapper die in 420 ms ontvouwt en in 290 ms dichtvouwt."
+      <Example id="structuur" api={['Tabs', 'TabList', 'Tab', 'TabPanel', 'Disclosure']} name="Tabs and Disclosure" intro="Tabs for different views of the same content. Disclosure is a native expander that unfolds in 420 ms and folds in 290 ms."
         code={`<Tabs defaultValue="nu">
-  <TabList label="Luisterweergave">
-    <Tab value="nu">Nu</Tab>
+  <TabList label="Listening view">
+    <Tab value="nu">Now</Tab>
     <Tab value="week">Week</Tab>
   </TabList>
   <TabPanel value="nu">…</TabPanel>
   <TabPanel value="week">…</TabPanel>
 </Tabs>
-<Disclosure summary="Technische verdieping">…</Disclosure>`}
-        a11y={['Tabs volgen het WAI-ARIA-patroon: pijltjes wisselen, Tab gaat naar het panel.', 'Disclosure blijft een <details>: zoeken in de pagina opent hem gewoon.', 'Bij reduced motion wisselen beide direct.']}>
+<Disclosure summary="Technical deep dive">…</Disclosure>`}
+        a11y={['Tabs follow the WAI-ARIA pattern: arrow keys switch, Tab moves to the panel.', 'Disclosure stays a <details>: find-in-page simply opens it.', 'With reduced motion, both switch instantly.']}>
         <StructureDemo />
       </Example>
 
-      <Example id="materiaal" api={['Surface', 'Tag', 'Link']} name="Surface, Tag en Link" intro="Modules met een eigen materiaal en objectschaduw, kleine labels en links met een opkomende onderstreping."
+      <Example id="materiaal" api={['Surface', 'Tag', 'Link']} name="Surface, Tag and Link" intro="Modules with their own material and object shadow, small labels, and links with a rising underline."
         code={`<Surface material="sage" elevation="object">…</Surface>
 <Tag tone="sage">Kotlin</Tag>
-<Link href="/werk" variant="arrow">Verken het werk</Link>
+<Link href="/work" variant="arrow">Explore the work</Link>
 <Link href="https://discogs.com" external>Discogs</Link>
-<Link asChild variant="arrow"><RouterLink to="/werk">Werk</RouterLink></Link>`}
-        a11y={['De tekstkleur volgt het materiaal en haalt op elk materiaal minimaal 4,5:1.', 'Externe links krijgen rel="noopener noreferrer" en een voorgelezen hint "opent in een nieuw tabblad".', 'Prose blijft vlak: de objectschaduw is alleen voor bedienbare objecten.']}>
+<Link asChild variant="arrow"><RouterLink to="/work">Work</RouterLink></Link>`}
+        a11y={['The text colour follows the material and reaches at least 4.5:1 on every material.', 'External links get rel="noopener noreferrer" and a hint, read out as "opens in a new tab".', 'Prose stays flat: the object shadow is only for interactive objects.']}>
         <SurfaceDemo />
       </Example>
 
-      <Example id="select" api={['Select', 'RadioGroup']} name="Select en RadioGroup" intro="Een gestijlde native select en een fieldset met keuzerondjes, als lijst of als tegels."
-        code={`<Select label="Sorteer de bak op" options={[{ value: 'artist', label: 'Artiest' }]} />
-<RadioGroup legend="Weergave" appearance="card" options={[
-  { value: 'bak', label: 'Platenbak', description: 'Blader door hoezen.' },
+      <Example id="select" api={['Select', 'RadioGroup']} name="Select and RadioGroup" intro="A styled native select and a fieldset with radio buttons, as a list or as cards."
+        code={`<Select label="Sort the crate by" options={[{ value: 'artist', label: 'Artist' }]} />
+<RadioGroup legend="View" appearance="card" options={[
+  { value: 'bak', label: 'Record crate', description: 'Flip through sleeves.' },
 ]} />`}
-        a11y={['Select blijft een native element: telefoons tonen hun eigen kiezer, typen springt naar een optie.', 'RadioGroup is een fieldset met legend; pijltjes en formulieren werken native.', 'Fout en hint hangen aan de groep via aria-describedby.']}>
+        a11y={['Select stays a native element: phones show their own picker, and typing jumps to an option.', 'RadioGroup is a fieldset with a legend; arrow keys and forms work natively.', 'The error and hint are attached to the group through aria-describedby.']}>
         <SelectRadioDemo />
       </Example>
 
-      <Example id="overlays" api={['Tooltip', 'Menu', 'Sheet']} name="Tooltip, Menu en Sheet" intro="Een hint op hover of focus, een actiemenu en een paneel vanaf de rand, zoals het mobiele navigatieblad van het portfolio."
-        code={`<Tooltip content="Zet de plaat terug" placement="right">
-  <IconButton label="Opbergen" icon={<icons.Close />} />
+      <Example id="overlays" api={['Tooltip', 'Menu', 'Sheet']} name="Tooltip, Menu and Sheet" intro="A hint on hover or focus, an action menu and a panel from the edge, like the portfolio's mobile navigation sheet."
+        code={`<Tooltip content="Put the record back" placement="right">
+  <IconButton label="Put away" icon={<icons.Close />} />
 </Tooltip>
-<Menu trigger="Acties" side="bottom" align="end" items={[{ label: 'Afspelen', onSelect: play }]} />
-<Sheet open={open} onClose={close} title="Navigatie" hideTitle>…</Sheet>`}
-        a11y={['Tooltip voegt een beschrijving toe, nooit de naam; hij blijft staan als je erop beweegt en Escape sluit hem (WCAG 1.4.13).', 'Menu volgt het menu-button-patroon: pijl omlaag opent, Escape en Tab sluiten, focus keert terug.', 'Sheet is een native modale dialog met een verborgen maar voorgelezen titel.', 'Menu en Tooltip openen in de top layer (Popover API), dus overflow:hidden knipt ze niet af; aan de rand van het scherm klappen ze om.']}
+<Menu trigger="Actions" side="bottom" align="end" items={[{ label: 'Play', onSelect: play }]} />
+<Sheet open={open} onClose={close} title="Navigation" hideTitle>…</Sheet>`}
+        a11y={['Tooltip adds a description, never the name; it stays open while you hover over it and Escape closes it (WCAG 1.4.13).', 'Menu follows the menu button pattern: arrow down opens it, Escape and Tab close it, and focus returns.', 'Sheet is a native modal dialog with a hidden title that is still read out.', 'Menu and Tooltip open in the top layer (Popover API), so overflow:hidden does not clip them; at the edge of the screen they flip.']}
         props={[
-          { name: 'Menu side', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Voorkeurskant; klapt om als er geen ruimte is. Standaard bottom.' },
-          { name: 'Menu align', type: "'start' | 'center' | 'end'", note: 'Uitlijning langs de knop.' },
-          { name: 'Tooltip placement', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Voorkeurskant; klapt om aan de rand. Standaard top.' },
-          { name: 'ref', type: 'Ref', note: 'Menu: de triggerknop. Dialog en Sheet: het dialog-element.' },
-          { name: 'Sheet returnFocusTo', type: 'RefObject<HTMLElement>', note: 'Waar de focus na sluiten heen gaat; standaard de opener. Ook op Dialog en AlertDialog.' },
+          { name: 'Menu side', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Preferred side; flips when there is no room. Defaults to bottom.' },
+          { name: 'Menu align', type: "'start' | 'center' | 'end'", note: 'Alignment along the button.' },
+          { name: 'Tooltip placement', type: "'top' | 'bottom' | 'left' | 'right'", note: 'Preferred side; flips at the edge. Defaults to top.' },
+          { name: 'ref', type: 'Ref', note: 'Menu: the trigger button. Dialog and Sheet: the dialog element.' },
+          { name: 'Sheet returnFocusTo', type: 'RefObject<HTMLElement>', note: 'Where focus goes after closing; defaults to the opener. Also on Dialog and AlertDialog.' },
         ]}>
         <OverlayDemo />
       </Example>
 
-      <Example id="zoeken" api={['Combobox']} name="Combobox" intro="Een invoerveld met een lijst die meezoekt terwijl je typt. Voor lange lijsten of zoeken op een server; voor een paar vaste keuzes blijft Select de betere keuze."
+      <Example id="zoeken" api={['Combobox']} name="Combobox" intro="An input with a list that filters as you type. For long lists or server-side search; for a few fixed choices, Select is still the better option."
         code={`<Combobox
-  label="Plaat"
+  label="Record"
   options={records}
   value={record}
-  onChange={setRecord}
+  onValueChange={setRecord}
 />
 
-// Zoeken op een server
-<Combobox label="Artiest" options={results} filter={false}
+// Searching on a server
+<Combobox label="Artist" options={results} filter={false}
   inputValue={query} onInputChange={setQuery} loading={pending} />`}
-        a11y={['Volgt het WAI-ARIA-comboboxpatroon: de focus blijft in het veld, aria-activedescendant wijst de actieve optie aan.', 'Pijltjes bewegen en slaan uitgeschakelde opties over, Enter kiest, Escape sluit en wist daarna.', 'Het aantal resultaten of "Geen resultaten" wordt beleefd voorgelezen.', 'Bij verlaten blijft er altijd een echte keuze staan: een exacte naam telt, anders keert de vorige terug.']}
+        a11y={['Follows the WAI-ARIA combobox pattern: focus stays in the field and aria-activedescendant points to the active option.', 'Arrow keys move and skip disabled options, Enter selects, Escape closes and then clears.', 'The number of results, or "No results", is announced politely.', 'On leaving the field there is always a real selection: an exact name counts, otherwise the previous one returns.']}
         props={[
-          { name: 'options', type: 'ComboboxOption[]', note: 'value, label en optioneel description en disabled.' },
-          { name: 'value / onChange', type: 'string | null', note: 'De gekozen waarde; onChange krijgt ook de optie.' },
-          { name: 'filter', type: '(option, query) => boolean | false', note: 'Standaard: label of beschrijving bevat de tekst, zonder accenten en hoofdletters. false voor resultaten van een server.' },
-          { name: 'inputValue / onInputChange', type: 'string', note: 'De getypte tekst, voor zoeken op een server.' },
-          { name: 'name', type: 'string', note: 'Stuurt de waarde mee in een formulier.' },
+          { name: 'options', type: 'ComboboxOption[]', note: 'value, label and optionally description and disabled.' },
+          { name: 'value / onChange', type: 'string | null', note: 'The selected value; onChange also receives the option.' },
+          { name: 'filter', type: '(option, query) => boolean | false', note: 'Default: the label or description contains the text, ignoring accents and capitals. false for results from a server.' },
+          { name: 'inputValue / onInputChange', type: 'string', note: 'The typed text, for searching on a server.' },
+          { name: 'name', type: 'string', note: 'Submits the value with a form.' },
         ]}>
         <ComboboxDemo />
       </Example>
 
-      <Example id="bevestigen" api={['AlertDialog']} name="AlertDialog" intro="Een bevestiging die je werk onderbreekt, voor acties met gevolgen. Sluit alleen via de knoppen of Escape, nooit met een klik ernaast."
+      <Example id="bevestigen" api={['AlertDialog']} name="AlertDialog" intro="A confirmation that interrupts your work, for actions with consequences. Closes only through the buttons or Escape, never with a click outside."
         code={`<AlertDialog
   open={open}
   onClose={() => setOpen(false)}
-  onConfirm={() => removeRecord(id)}  // een promise laat de knop laden
-  title="Blue Train uit je collectie halen?"
-  confirmLabel="Uit collectie halen"
+  onConfirm={() => removeRecord(id)}  // a promise makes the button load
+  title="Remove Blue Train from your collection?"
+  confirmLabel="Remove from collection"
   tone="danger"
 />`}
-        a11y={['role="alertdialog" op het native dialog-element, met de titel als naam en de beschrijving in aria-describedby.', 'De focus begint op Annuleren, zodat Enter nooit per ongeluk iets verwijdert.', 'Geeft onConfirm een promise terug, dan laadt de knop en blijft het venster open als het mislukt.']}>
+        a11y={['role="alertdialog" on the native dialog element, with the title as its name and the description in aria-describedby.', 'Focus starts on Cancel, so Enter never deletes anything by accident.', 'If onConfirm returns a promise, the button loads and the window stays open if it fails.']}>
         <AlertDialogDemo />
       </Example>
 
-      <Example id="navigatie" api={['Breadcrumb', 'BreadcrumbItem', 'Pagination']} name="Breadcrumb en Pagination" intro="Waar je bent en waar je heen kunt: een kruimelpad naar de pagina's erboven en paginering voor lange lijsten. Op smalle schermen houdt Pagination alleen vorige, volgende en de positie."
+      <Example id="navigatie" api={['Breadcrumb', 'BreadcrumbItem', 'Pagination']} name="Breadcrumb and Pagination" intro="Where you are and where you can go: a breadcrumb trail to the pages above and pagination for long lists. On narrow screens, Pagination keeps only previous, next and the position."
         code={`<Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
-  <BreadcrumbItem asChild><NextLink href="/collectie">Collectie</NextLink></BreadcrumbItem>
+  <BreadcrumbItem asChild><NextLink href="/collection">Collection</NextLink></BreadcrumbItem>
   <BreadcrumbItem>Blue Train</BreadcrumbItem>
 </Breadcrumb>
 
 <Pagination page={page} pageCount={12} onPageChange={setPage} />
 <Pagination page={page} pageCount={12} getHref={(p) => \`?p=\${p}\`} linkAs={NextLink} />`}
-        a11y={['Beide zijn een benoemde nav-landmark met een echte lijst.', 'De huidige pagina heeft aria-current="page", in het kruimelpad en in de paginering.', "Paginanummers heten voluit \"Pagina 3\"; weggelaten pagina's zijn voor schermlezers verborgen."]}
+        a11y={['Both are a named nav landmark with a real list.', 'The current page has aria-current="page", in the breadcrumb and in the pagination.', 'Page numbers are named in full, as "Page 3"; omitted pages are hidden from screen readers.']}
         props={[
-          { name: 'BreadcrumbItem', type: 'href | asChild', note: 'Zonder href of asChild is het item de huidige pagina.' },
-          { name: 'Pagination getHref', type: '(page) => string', note: 'Echte links, te openen in een nieuw tabblad. Zonder getHref zijn het knoppen.' },
-          { name: 'Pagination linkAs', type: 'ElementType', note: 'Eigen linkcomponent, zoals de Link van Next.js.' },
-          { name: 'Pagination siblings', type: 'number', note: "Pagina's aan elke kant van de huidige. Standaard 1." },
+          { name: 'BreadcrumbItem', type: 'href | asChild', note: 'Without href or asChild, the item is the current page.' },
+          { name: 'Pagination getHref', type: '(page) => string', note: 'Real links that can be opened in a new tab. Without getHref they are buttons.' },
+          { name: 'Pagination linkAs', type: 'ElementType', note: 'Your own link component, such as the Next.js Link.' },
+          { name: 'Pagination siblings', type: 'number', note: 'Pages on each side of the current one. Defaults to 1.' },
         ]}>
         <NavigationDemo />
       </Example>
 
-      <Example id="toast" name="Toast" intro="Korte bevestigingen rechtsonder. Ze pauzeren als je erop wijst of focust; fouten blijven staan tot je ze sluit."
+      <Example id="toast" name="Toast" intro="Short confirmations in the bottom-right corner. They pause when you point at or focus them; errors stay until you close them."
         code={`<ToastProvider>
   <App />
 </ToastProvider>
 
 const { toast } = useToast();
-toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`}
-        a11y={['De live region bestaat altijd, dus schermlezers missen geen nieuwe melding.', 'Tijd pauzeert bij hover en focus (WCAG 2.2.1); foutmeldingen verdwijnen niet vanzelf.', 'Maximaal drie tegelijk, de oudste gaat eerst.']}>
+toast({ title: 'Record added', description: 'Now in your collection.' });`}
+        a11y={['The live region always exists, so screen readers never miss a new message.', 'The timer pauses on hover and focus (WCAG 2.2.1); error messages never disappear on their own.', 'At most three at a time; the oldest goes first.']}>
         <ToastDemo />
       </Example>
 
-      <Example id="data" api={['Table', 'Avatar', 'Skeleton']} name="Table, Avatar, Skeleton en Spinner" intro="Gegevens in een native tabel met een actiemenu per rij, hoezen of personen als avatar, en plaatshouders terwijl iets laadt."
-        code={`<Table caption="Meest gedraaid" showCaption>
+      <Example id="data" api={['Table', 'Avatar', 'Skeleton']} name="Table, Avatar, Skeleton and Spinner" intro="Data in a native table with an action menu per row, sleeves or people as avatars, and placeholders while something loads."
+        code={`<Table caption="Most played" showCaption>
   <thead>…</thead>
   <tbody><tr><th scope="row">Uitzinnig</th><td className="pp-num">42</td></tr></tbody>
 </Table>
 <div aria-busy={loading}>{loading ? <Skeleton lines={2} /> : content}</div>`}
-        a11y={['Table vraagt een caption; die benoemt ook het scrollbare, focusbare gebied.', 'Skeleton is decoratief; het gebied zelf krijgt aria-busy en kondigt het resultaat aan.', 'Avatar valt terug op initialen met de naam als toegankelijke naam, of is decoratief als de naam ernaast staat.']}>
+        a11y={['Table requires a caption; it also names the scrollable, focusable region.', 'Skeleton is decorative; the region itself gets aria-busy and announces the result.', 'Avatar falls back to initials with the name as its accessible name, or is decorative when the name is shown next to it.']}>
         <DataDemo />
       </Example>
 
-      <Example id="layout" api={['Stack', 'Container']} name="Stack en Container" intro="Twee kleine layoutbouwstenen: een flexstapel op de ruimteschaal en een container met de goot van het portfolio."
+      <Example id="layout" api={['Stack', 'Container']} name="Stack and Container" intro="Two small layout building blocks: a flex stack on the spacing scale and a container with the portfolio's gutter."
         code={`<Container size="md">
   <Stack gap={5}>
-    <Text variant="title">Kop</Text>
+    <Text variant="title">Heading</Text>
     <Stack direction="row" gap={2} wrap>…</Stack>
   </Stack>
 </Container>`}
-        a11y={['Alleen visuele volgorde via flex, nooit een andere leesvolgorde dan de DOM.', 'Container houdt minimaal 18 px goot op de smalste schermen.']}>
+        a11y={['Flex only changes the visual order, never a reading order different from the DOM.', 'Container keeps a gutter of at least 18 px on the narrowest screens.']}>
         <LayoutDemo />
       </Example>
 

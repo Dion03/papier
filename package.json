@@ -1,7 +1,7 @@
 {
   "name": "@dionbm/papier",
   "version": "0.5.0",
-  "description": "Papier: mijn design system. Warm papier, inkt, vermiljoen en salie als toegankelijke React-componenten.",
+  "description": "Papier: a warm, tactile design system. Paper, ink, vermilion and sage as accessible React components.",
   "license": "MIT",
   "author": "Dion Meijboom",
   "type": "module",
@@ -80,6 +80,9 @@
     "react",
     "components",
     "accessibility",
-    "tokens"
+    "tokens",
+    "react-components",
+    "wcag",
+    "dark-mode"
   ]
 }
