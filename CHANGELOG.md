@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 (nog niet uitgebracht)
+## 0.5.0 (2026-10-17)
 
 Nieuwe componenten en uitbreidingen na een vergelijking met shadcn/ui, Radix, Mantine, Chakra
 en HeroUI (zie `docs/gap-analysis.md`), en een nieuwe documentatiesite. Samen 56 componenten.
