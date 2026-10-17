@@ -388,18 +388,16 @@ test('checkboxes: een echte klik op het vakje werkt, ook in een tabel en een pop
   await page.getByRole('dialog', { name: 'Filter de bak' }).getByRole('checkbox', { name: 'Soul' }).check();
 });
 
-test('command en pincode: zoeken in de pagina en plakken in de vakjes', async ({ page }) => {
+test('command en pincode: zoeken in de pagina en een code via autofill in de vakjes', async ({ page }) => {
   await open(page, 'light', component('command'));
   const inline = page.locator('#command .doc-command-inline').getByRole('combobox');
   await inline.fill('csv');
   await expect(page.locator('#command .doc-command-inline').getByRole('option')).toHaveText([/Exporteer als CSV/]);
   await go(page, component('pincode'));
   const first = page.locator('#voorbeeld').getByRole('textbox', { name: 'Teken 1 van 6' });
-  await first.focus();
-  await page.evaluate(() => {
-    const dt = new DataTransfer(); dt.setData('text', '424242');
-    document.activeElement!.dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true }));
-  });
+  // As the phone's SMS suggestion does: the whole code lands in the first box and spreads out.
+  // (Pasting is covered by the unit tests; Firefox drops the data of a synthetic paste event.)
+  await first.fill('424242');
   await expect(page.getByText('Ingelogd')).toBeVisible();
 });
 
