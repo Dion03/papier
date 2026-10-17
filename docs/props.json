@@ -2711,6 +2711,387 @@
       "doc": "The span as \"YYYY-MM-DD\" dates; `end` is null while only the start is known."
     }
   ],
+  "Command": [
+    {
+      "name": "items",
+      "type": "CommandItem[]",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "Accessible name of the search field and list, e.g. \"Zoek in de documentatie\"."
+    },
+    {
+      "name": "autoFocus",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "emptyText",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Shown when nothing matches; defaults to the \"no results\" label."
+    },
+    {
+      "name": "filter",
+      "type": "(item: CommandItem, query: string) => number",
+      "required": false,
+      "default": null,
+      "doc": "Replaces the built-in ranking; return 0 to hide an item."
+    },
+    {
+      "name": "hideHints",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Hides the hint line with the keys."
+    },
+    {
+      "name": "onDone",
+      "type": "() => void",
+      "required": false,
+      "default": null,
+      "doc": "Called after an item's own onSelect, e.g. to close a dialog."
+    },
+    {
+      "name": "onQueryChange",
+      "type": "(query: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "The search text, to control it from outside."
+    }
+  ],
+  "CommandDialog": [
+    {
+      "name": "items",
+      "type": "CommandItem[]",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "default": null,
+      "doc": "Accessible name of the search field and list, e.g. \"Zoek in de documentatie\"."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "emptyText",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Shown when nothing matches; defaults to the \"no results\" label."
+    },
+    {
+      "name": "filter",
+      "type": "(item: CommandItem, query: string) => number",
+      "required": false,
+      "default": null,
+      "doc": "Replaces the built-in ranking; return 0 to hide an item."
+    },
+    {
+      "name": "hideHints",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Hides the hint line with the keys."
+    },
+    {
+      "name": "onQueryChange",
+      "type": "(query: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "The search text, to control it from outside."
+    },
+    {
+      "name": "returnFocusTo",
+      "type": "RefObject<HTMLElement | null>",
+      "required": false,
+      "default": null,
+      "doc": "Where focus goes after closing. Defaults to the element that opened it."
+    }
+  ],
+  "CopyButton": [
+    {
+      "name": "value",
+      "type": "string | (() => string)",
+      "required": true,
+      "default": null,
+      "doc": "The text to copy, or a function that returns it at the moment of copying."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Visible label. Without it the button shows only an icon, named by the \"copy\" label."
+    },
+    {
+      "name": "copiedLabel",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": "Label while the copy is confirmed; defaults to the \"copied\" label."
+    },
+    {
+      "name": "onCopy",
+      "type": "(text: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "onCopyError",
+      "type": "(error: unknown) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md'",
+      "required": false,
+      "default": "'sm'",
+      "doc": ""
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "required": false,
+      "default": "2000",
+      "doc": "How long the confirmation stays, in ms."
+    },
+    {
+      "name": "variant",
+      "type": "'primary' | 'ink' | 'secondary' | 'ghost' | 'danger'",
+      "required": false,
+      "default": "'secondary'",
+      "doc": ""
+    }
+  ],
+  "Steps": [
+    {
+      "name": "current",
+      "type": "number",
+      "required": true,
+      "default": null,
+      "doc": "The current step, starting at 0. Steps before it count as completed."
+    },
+    {
+      "name": "items",
+      "type": "StepItem[]",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Name of the landmark; defaults to the \"steps\" label."
+    },
+    {
+      "name": "onStepClick",
+      "type": "(index: number) => void",
+      "required": false,
+      "default": null,
+      "doc": "Makes completed steps (and the current one) buttons, so people can go back. Later steps stay plain text: you only reach them by finishing the current one."
+    },
+    {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "required": false,
+      "default": "'horizontal'",
+      "doc": "`vertical` stacks the steps with room for descriptions, e.g. in a sidebar."
+    }
+  ],
+  "PinInput": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "autoFocus",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "required": false,
+      "default": "''",
+      "doc": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "length",
+      "type": "number",
+      "required": false,
+      "default": "6",
+      "doc": "Number of boxes."
+    },
+    {
+      "name": "mask",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": "Hides the characters, as for a PIN."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "Form name for the whole code."
+    },
+    {
+      "name": "onComplete",
+      "type": "(value: string) => void",
+      "required": false,
+      "default": null,
+      "doc": "Called once every box is filled, e.g. to submit the code."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "doc": ""
+    },
+    {
+      "name": "type",
+      "type": "'numeric' | 'alphanumeric'",
+      "required": false,
+      "default": "'numeric'",
+      "doc": "`numeric` only takes digits and shows the number keypad."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "The code; an empty box is a space, trailing spaces are left out."
+    }
+  ],
   "Separator": [
     {
       "name": "decorative",

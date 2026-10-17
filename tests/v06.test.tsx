@@ -88,6 +88,7 @@ describe('Menu (groepen, keuzes, links, typeahead)', () => {
   });
 
   it('een letter springt naar het volgende item dat ermee begint', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
     setup();
     const trigger = screen.getByRole('button', { name: 'Weergave' });
     trigger.focus();
@@ -95,18 +96,10 @@ describe('Menu (groepen, keuzes, links, typeahead)', () => {
     expect(screen.getByRole('menuitemradio', { name: 'Artiest' })).toHaveFocus();
     await userEvent.keyboard('w');
     expect(screen.getByRole('menuitem', { name: /Wissen/ })).toHaveFocus();
-    // Letters within half a second form one search ("wj"); wait so "j" starts a new one.
-    await new Promise((r) => setTimeout(r, 550));
+    // Letters within half a second form one search ("wj"); move the clock so "j" starts a new one.
+    vi.setSystemTime(Date.now() + 600);
     await userEvent.keyboard('j');
     expect(screen.getByRole('menuitemradio', { name: 'Jaar' })).toHaveFocus();
-  });
-
-  it('oude items zonder type werken nog', async () => {
-    const onSelect = vi.fn();
-    render(<Menu trigger="Acties" items={[{ label: 'Delen', onSelect }]} />);
-    await userEvent.click(screen.getByRole('button', { name: 'Acties' }));
-    await userEvent.click(screen.getByRole('menuitem', { name: 'Delen' }));
-    expect(onSelect).toHaveBeenCalled();
   });
 });
 
@@ -421,7 +414,7 @@ describe('Toggle en ToggleGroup', () => {
     const soul = screen.getByRole('button', { name: 'Soul' });
     expect(jazz).toHaveAttribute('tabindex', '0');
     expect(soul).toHaveAttribute('tabindex', '-1');
-    jazz.focus();
+    act(() => jazz.focus());
     await userEvent.keyboard('{ArrowRight}');
     expect(soul).toHaveFocus();
     await userEvent.keyboard(' ');

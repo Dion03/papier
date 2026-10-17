@@ -31,6 +31,9 @@ import './components/FileField.css';
 import './components/ToggleGroup.css';
 import './components/Display.css';
 import './components/Calendar.css';
+import './components/Command.css';
+import './components/Steps.css';
+import './components/PinInput.css';
 // Last, so its overrides win over the component rules at equal specificity.
 import './styles/forced-colors.css';
 
@@ -80,6 +83,10 @@ export { RangeSlider, type RangeSliderProps, type RangeValue } from './component
 export { Calendar, RangeCalendar, type CalendarProps, type RangeCalendarProps, type DateRange } from './components/Calendar';
 export { DatePicker, DateRangePicker, type DatePickerProps, type DateRangePickerProps } from './components/DatePicker';
 export { parseTypedDate, formatNumericDate, type ISODate } from './lib/date';
+export { Command, CommandDialog, scoreCommandItem, type CommandProps, type CommandDialogProps, type CommandItem } from './components/Command';
+export { CopyButton, type CopyButtonProps } from './components/CopyButton';
+export { Steps, type StepsProps, type StepItem } from './components/Steps';
+export { PinInput, type PinInputProps } from './components/PinInput';
 export { Separator, type SeparatorProps } from './components/Separator';
 export { Kbd } from './components/Kbd';
 export { EmptyState, type EmptyStateProps } from './components/EmptyState';

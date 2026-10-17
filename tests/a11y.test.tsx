@@ -9,6 +9,7 @@ import {
   Checkbox, Switch, Slider, SegmentedControl, Tabs, TabList, Tab, TabPanel, Disclosure, Dialog, icons,
   Select, RadioGroup, Tooltip, Menu, ToastProvider, Table, Skeleton, Sheet, Stack, Container, Avatar, Spinner, Field,
   AlertDialog, Combobox, Breadcrumb, BreadcrumbItem, Pagination,
+  Command, CopyButton, Steps, PinInput,
   MultiCombobox, RangeSlider, Calendar, DatePicker, RangeCalendar, DateRangePicker,
   Popover, NumberField, PasswordField, FileField, CheckboxGroup, Accordion, ToggleGroup, Toggle, SortHeader, Separator, Kbd, EmptyState,
 } from '../src';
@@ -64,6 +65,10 @@ const cases: Array<[string, ReactElement]> = [
   ['MultiCombobox', <><MultiCombobox label="Genres" defaultValue={['jazz']} options={[{ value: 'jazz', label: 'Jazz' }, { value: 'soul', label: 'Soul' }]} hint="Een of meer" name="g" /><MultiCombobox label="Artiesten" options={[]} error="Kies een artiest" required /></>],
   ['RangeSlider', <RangeSlider label="Jaar" min={1950} max={2020} defaultValue={[1960, 1990]} marks={[{ value: 1950, label: '1950' }, 1985, { value: 2020, label: '2020' }]} />],
   ['Calendar', <Calendar defaultValue="2024-03-15" min="2024-03-05" isDateUnavailable={(d) => d === '2024-03-20'} />],
+  ['Command', <Command label="Zoek in de docs" items={[{ id: 'a', label: 'Button', group: 'Acties', description: 'Knoppen', onSelect: () => {} }, { id: 'b', label: 'Installatie', shortcut: 'G I', onSelect: () => {} }]} />],
+  ['CopyButton', <><CopyButton value="x" /><CopyButton value="y">Kopieer code</CopyButton></>],
+  ['Steps', <><Steps items={[{ title: 'Mand' }, { title: 'Bezorging', description: 'Adres' }, { title: 'Betalen', error: true }]} current={1} onStepClick={() => {}} /><Steps orientation="vertical" items={[{ title: 'Een' }, { title: 'Twee' }]} current={0} label="Aanmelden" /></>],
+  ['PinInput', <><PinInput label="Inlogcode" hint="Uit de sms" defaultValue="12" /><PinInput label="Pincode" length={4} mask error="Onjuiste pincode" /></>],
   ['RangeCalendar', <RangeCalendar defaultValue={{ start: '2024-03-11', end: '2024-03-20' }} />],
   ['DateRangePicker', <DateRangePicker label="Verblijf" defaultValue={{ start: '2024-03-11', end: '2024-03-20' }} hint="Aankomst en vertrek" />],
   ['DatePicker', <><DatePicker label="Releasedatum" defaultValue="2024-03-15" hint="Op de hoes" /><DatePicker label="Leverdatum" error="Kies een werkdag" required /></>],

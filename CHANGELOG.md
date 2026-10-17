@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.7.0 (nog niet uitgebracht)
+
+Een nieuwe documentatiesite en vier componenten die er (ook) voor nodig waren. Samen 56
+componenten; bestaande API's ongewijzigd.
+
+- Nieuw: `Command` en `CommandDialog`, een opdrachtenlijst die meezoekt (combobox met een
+  gegroepeerde listbox): rangschikking op label, woorden, trefwoorden en beschrijving,
+  uitgeschakelde items, sneltoetshints en een eigen `filter`. Plus `scoreCommandItem`.
+- Nieuw: `CopyButton` met bevestiging op dezelfde plek, een live region naast de knop en een
+  terugval zonder Clipboard API.
+- Nieuw: `Steps` voor een flow van een paar stappen: `aria-current="step"`, voltooide stappen
+  als knoppen om terug te gaan, horizontaal of verticaal, compact op smalle schermen.
+- Nieuw: `PinInput` voor codes: doorschuiven, Backspace terug, plakken en sms-autofill
+  (`autocomplete="one-time-code"`), cijfers of letters, afgeschermd.
+- Teksten: nieuw `copy`, `copied`, `copyFailed`, `steps`, `stepOf`, `stepComplete`, `stepError`,
+  `pinChar` en `commandHints`.
+- `Steps`: een stap met `error` meldt dat ook aan schermlezers ("controleer deze stap"); het
+  uitroepteken alleen werd niet voorgelezen.
+- `PinInput`: autofill in een gevuld eerste vakje verschoof de code als hij met hetzelfde teken
+  begon, en typen vóór een bestaand teken overschreef het volgende vakje.
+- `Command`: een nieuwe render van de ouder (met een nieuwe maar gelijke `items`-array) zette
+  de gekozen regel niet meer terug naar de eerste.
+- Docs: een kapotte link (`#/componenten/%E0`) liet de site crashen.
+- Docs: een eigen pagina per component met breadcrumb, importregel, Voorbeeld/Code-tabs met
+  kopieerknop, varianten en toestanden, toegankelijkheid, API-tabellen, gerelateerde
+  componenten en vorige/volgende. Een zijbalk per categorie (ook als blad op mobiel), zoeken
+  met Ctrl/⌘ K of `/` over componenten, exports, props, gidsen en instellingen, een
+  homepage met een verkenner van live voorbeelden, en gidsen voor aan de slag en thema's met
+  een merkkleur-speeltuin die `checkTheme` live toont. Oude ankers (`#knoppen`) blijven werken.
+- Kwaliteit: `tests/docs.test.ts` houdt de site en de bibliotheek gelijk; de e2e-test draait
+  axe en de scrollcheck op elke pagina, test navigatie, zoeken, het mobiele menu en de
+  kopieerknop.
+
 ## 0.6.0 (nog niet uitgebracht)
 
 Achttien nieuwe componenten en uitbreidingen na een vergelijking met shadcn/ui, Radix, Mantine,

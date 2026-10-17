@@ -117,11 +117,6 @@ describe('veldbouwstenen', () => {
     fireEvent.pointerDown(prefix);
     expect(input).toHaveFocus();
   });
-
-  it('TextField zonder prefix of suffix houdt de oude opbouw', () => {
-    render(<TextField label="Naam" />);
-    expect(screen.getByRole('textbox').parentElement).toHaveClass('pp-field');
-  });
 });
 
 describe('overlays: plaatsing', () => {

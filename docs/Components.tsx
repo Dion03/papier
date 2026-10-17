@@ -7,6 +7,7 @@ import {
 } from '@dionbm/papier';
 import { Example } from './Example';
 import { ExtendedExamples } from './Extended';
+import { AdditionExamples } from './Additions';
 
 const time = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
@@ -293,13 +294,10 @@ function NavigationDemo() {
   );
 }
 
+/** Every component page, declared once; each renders only on its own route (see ActiveExample). */
 export function Components() {
   return (
-    <section id="componenten" className="doc-section" aria-labelledby="componenten-title">
-      <div className="doc-section__head">
-        <Text variant="headline" as="h2" id="componenten-title">Onderdelen die je kunt aanraken.</Text>
-        <Text variant="body-lg" tone="muted">Elk onderdeel is gebouwd op een native element waar dat kan. Papier voegt materiaal en beweging toe, nooit een eigen versie van wat de browser al goed doet.</Text>
-      </div>
+    <>
 
       <Example id="knoppen" api={['Button', 'IconButton']} name="Button en IconButton" intro="De salie-groene actie uit de cases, de inktknop en rustige secundaire varianten. Tijdens laden blijft de knop focusbaar."
         code={`<Button loading={saving} iconEnd={<icons.ArrowRight />}>Opslaan</Button>
@@ -543,6 +541,7 @@ toast({ title: 'Plaat toegevoegd', description: 'Staat nu in je collectie.' });`
       </Example>
 
       <ExtendedExamples />
-    </section>
+      <AdditionExamples />
+    </>
   );
 }
