@@ -22,6 +22,9 @@ export interface ComboboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
   /** The chosen option's value, or null for none. */
   value?: string | null;
   defaultValue?: string | null;
+  /** Called with the chosen value and its option, or null and null when cleared. */
+  onValueChange?: (value: string | null, option: ComboboxOption | null) => void;
+  /** @deprecated Use `onValueChange`, the name every other Papier input uses. Removed in 1.0. */
   onChange?: (value: string | null, option: ComboboxOption | null) => void;
   /** The typed text, for searching on a server. Use with `filter={false}`. */
   inputValue?: string;
@@ -50,7 +53,7 @@ export const defaultComboboxFilter = (option: ComboboxOption, query: string) => 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(
   {
     label, hint, error, hideLabel, required, disabled, id, name, placeholder, className, options,
-    value: valueProp, defaultValue = null, onChange, inputValue, onInputChange, filter, loading, emptyText,
+    value: valueProp, defaultValue = null, onValueChange, onChange, inputValue, onInputChange, filter, loading, emptyText,
     onBlur, onKeyDown, 'aria-describedby': describedBy, ...rest
   }, ref,
 ) {
@@ -58,7 +61,11 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const listId = `${useId()}-list`;
   const optionId = (i: number) => `${listId}-${i}`;
 
-  const [value, setValue] = useControllable<string | null>(valueProp, defaultValue, (v) => onChange?.(v, options.find((o) => o.value === v) ?? null));
+  const [value, setValue] = useControllable<string | null>(valueProp, defaultValue, (v) => {
+    const option = options.find((o) => o.value === v) ?? null;
+    onValueChange?.(v, option);
+    onChange?.(v, option);
+  });
   const selected = options.find((o) => o.value === value) ?? null;
   const [text, setText] = useControllable(inputValue, selected?.label ?? '', onInputChange);
   const [open, setOpen] = useState(false);

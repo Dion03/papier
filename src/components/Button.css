@@ -42,6 +42,7 @@
   transition: background-color var(--papier-dur-color) var(--papier-ease-arrive), color var(--papier-dur-color) var(--papier-ease-arrive),
               border-color var(--papier-dur-color) var(--papier-ease-arrive), transform var(--papier-dur-press) var(--papier-ease-arrive);
 }
+.pp-icon-button[data-size="sm"] { width: var(--papier-control-sm); height: var(--papier-control-sm); }
 .pp-icon-button[data-size="lg"] { width: 48px; height: 48px; }
 .pp-icon-button:hover { background: var(--papier-color-surface-sunken); }
 .pp-icon-button:active { transform: scale(0.94); }

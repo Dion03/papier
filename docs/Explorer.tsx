@@ -16,10 +16,10 @@ export function PageCard({ page, headingLevel = 3 }: { page: DocPage; headingLev
     <li className="doc-card">
       <div className="doc-card__preview" inert aria-hidden="true">{page.preview()}</div>
       <div className="doc-card__body">
-        <H className="doc-card__title"><a href={href('componenten', page.slug)} className="doc-card__link">{page.title}</a></H>
+        <H className="doc-card__title"><a href={href('components', page.slug)} className="doc-card__link">{page.title}</a></H>
         <p className="doc-card__summary">{page.summary}</p>
         <div className="doc-card__tags">
-          {page.added === currentRelease && <Tag tone="accent">Nieuw</Tag>}
+          {page.added === currentRelease && <Tag tone="accent">New</Tag>}
           {page.server && <Tag tone="sage">Server</Tag>}
           <span className="doc-card__exports">{page.exports.filter((e) => /^[A-Z]/.test(e)).slice(0, 3).join(' · ')}</span>
         </div>
@@ -39,14 +39,14 @@ export function Explorer({ only, headingLevel = 2, autoFocus }: { only?: string;
   return (
     <div className="doc-explorer">
       <div className="doc-explorer__bar">
-        <TextField label="Filter de componenten" hideLabel type="search" placeholder="Filter op naam, functie of export, bijvoorbeeld ‘datum’" prefix={<icons.Search />}
+        <TextField label="Filter the components" hideLabel type="search" placeholder="Filter by name, purpose or export, for example ‘date’" prefix={<icons.Search />}
           value={query} onChange={(e) => setQuery(e.target.value)} autoFocus={autoFocus} />
-        <Text variant="small" tone="muted" role="status" className="doc-explorer__count">{shown.length} {shown.length === 1 ? 'pagina' : "pagina's"}</Text>
+        <Text variant="small" tone="muted" role="status" className="doc-explorer__count">{shown.length} {shown.length === 1 ? 'page' : 'pages'}</Text>
       </div>
       {shown.length === 0 && (
-        <EmptyState title="Niets gevonden" headingLevel={headingLevel} icon={<icons.Search />}
-          description={`Geen component past bij "${query}". Zoek op wat het doet, zoals ‘upload’, ‘datum’ of ‘melding’.`}
-          action={<Button variant="secondary" size="sm" onClick={() => setQuery('')}>Filter wissen</Button>} />
+        <EmptyState title="Nothing found" headingLevel={headingLevel} icon={<icons.Search />}
+          description={`No component matches "${query}". Search for what it does, such as ‘upload’, ‘date’ or ‘notification’.`}
+          action={<Button variant="secondary" size="sm" onClick={() => setQuery('')}>Clear filter</Button>} />
       )}
       {categories.filter((c) => !only || c.id === only).map((c) => {
         const inCategory = shown.filter((p) => p.category === c.id);
@@ -55,7 +55,7 @@ export function Explorer({ only, headingLevel = 2, autoFocus }: { only?: string;
           <section key={c.id} className="doc-explorer__group" aria-labelledby={`cat-${c.id}`}>
             <div className="doc-explorer__head">
               <span className="doc-explorer__icon" aria-hidden="true">{c.icon}</span>
-              <H id={`cat-${c.id}`} className="doc-explorer__title">{only ? c.title : <a href={href('categorie', c.id)}>{c.title}</a>}</H>
+              <H id={`cat-${c.id}`} className="doc-explorer__title">{only ? c.title : <a href={href('category', c.id)}>{c.title}</a>}</H>
               <Text variant="small" tone="muted" as="p" className="doc-explorer__blurb">{c.blurb}</Text>
             </div>
             <ul className="doc-cards">{inCategory.map((p) => <PageCard key={p.slug} page={p} headingLevel={headingLevel === 2 ? 3 : 4} />)}</ul>

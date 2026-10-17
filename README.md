@@ -1,10 +1,10 @@
 # Papier
 
-Mijn design system: warm papier, inkt, vermiljoen en salie uit
-[portfolio.dionbm.nl](https://portfolio.dionbm.nl) als toegankelijke React-componenten,
-met tokens voor web en Android.
+My design system: warm paper, ink, vermilion and sage from
+[portfolio.dionbm.nl](https://portfolio.dionbm.nl) as accessible React components,
+with tokens for web and Android.
 
-Documentatie en voorbeelden: [papier.dionbm.nl](https://papier.dionbm.nl).
+Documentation and examples: [papier.dionbm.nl](https://papier.dionbm.nl).
 
 ```bash
 npm install @dionbm/papier
@@ -19,350 +19,357 @@ export function App() {
   return (
     <Papier theme="system">
       <ToastProvider>
-        <Button>Opslaan</Button>
+        <Button>Save</Button>
       </ToastProvider>
     </Papier>
   );
 }
 ```
 
-Werkt in Vite en in Next.js (App Router), met React 18 of 19. Alles rendert op de server.
+Works in Vite and in Next.js (App Router), with React 18 or 19. Everything renders on the server.
 
-## Componenten (56)
+## Components (56)
 
-| Groep | Componenten |
+| Group | Components |
 |---|---|
-| Basis | Papier, Text, VisuallyHidden, Stack, Container, Separator, Kbd |
-| Acties | Button, IconButton, CopyButton, Link, Menu, Toggle, ToggleGroup |
-| Formulieren | TextField, TextArea, PasswordField, NumberField, PinInput, FileField, DatePicker, DateRangePicker, Calendar, RangeCalendar, Select, Combobox, MultiCombobox, Checkbox, CheckboxGroup, RadioGroup, Switch, Slider, RangeSlider, SegmentedControl |
-| Veldbouwstenen | Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl |
-| Navigatie | Breadcrumb (BreadcrumbItem), Pagination, Steps |
-| Structuur | Tabs (TabList, Tab, TabPanel), Disclosure, Accordion, Table, SortHeader en useTableSort |
-| Overlays | Dialog, AlertDialog, Sheet, Popover, Tooltip, Command en CommandDialog |
-| Feedback | Notice, ToastProvider en useToast, Progress, Spinner, Skeleton, EmptyState |
-| Materiaal | Surface, Tag, Avatar |
+| Basics | Papier, Text, VisuallyHidden, Stack, Container, Separator, Kbd |
+| Actions | Button, IconButton, CopyButton, Link, Menu, Toggle, ToggleGroup |
+| Forms | TextField, TextArea, PasswordField, NumberField, PinInput, FileField, DatePicker, DateRangePicker, Calendar, RangeCalendar, Select, Combobox, MultiCombobox, Checkbox, CheckboxGroup, RadioGroup, Switch, Slider, RangeSlider, SegmentedControl |
+| Field building blocks | Field, FieldLabel, FieldHint, FieldError, useField, useFieldControl |
+| Navigation | Breadcrumb (BreadcrumbItem), Pagination, Steps |
+| Structure | Tabs (TabList, Tab, TabPanel), Disclosure, Accordion, Table, SortHeader and useTableSort |
+| Overlays | Dialog, AlertDialog, Sheet, Popover, Tooltip, Command and CommandDialog |
+| Feedback | Notice, ToastProvider and useToast, Progress, Spinner, Skeleton, EmptyState |
+| Material | Surface, Tag, Avatar |
 
-Plus 30 lijniconen onder `icons`.
+Plus 30 line icons under `icons`.
 
-Elk component heeft een eigen pagina op [papier.dionbm.nl](https://papier.dionbm.nl) met een
-live voorbeeld, code, varianten, toegankelijkheid en de API uit de types. Zoek met
-<kbd>Ctrl</kbd> <kbd>K</kbd> (<kbd>⌘</kbd> <kbd>K</kbd> op een Mac) of <kbd>/</kbd>.
+Every component has its own page on [papier.dionbm.nl](https://papier.dionbm.nl) with a
+live example, code, variants, accessibility and the API from the types. Search with
+<kbd>Ctrl</kbd> <kbd>K</kbd> (<kbd>⌘</kbd> <kbd>K</kbd> on a Mac) or <kbd>/</kbd>.
 
-Hoe Papier zich verhoudt tot shadcn/ui, Radix, Mantine, Chakra en HeroUI, en wat nog op de
-lijst staat: [docs/gap-analysis.md](docs/gap-analysis.md).
+How Papier compares to shadcn/ui, Radix, Mantine, Chakra and HeroUI, and what is still on the
+list: [docs/gap-analysis.md](docs/gap-analysis.md).
 
-## In je eigen app
+## In your own app
 
-### Router-links: `asChild`
+### Router links: `asChild`
 
-Button, IconButton en Link renderen met `asChild` hun enige kind in plaats van een eigen
-element. Zo krijgt de Link van Next.js of React Router de Papier-vorm, en blijft het een
-echte link:
+With `asChild`, Button, IconButton and Link render their only child instead of their own
+element. That gives the Link from Next.js or React Router the Papier look, and it stays a
+real link:
 
 ```tsx
 import NextLink from 'next/link';
 
 <Button asChild variant="ink" iconEnd={<icons.ArrowRight />}>
-  <NextLink href="/werk">Bekijk het werk</NextLink>
+  <NextLink href="/work">See the work</NextLink>
 </Button>
-<Link asChild variant="arrow"><NextLink href="/over">Over mij</NextLink></Link>
+<Link asChild variant="arrow"><NextLink href="/about">About me</NextLink></Link>
 <IconButton asChild label="Home" icon={<icons.ArrowLeft />}><NextLink href="/" /></IconButton>
 ```
 
-Papier zet klasse, data-attributen, ARIA en `ref` op het kind; `className`, `style` en
-handlers van het kind blijven behouden. De tekst van het kind wordt het label. Een
-`loading` of `disabled` Button met `asChild` krijgt `aria-disabled` en blokkeert de klik,
-ook de navigatie van de routerlink.
+Papier puts the class, data attributes, ARIA and `ref` on the child; the child's `className`,
+`style` and handlers are kept. The child's text becomes the label. A `loading` or `disabled`
+Button with `asChild` gets `aria-disabled` and blocks the click, including the router
+link's navigation.
 
-### Velden: `Field`, `useField` en prefix/suffix
+### Fields: `Field`, `useField` and prefix/suffix
 
-TextField, TextArea en Select zijn gebouwd op `Field`. Gebruik dezelfde bouwsteen voor een
-eigen of externe input, dan krijgt die dezelfde opmaak en koppelingen (label, fout en hint
+TextField, TextArea and Select are built on `Field`. Use the same building block for your
+own or a third-party input, and it gets the same styling and wiring (label, error and hint
 via `aria-describedby`, `aria-invalid`):
 
 ```tsx
-<Field label="Toerental" hint="33, 45 of 78" error={error}>
-  {(control) => <MijnInput {...control} />}
+<Field label="Speed" hint="33, 45 or 78" error={error}>
+  {(control) => <MyInput {...control} />}
 </Field>
 ```
 
-Kinderen kunnen de props ook zelf ophalen met `useFieldControl()`. Wil je de opbouw helemaal
-zelf bepalen, gebruik dan `useField` met `FieldLabel`, `FieldHint` en `FieldError`:
+Children can also fetch the props themselves with `useFieldControl()`. To control the
+structure entirely yourself, use `useField` with `FieldLabel`, `FieldHint` and `FieldError`:
 
 ```tsx
 const f = useField({ hint, error });
-<FieldLabel {...f.labelProps}>Artiest</FieldLabel>
-<MijnCombobox {...f.controlProps} aria-labelledby={f.ids.label} />
+<FieldLabel {...f.labelProps}>Artist</FieldLabel>
+<MyCombobox {...f.controlProps} aria-labelledby={f.ids.label} />
 <FieldError {...f.errorProps}>{error}</FieldError>
 <FieldHint {...f.hintProps}>{hint}</FieldHint>
 ```
 
-TextField heeft `prefix` en `suffix` voor een icoon of eenheid:
+TextField has `prefix` and `suffix` for an icon or unit:
 
 ```tsx
-<TextField label="Prijs in euro" prefix="€" />
-<TextField label="Zoeken" hideLabel prefix={<icons.Search />} />
+<TextField label="Price in euros" prefix="€" />
+<TextField label="Search" hideLabel prefix={<icons.Search />} />
 ```
 
-Prefix en suffix zijn decoratief (`aria-hidden`), net als bij GOV.UK. Zet de eenheid daarom
-ook in het label of de hint.
+Prefix and suffix are decorative (`aria-hidden`), as in GOV.UK. So put the unit in the
+label or hint as well.
 
-### Popover en menu's met keuzes
+### Popover and menus with choices
 
-Popover is een niet-modaal paneel naast een knop, voor filters, een kort formulier of uitleg.
-De focus gaat erin bij openen en terug naar de knop bij Escape:
+Popover is a non-modal panel next to a button, for filters, a short form or an explanation.
+Focus moves into it on open and back to the button on Escape:
 
 ```tsx
-<Popover title="Filter de bak" trigger={<Button variant="secondary">Filters</Button>}>
-  {({ close }) => <Button onClick={() => { apply(); close(); }}>Toepassen</Button>}
+<Popover title="Filter the crate" trigger={<Button variant="secondary">Filters</Button>}>
+  {({ close }) => <Button onClick={() => { apply(); close(); }}>Apply</Button>}
 </Popover>
 ```
 
-Menu kent naast acties ook kopjes, scheidingslijnen, keuzes, links en sneltoetsen. Oude
-`items` werken ongewijzigd:
+Besides actions, Menu supports headings, separators, choices, links and shortcuts. Existing
+`items` work unchanged:
 
 ```tsx
-<Menu trigger="Weergave" items={[
-  { type: 'label', label: 'Sorteren op' },
-  { type: 'radio', label: 'Artiest', checked: sort === 'artiest', onSelect: () => setSort('artiest') },
+<Menu trigger="View" items={[
+  { type: 'label', label: 'Sort by' },
+  { type: 'radio', label: 'Artist', checked: sort === 'artist', onSelect: () => setSort('artist') },
   { type: 'separator' },
-  { type: 'checkbox', label: 'Hoezen', checked: covers, keepOpen: true, onSelect: toggleCovers },
-  { label: 'Bekijk op Discogs', href: 'https://www.discogs.com', target: '_blank' },
+  { type: 'checkbox', label: 'Sleeves', checked: covers, keepOpen: true, onSelect: toggleCovers },
+  { label: 'View on Discogs', href: 'https://www.discogs.com', target: '_blank' },
 ]} />
 ```
 
-### Getallen, wachtwoorden en bestanden
+### Numbers, passwords and files
 
 ```tsx
-<NumberField label="Prijs" formatOptions={{ style: 'currency', currency: 'EUR' }} min={0} step={0.5} />
-<PasswordField label="Wachtwoord" autoComplete="current-password" />
-<TextArea label="Notities" autoResize maxRows={8} />
-<FileField label="Hoezen" accept="image/*" multiple maxFiles={4} maxSize={5_000_000} />
+<NumberField label="Price" formatOptions={{ style: 'currency', currency: 'EUR' }} min={0} step={0.5} />
+<PasswordField label="Password" autoComplete="current-password" />
+<TextArea label="Notes" autoResize maxRows={8} />
+<FileField label="Sleeves" accept="image/*" multiple maxFiles={4} maxSize={5_000_000} />
 ```
 
-NumberField leest en schrijft getallen in de taal van de app (`24,95` in het Nederlands). Die
-komt uit `labels.locale` (`nl-NL` in `dutchLabels`, `en-US` in `englishLabels`), of geef
-`locale` mee. FileField schrijft gesleepte en verwijderde bestanden terug naar de echte
-`<input type="file">`, dus een gewoon formulier stuurt wat je ziet.
+NumberField reads and writes numbers in the app's language (`24,95` in Dutch). That comes
+from `labels.locale` (`nl-NL` in `dutchLabels`, `en-US` in `englishLabels`), or pass
+`locale`. FileField writes dropped and removed files back to the real
+`<input type="file">`, so a plain form submits what you see.
 
-### Datums, meerdere keuzes en bereiken
+### Dates, multiple choices and ranges
 
 ```tsx
-<DatePicker label="Bezorgdatum" value={date} onValueChange={setDate} min="2026-10-20" isDateUnavailable={isWeekend} />
+<DatePicker label="Delivery date" value={date} onValueChange={setDate} min="2026-10-20" isDateUnavailable={isWeekend} />
 <Calendar value={date} onValueChange={setDate} />
-<DateRangePicker label="Verblijf" value={stay} onValueChange={setStay} startName="aankomst" endName="vertrek" />
-<MultiCombobox label="Genres" options={genres} value={chosen} onChange={setChosen} max={5} />
-<RangeSlider label="Jaar" min={1950} max={2025} value={years} onValueChange={setYears} marks={[1960, 1980, 2000]} />
+<DateRangePicker label="Stay" value={stay} onValueChange={setStay} startName="arrival" endName="departure" />
+<MultiCombobox label="Genres" options={genres} value={chosen} onValueChange={setChosen} max={5} />
+<RangeSlider label="Year" min={1950} max={2025} value={years} onValueChange={setYears} marks={[1960, 1980, 2000]} />
 ```
 
-Datums zijn tekst in de vorm `"2024-03-15"`, net als bij `<input type="date">`; er schuift dus
-geen dag door een tijdzone. DatePicker leest getypte datums in de volgorde van `locale`
-(`15-3-2024` in het Nederlands, `3/15/2024` in het Amerikaans) en de kalender begint de week
-op de eerste dag van die taal.
+Dates are strings in the form `"2024-03-15"`, just like `<input type="date">`, so no day
+shifts because of a time zone. DatePicker reads typed dates in the order of `locale`
+(`15-3-2024` in Dutch, `3/15/2024` in American English) and the calendar starts the week
+on the first day for that language.
 
-### Sorteerbare tabellen
+### Sortable tables
 
 ```tsx
-const sort = useTableSort<'titel' | 'jaar'>();
+const sort = useTableSort<'title' | 'year'>();
 <thead><tr>
-  <SortHeader {...sort.headerProps('titel')}>Titel</SortHeader>
-  <SortHeader {...sort.headerProps('jaar')} align="end">Jaar</SortHeader>
+  <SortHeader {...sort.headerProps('title')}>Title</SortHeader>
+  <SortHeader {...sort.headerProps('year')} align="end">Year</SortHeader>
 </tr></thead>
 <tbody>{sort.sortRows(rows, (row, key) => row[key]).map(renderRow)}</tbody>
 ```
 
-### Toasts die meelopen met werk
+### Toasts that follow along with work
 
 ```tsx
 const { promise } = useToast();
 promise(save(), {
-  loading: { title: 'Opslaan…' },
-  success: { title: 'Opgeslagen' },
-  error: (e) => ({ title: 'Opslaan mislukt', description: String(e) }),
+  loading: { title: 'Saving…' },
+  success: { title: 'Saved' },
+  error: (e) => ({ title: 'Saving failed', description: String(e) }),
 });
 ```
 
-`update(id, opties)` past een bestaande toast aan; zijn tijd begint dan opnieuw.
+`update(id, options)` changes an existing toast; its timer then starts again.
 
-### Overlays in de top layer
+### Overlays in the top layer
 
-Menu en Tooltip openen met de Popover API in de top layer. Ze vallen niet weg in een
-Table, Surface of andere container met `overflow: hidden`, en ze klappen om aan de rand van
-het scherm. De plaatsing kies je met `side` en `align` (Menu) of `placement` (Tooltip):
-`top`, `bottom`, `left` of `right`. Browsers zonder Popover API krijgen een vast paneel met
-een `z-index`. Het paneel blijft in de DOM bij zijn knop, dus de tabvolgorde en de
-`.papier`-variabelen blijven kloppen.
+Menu and Tooltip open in the top layer using the Popover API. They don't get clipped in a
+Table, Surface or other container with `overflow: hidden`, and they flip at the edge of
+the screen. You choose the placement with `side` and `align` (Menu) or `placement` (Tooltip):
+`top`, `bottom`, `left` or `right`. Browsers without the Popover API get a fixed panel with
+a `z-index`. The panel stays in the DOM next to its button, so the tab order and the
+`.papier` variables stay correct.
 
 ### Cascade: `@layer papier`
 
-Alle CSS van Papier, ook de tokens, staat in `@layer papier`. Stijlen buiten een laag
-winnen daardoor altijd, ongeacht specificiteit:
+All of Papier's CSS, including the tokens, lives in `@layer papier`. Styles outside a layer
+therefore always win, regardless of specificity:
 
 ```css
-.pp-button { border-radius: 8px; }           /* wint van Papier */
-:root { --papier-color-accent: #d6452a; }     /* overschrijft een token */
+.pp-button { border-radius: 8px; }           /* beats Papier */
+:root { --papier-color-accent: #d6452a; }     /* overrides a token */
 ```
 
-- Een eigen reset (`button { color: inherit }`) wint nu ook. Zet die in een laag vóór
-  Papier: `@layer reset, papier;` bovenaan je CSS.
-- Tailwind 4 gebruikt zelf lagen. Zet bovenaan je CSS
-  `@layer theme, base, papier, components, utilities;`, dan winnen utilities van Papier en
-  Papier van de Tailwind-basis.
-- Tailwind 3 schrijft alles zonder laag, ook de preflight-reset. Utilities winnen dus
-  vanzelf, maar de reset (`button { background-color: transparent }`) wint ook van Papier.
-  Laad de preflight in een laag (`@import 'tailwindcss/base' layer(reset);` met
-  postcss-import) of zet `corePlugins.preflight` uit.
+- Your own reset (`button { color: inherit }`) now wins too. Put it in a layer before
+  Papier: `@layer reset, papier;` at the top of your CSS.
+- Tailwind 4 uses layers itself. Put
+  `@layer theme, base, papier, components, utilities;` at the top of your CSS, so utilities
+  beat Papier and Papier beats the Tailwind base.
+- Tailwind 3 writes everything without a layer, including the preflight reset. Utilities
+  therefore win on their own, but the reset (`button { background-color: transparent }`)
+  beats Papier too. Load preflight in a layer (`@import 'tailwindcss/base' layer(reset);` with
+  postcss-import) or turn off `corePlugins.preflight`.
 
-### Next.js en server components
+### Next.js and server components
 
-De build heeft één bestand per module. Alleen modules met hooks, context of events
-beginnen met `'use client'`; Text, VisuallyHidden, Stack, Container, Surface, Tag, Table,
-Skeleton, Separator, Kbd, EmptyState, de iconen en de themafuncties blijven server components en voegen geen
-JavaScript aan je pagina toe. Welke modules dat zijn staat in
-`scripts/server-modules.mjs`; een test controleert dat ze geen client-code bevatten, en
-`scripts/check-build.mjs` dat de build het goed doet.
+The build has one file per module. Only modules with hooks, context or events
+start with `'use client'`; Text, VisuallyHidden, Stack, Container, Surface, Tag, Table,
+Skeleton, Separator, Kbd, EmptyState, the icons and the theme functions stay server components and add no
+JavaScript to your page. Which modules those are is listed in
+`scripts/server-modules.mjs`; a test checks that they contain no client code, and
+`scripts/check-build.mjs` that the build is correct.
 
-### Eigen thema
+### Custom theme
 
-Componenten gebruiken alleen kleurrollen (`--papier-color-*`). Een merk is dus een
-andere waarde voor een paar rollen:
+Components only use colour roles (`--papier-color-*`). A brand is therefore a
+different value for a few roles:
 
 ```tsx
 import { Papier, themeStyle, checkTheme } from '@dionbm/papier';
 
-const merk = { action: '#1f4e8c', 'action-hover': '#183d6e', 'on-action': '#ffffff' };
+const brand = { action: '#1f4e8c', 'action-hover': '#183d6e', 'on-action': '#ffffff' };
 
-<Papier theme="light" style={themeStyle(merk)}>…</Papier>
+<Papier theme="light" style={themeStyle(brand)}>…</Papier>
 ```
 
-`checkTheme(merk, 'light')` legt de kleuren langs dezelfde 26 contrastparen als de build
-en geeft per paar de verhouding terug. Zet het in een test, dan kan geen merkkleur tekst
-onleesbaar maken:
+`checkTheme(brand, 'light')` checks the colours against the same 26 contrast pairs as the build
+and returns the ratio per pair. Put it in a test, and no brand colour can make text
+unreadable:
 
 ```ts
-expect(checkTheme(merk).filter((r) => !r.ok)).toEqual([]);
+expect(checkTheme(brand).filter((r) => !r.ok)).toEqual([]);
 ```
 
-Alle rollen staan in `colorRoles`, de ingebouwde waarden in `themeColors('light')` en
-`themeColors('dark')`. Voor licht én donker zet je de variabelen in je eigen CSS:
+All roles are in `colorRoles`, the built-in values in `themeColors('light')` and
+`themeColors('dark')`. For both light and dark, set the variables in your own CSS:
 
 ```css
 [data-papier-theme="light"] { --papier-color-action: #1f4e8c; }
 [data-papier-theme="dark"] { --papier-color-action: #9cc0ff; }
 ```
 
-### Van rechts naar links
+### Right to left
 
-Zet `dir="rtl"` op `<html>` (of op `<Papier>`). Papier gebruikt logische CSS
-(`inset-inline-start`, `text-align: start`), dus uitlijning, tabellen, toasts en velden
-draaien mee. Menu's lijnen `align="start"` uit op de rechterkant van de knop, en pijlen
-in Link, Breadcrumb en Pagination spiegelen. Geef je eigen richtingsiconen
-`className="pp-flip-rtl"`, bijvoorbeeld in `iconEnd` van een Button. Zet de richting
-vóór het renderen: wie `dir` later wisselt, moet de pagina opnieuw renderen.
+Set `dir="rtl"` on `<html>` (or on `<Papier>`). Papier uses logical CSS
+(`inset-inline-start`, `text-align: start`), so alignment, tables, toasts and fields
+follow along. Menus with `align="start"` align to the right side of the button, and arrows
+in Link, Breadcrumb and Pagination are mirrored. Give your own directional icons
+`className="pp-flip-rtl"`, for example in a Button's `iconEnd`. Set the direction
+before rendering: if you change `dir` later, you have to re-render the page.
 
 ### Refs
 
-Elk component met een eigen element geeft `ref` door: Dialog en Sheet naar het
-`<dialog>`, Menu naar de triggerknop, Popover naar het paneel, NumberField, PasswordField
-en FileField naar de input, Tabs, TabList, Tab en TabPanel, RadioGroup naar de
-fieldset, SegmentedControl, Avatar, Skeleton, Field en alle invoervelden. Tooltip heeft
-geen eigen element; de ref van zijn kind blijft gewoon werken.
+Every component with its own element forwards `ref`: Dialog and Sheet to the
+`<dialog>`, Menu to the trigger button, Popover to the panel, NumberField, PasswordField
+and FileField to the input, Tabs, TabList, Tab and TabPanel, RadioGroup to the
+fieldset, SegmentedControl, Avatar, Skeleton, Field and all input fields. Tooltip has
+no element of its own; its child's ref keeps working as usual.
 
-## De documentatiesite
+## The documentation site
 
-`docs/` is een Vite-app met hash-routes (`#/componenten/button`), zodat de statische build
-zonder extra instellingen op GitHub Pages werkt. Er zit geen router- of docs-framework in;
-alles op de site is Papier zelf.
+`docs/` is a Vite app with hash routes (`#/components/button`), so the static build
+works on GitHub Pages without extra configuration. There is no router or docs framework in it;
+everything on the site is Papier itself.
 
-- `docs/registry.tsx` is de kaart van de site: per pagina de categorie, titel, samenvatting,
-  exports, trefwoorden, gerelateerde pagina's en een klein live voorbeeld voor de verkenner.
-- `docs/Components.tsx`, `docs/Extended.tsx` en `docs/Additions.tsx` bevatten de voorbeelden
-  (`<Example id="…">`); elk voorbeeld rendert alleen op zijn eigen pagina.
-- `docs/variants.tsx` voegt varianten, maten en toestanden toe per pagina.
-- De API-tabellen komen uit de types (`docs/props.json`, `node scripts/build-props.mjs`).
+- `docs/registry.tsx` is the map of the site: per page the category, title, summary,
+  exports, keywords, related pages and a small live example for the explorer.
+- `docs/Components.tsx`, `docs/Extended.tsx` and `docs/Additions.tsx` contain the examples
+  (`<Example id="…">`); each example renders only on its own page.
+- `docs/variants.tsx` adds variants, sizes and states per page.
+- The API tables come from the types (`docs/props.json`, `node scripts/build-props.mjs`).
 
-Een nieuw component documenteren: schrijf een `<Example id="…">`, voeg een pagina toe aan
-`docs/registry.tsx` en draai `npm run check`. `tests/docs.test.ts` faalt als een voorbeeld
-geen pagina heeft (of omgekeerd), als een pagina een export noemt die niet bestaat, als een
-gerelateerde link nergens heen gaat of als een geëxporteerd component nergens staat. De
-e2e-test draait axe en de horizontale-scrollcheck op elke pagina, in licht en donker.
+Documenting a new component: write an `<Example id="…">`, add a page to
+`docs/registry.tsx` and run `npm run check`. `tests/docs.test.ts` fails if an example
+has no page (or vice versa), if a page names an export that doesn't exist, if a
+related link goes nowhere or if an exported component isn't listed anywhere. The
+e2e test runs axe and the horizontal-scroll check on every page, in light and dark.
 
 ```bash
-npm run dev        # docs op http://127.0.0.1:4330
+npm run dev        # docs at http://127.0.0.1:4330
 ```
 
 ## Tokens
 
-`src/tokens/tokens.mjs` is de enige bron. De build maakt:
+`src/tokens/tokens.mjs` is the single source. The build produces:
 
-- `tokens.css`: CSS-variabelen (`--papier-*`), thema's `light`, `dark` en `system`;
-- `tokens.json`: alle waarden voor andere tools;
-- `tokens.dtcg.json`: dezelfde waarden in het W3C-formaat voor design tokens (DTCG), voor
-  Tokens Studio, Figma-plugins en Style Dictionary. Themakleuren verwijzen naar het palet
-  (`{primitive.paper}`), zodat een ontwerptool laat zien waar elke rol vandaan komt;
-- `android/PapierTokens.kt`: dezelfde kleuren, ruimte, vorm, type en beweging voor Jetpack Compose.
+- `tokens.css`: CSS variables (`--papier-*`), themes `light`, `dark` and `system`;
+- `tokens.json`: all values for other tools;
+- `tokens.dtcg.json`: the same values in the W3C design tokens format (DTCG), for
+  Tokens Studio, Figma plugins and Style Dictionary. Theme colours refer to the palette
+  (`{primitive.paper}`), so a design tool shows where each role comes from;
+- `android/PapierTokens.kt`: the same colours, spacing, shape, type and motion for Jetpack Compose.
 
-## Teksten
+## Labels
 
-Ingebouwde teksten (Sluiten, opent in een nieuw tabblad, Meldingen, ...) zijn standaard
-Nederlands en per app aan te passen:
+Built-in text (Close, opens in a new tab, Notifications, ...) is Dutch by default
+(`dutchLabels`) and can be changed per app; `englishLabels` is available too:
 
 ```tsx
 import { Papier, englishLabels } from '@dionbm/papier';
 <Papier labels={englishLabels}>…</Papier>
 ```
 
-Teksten met een getal of naam, zoals "Pagina 3 van 12", "4 resultaten" en "hoes.jpg
-verwijderen", zijn functies. `locale` bepaalt hoe NumberField, FileField, DatePicker, Calendar en
-`useTableSort` getallen en datums opmaken en tekst sorteren:
+Text with a number or name, such as "Page 3 of 12", "4 results" and "Remove
+sleeve.jpg", is a function. `locale` determines how NumberField, FileField, DatePicker, Calendar and
+`useTableSort` format numbers and dates and sort text:
 
 ```tsx
 <Papier labels={{ pageOf: (p, n) => `${p} / ${n}` }}>…</Papier>
 ```
 
-## Principes
+## Principles
 
-1. Native eerst: button, details, dialog, select en input blijven echte elementen.
-2. Diepte en materiaal alleen voor dingen die je bedient; prose blijft vlak.
-3. Componenten kennen rollen, geen kleuren. Een thema is een nieuwe set rollen.
-4. Elke overgang heeft een direct bereikbare eindtoestand; minder beweging zet alle
-   duren op 0 (`motion="reduced"` of de OS-instelling).
+1. Native first: button, details, dialog, select and input stay real elements.
+2. Depth and material only for things you operate; prose stays flat.
+3. Components know roles, not colours. A theme is a new set of roles.
+4. Every transition has a directly reachable end state; reduced motion sets all
+   durations to 0 (`motion="reduced"` or the OS setting).
 
-## Kwaliteit
+## Quality
 
 ```bash
-npm run check      # props-docs, typecheck, contrast, unit-, axe- en SSR-tests, build en buildcheck
-npm run test:e2e   # Playwright: axe, hoogcontrast, toetsenbord, visuele regressie
+npm run check      # props docs, typecheck, contrast, unit, axe and SSR tests, build and build check
+npm run test:e2e   # Playwright: axe, high contrast, keyboard, visual regression
 ```
 
-- `scripts/contrast.mjs` controleert 26 kleurparen per thema volgens WCAG 2.2.
-- Vitest: axe op elk component in licht en donker, gedragstests voor toetsenbord,
-  focus en ARIA, en een server-rendertest zonder `window`. CI draait ze ook op React 18.
-- `scripts/build-props.mjs` haalt de API-tabellen van de docs uit de TypeScript-types;
-  `npm run check` faalt als `docs/props.json` achterloopt.
-- Playwright: axe op de docs in licht, donker en hoogcontrast, toetsenbordroutes en
-  screenshotvergelijking per component, ook met `dir="rtl"`. CI draait Chromium, Firefox
-  en WebKit.
-- Lokaal met een eigen Chromium: `PAPIER_CHROMIUM=/pad/naar/chromium npm run test:e2e`.
+- `scripts/contrast.mjs` checks 26 colour pairs per theme against WCAG 2.2.
+- Vitest: axe on every component in light and dark, behaviour tests for keyboard,
+  focus and ARIA, and a server render test without `window`. CI also runs them on React 18.
+- `scripts/build-props.mjs` extracts the docs' API tables from the TypeScript types;
+  `npm run check` fails if `docs/props.json` is out of date.
+- Playwright: axe on the docs in light, dark and high contrast, keyboard routes and
+  screenshot comparison per component, also with `dir="rtl"`. CI runs Chromium, Firefox
+  and WebKit.
+- Locally with your own Chromium: `PAPIER_CHROMIUM=/path/to/chromium npm run test:e2e`.
 
-Met de hand, voor elke minor-release: de [schermlezertest](docs/schermlezertest.md) met
-NVDA en VoiceOver. Die heb ik nog niet gedaan.
+By hand, before every minor release: the [screen reader test](docs/screen-reader-test.md) with
+NVDA and VoiceOver. I haven't done it yet.
 
-## Releasen
+## Browser support
 
-1. Werk `CHANGELOG.md` bij.
-2. `npm run release:patch` of `npm run release:minor` (draait de check en maakt een versietag).
-3. `git push --follow-tags`: de workflow publiceert naar npm via Trusted Publishing (geen
-   token nodig) en maakt een GitHub-release met de changelog.
+Papier supports the last two major versions of Chrome, Edge, Firefox and Safari. The floor
+is Chrome and Edge 111, Firefox 121 and Safari 16.4, because Papier needs `@layer`, `:has()`
+and `color-mix()`. Menu and Tooltip use the Popover API, with a fixed panel as a fallback.
+Details: [papier.dionbm.nl/#/stability](https://papier.dionbm.nl/#/stability).
 
-Elke push naar `main` zet de docs opnieuw op [papier.dionbm.nl](https://papier.dionbm.nl)
+## Releasing
+
+1. Update `CHANGELOG.md`.
+2. `npm run release:patch` or `npm run release:minor` (runs the check and creates a version tag).
+3. `git push --follow-tags`: the workflow publishes to npm via Trusted Publishing (no
+   token needed) and creates a GitHub release with the changelog.
+
+Every push to `main` redeploys the docs to [papier.dionbm.nl](https://papier.dionbm.nl)
 (GitHub Pages, workflow `pages.yml`).
 
-## Afwijkingen van het portfolio
+## Deviations from the portfolio
 
-- `muted` is `#64635a` in plaats van `#6b6a61`, zodat toelichting ook op het verdiepte
-  vlak en zachte salie 4,5:1 haalt.
+- `muted` is `#64635a` instead of `#6b6a61`, so that secondary text also reaches 4.5:1 on the
+  sunken surface and soft sage.
 
-## Licentie
+## Licence
 
-MIT. Manrope en DM Sans vallen onder de SIL Open Font License en komen via Fontsource.
+MIT. Manrope and DM Sans are under the SIL Open Font License and come via Fontsource.

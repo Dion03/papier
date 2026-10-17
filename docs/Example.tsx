@@ -30,18 +30,18 @@ export function Demo({ id, label, code, children, stageClass }: { id: string; la
     <div className="doc-demo">
       <Tabs defaultValue="preview">
         <div className="doc-demo__bar">
-          <TabList label={`${label}: voorbeeld of code`}>
-            <Tab value="preview">Voorbeeld</Tab>
+          <TabList label={`${label}: example or code`}>
+            <Tab value="preview">Example</Tab>
             <Tab value="code">Code</Tab>
           </TabList>
           <CopyButton value={code} aria-describedby={`${id}-copy-what`} />
-          <span id={`${id}-copy-what`} hidden>Code van {label}</span>
+          <span id={`${id}-copy-what`} hidden>Code of {label}</span>
         </div>
         <TabPanel value="preview" className="doc-demo__panel" tabIndex={-1}>
           <div className={stageClass ?? 'doc-example__stage'}>{children}</div>
         </TabPanel>
         <TabPanel value="code" className="doc-demo__panel">
-          <pre className="doc-code" tabIndex={0} aria-label={`Code van ${label}`}><code>{code}</code></pre>
+          <pre className="doc-code" tabIndex={0} aria-label={`Code of ${label}`}><code>{code}</code></pre>
         </TabPanel>
       </Tabs>
     </div>
@@ -63,17 +63,17 @@ function PageHead({ page, name, intro }: { page: DocPage; name: string; intro: R
   const props = page.exports.filter((e) => reference[e]).reduce((n, e) => n + reference[e].length, 0);
   return (
     <header className="doc-page__head">
-      <Breadcrumb label="Je bent hier">
-        <BreadcrumbItem href={href('componenten')}>Componenten</BreadcrumbItem>
-        <BreadcrumbItem href={href('categorie', category.id)}>{category.title}</BreadcrumbItem>
+      <Breadcrumb label="You are here">
+        <BreadcrumbItem href={href('components')}>Components</BreadcrumbItem>
+        <BreadcrumbItem href={href('category', category.id)}>{category.title}</BreadcrumbItem>
         <BreadcrumbItem>{page.title}</BreadcrumbItem>
       </Breadcrumb>
       <Text variant="headline" as="h1" id="page-title" tabIndex={-1} className="doc-page__title">{name}</Text>
       <Text variant="body-lg" tone="muted" className="doc-page__lead">{intro}</Text>
       <div className="doc-page__meta">
         {page.server ? <Tag tone="sage">Server component</Tag> : <Tag tone="outline">Client component</Tag>}
-        {page.added && <Tag tone="accent">Nieuw in {page.added}</Tag>}
-        {props > 0 && <Tag tone="outline">{props} props uit de types</Tag>}
+        {page.added && <Tag tone="accent">New in {page.added}</Tag>}
+        {props > 0 && <Tag tone="outline">{props} props from the types</Tag>}
       </div>
       <ImportLine names={page.exports} />
     </header>
@@ -84,7 +84,7 @@ function Section({ id, title, children, intro, base }: { id: string; title: stri
   return (
     <section id={id} className="doc-page__section" aria-labelledby={`${id}-title`}>
       <Text variant="title" as="h2" id={`${id}-title`} className="doc-page__h2">
-        <a href={href('componenten', base, id)} className="doc-anchor" aria-hidden="true" tabIndex={-1}>#</a>
+        <a href={href('components', base, id)} className="doc-anchor" aria-hidden="true" tabIndex={-1}>#</a>
         {title}
       </Text>
       {intro && <Text tone="muted" className="doc-page__intro">{intro}</Text>}
@@ -98,16 +98,16 @@ function ApiTable({ name }: { name: string }) {
   return (
     <div className="doc-api">
       <Text variant="subtitle" as="h3" className="doc-api__name"><code>{name}</code> <Tag tone="outline">{rows.length}</Tag></Text>
-      <div className="doc-props-wrap" role="region" aria-label={`Props van ${name}`} tabIndex={0}>
+      <div className="doc-props-wrap" role="region" aria-label={`Props of ${name}`} tabIndex={0}>
         <table className="doc-props">
-          <caption className="pp-visually-hidden">Alle props van {name}, uit de TypeScript-types</caption>
-          <thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Standaard</th><th scope="col">Toelichting</th></tr></thead>
+          <caption className="pp-visually-hidden">All props of {name}, from the TypeScript types</caption>
+          <thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
           <tbody>{rows.map((p) => (
             <tr key={p.name}>
-              <th scope="row"><code>{p.name}</code>{p.required && <span className="doc-required"> verplicht</span>}</th>
+              <th scope="row"><code>{p.name}</code>{p.required && <span className="doc-required"> required</span>}</th>
               <td><code className="doc-type-code">{p.type}</code></td>
-              <td>{p.default ? <code>{p.default}</code> : <span aria-label="geen">–</span>}</td>
-              <td lang="en">{p.doc}</td>
+              <td>{p.default ? <code>{p.default}</code> : <span aria-label="none">–</span>}</td>
+              <td>{p.doc}</td>
             </tr>
           ))}</tbody>
         </table>
@@ -116,14 +116,14 @@ function ApiTable({ name }: { name: string }) {
   );
 }
 
-/** Sections of a page, for the "Op deze pagina" list. */
+/** Sections of a page, for the "On this page" list. */
 export function sectionsOf(page: DocPage, hasApi: boolean): Array<{ id: string; title: string }> {
   return [
-    { id: 'voorbeeld', title: 'Voorbeeld' },
-    ...(variantsFor(page.example).length ? [{ id: 'varianten', title: 'Varianten en toestanden' }] : []),
-    { id: 'toegankelijkheid', title: 'Toegankelijkheid' },
+    { id: 'example', title: 'Example' },
+    ...(variantsFor(page.example).length ? [{ id: 'variants', title: 'Variants and states' }] : []),
+    { id: 'accessibility', title: 'Accessibility' },
     ...(hasApi ? [{ id: 'api', title: 'API' }] : []),
-    { id: 'gerelateerd', title: 'Gerelateerd' },
+    { id: 'related', title: 'Related' },
   ];
 }
 
@@ -142,12 +142,12 @@ export function Example({ id, name, intro, children, code, a11y, props, api: com
     <article className="doc-page doc-example" id={id} aria-labelledby="page-title">
       <PageHead page={page} name={name} intro={intro} />
 
-      <Section base={page.slug} id="voorbeeld" title="Voorbeeld">
+      <Section base={page.slug} id="example" title="Example">
         <Demo id={id} label={name} code={code}>{children}</Demo>
       </Section>
 
       {variants.length > 0 && (
-        <Section base={page.slug} id="varianten" title="Varianten en toestanden">
+        <Section base={page.slug} id="variants" title="Variants and states">
           <div className="doc-variants">
             {variants.map((v) => (
               <div key={v.title} className="doc-variant">
@@ -160,17 +160,17 @@ export function Example({ id, name, intro, children, code, a11y, props, api: com
         </Section>
       )}
 
-      <Section base={page.slug} id="toegankelijkheid" title="Toegankelijkheid">
+      <Section base={page.slug} id="accessibility" title="Accessibility">
         <ul className="doc-a11y">{a11y.map((line) => <li key={line}><icons.Check width={16} height={16} />{line}</li>)}</ul>
       </Section>
 
       {(apiNames.length > 0 || props) && (
-        <Section base={page.slug} id="api" title="API" intro="Uit de TypeScript-types, dus nooit achter. Overgeërfde HTML-attributen (zoals className en aria-*) staan er niet bij en werken gewoon.">
+        <Section base={page.slug} id="api" title="API" intro="From the TypeScript types, so never out of date. Inherited HTML attributes (such as className and aria-*) are not listed and work as usual.">
           {props && (
-            <div className="doc-props-wrap" role="region" aria-label="Belangrijkste props" tabIndex={0}>
+            <div className="doc-props-wrap" role="region" aria-label="Main props" tabIndex={0}>
               <table className="doc-props">
-                <caption className="pp-visually-hidden">Belangrijkste props</caption>
-                <thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Toelichting</th></tr></thead>
+                <caption className="pp-visually-hidden">Main props</caption>
+                <thead><tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead>
                 <tbody>{props.map((p) => <tr key={p.name}><th scope="row"><code>{p.name}</code></th><td><code className="doc-type-code">{p.type}</code></td><td>{p.note}</td></tr>)}</tbody>
               </table>
             </div>
@@ -179,11 +179,11 @@ export function Example({ id, name, intro, children, code, a11y, props, api: com
         </Section>
       )}
 
-      <Section base={page.slug} id="gerelateerd" title="Gerelateerd">
+      <Section base={page.slug} id="related" title="Related">
         <ul className="doc-related">
           {relatedPages(page).map((p) => (
             <li key={p.slug}>
-              <a href={href('componenten', p.slug)} className="doc-related__link">
+              <a href={href('components', p.slug)} className="doc-related__link">
                 <span className="doc-related__cat">{categoryById.get(p.category)!.title}</span>
                 <span className="doc-related__title">{p.title}</span>
                 <span className="doc-related__summary">{p.summary}</span>
@@ -193,9 +193,9 @@ export function Example({ id, name, intro, children, code, a11y, props, api: com
         </ul>
       </Section>
 
-      <nav className="doc-pager" aria-label="Vorige en volgende component">
-        {prev ? <a href={href('componenten', prev.slug)} className="doc-pager__link" rel="prev"><span>Vorige</span><strong><icons.ArrowLeft className="pp-flip-rtl" width={16} height={16} /> {prev.title}</strong></a> : <span />}
-        {next && <a href={href('componenten', next.slug)} className="doc-pager__link doc-pager__link--next" rel="next"><span>Volgende</span><strong>{next.title} <icons.ArrowRight className="pp-flip-rtl" width={16} height={16} /></strong></a>}
+      <nav className="doc-pager" aria-label="Previous and next component">
+        {prev ? <a href={href('components', prev.slug)} className="doc-pager__link" rel="prev"><span>Previous</span><strong><icons.ArrowLeft className="pp-flip-rtl" width={16} height={16} /> {prev.title}</strong></a> : <span />}
+        {next && <a href={href('components', next.slug)} className="doc-pager__link doc-pager__link--next" rel="next"><span>Next</span><strong>{next.title} <icons.ArrowRight className="pp-flip-rtl" width={16} height={16} /></strong></a>}
       </nav>
     </article>
   );

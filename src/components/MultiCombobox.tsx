@@ -21,6 +21,9 @@ export interface MultiComboboxProps extends Omit<InputHTMLAttributes<HTMLInputEl
   /** The chosen values, in the order they were chosen. */
   value?: string[];
   defaultValue?: string[];
+  /** Called with the chosen values and their options, in the order they were chosen. */
+  onValueChange?: (value: string[], options: ComboboxOption[]) => void;
+  /** @deprecated Use `onValueChange`, the name every other Papier input uses. Removed in 1.0. */
   onChange?: (value: string[], options: ComboboxOption[]) => void;
   /** The typed search text, for searching on a server. Use with `filter={false}`. */
   inputValue?: string;
@@ -44,7 +47,7 @@ export interface MultiComboboxProps extends Omit<InputHTMLAttributes<HTMLInputEl
 export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(function MultiCombobox(
   {
     label, hint, error, hideLabel, required, disabled, id, name, placeholder, className, options,
-    value: valueProp, defaultValue = [], onChange, inputValue, onInputChange, filter, max, loading, emptyText,
+    value: valueProp, defaultValue = [], onValueChange, onChange, inputValue, onInputChange, filter, max, loading, emptyText,
     onKeyDown, onBlur, 'aria-describedby': describedBy, ...rest
   }, ref,
 ) {
@@ -55,7 +58,11 @@ export const MultiCombobox = forwardRef<HTMLInputElement, MultiComboboxProps>(fu
   const optionId = (i: number) => `${listId}-${i}`;
 
   const find = (v: string) => options.find((o) => o.value === v);
-  const [value, setValue] = useControllable<string[]>(valueProp, defaultValue, (v) => onChange?.(v, v.map(find).filter((o): o is ComboboxOption => !!o)));
+  const [value, setValue] = useControllable<string[]>(valueProp, defaultValue, (v) => {
+    const chosen = v.map(find).filter((o): o is ComboboxOption => !!o);
+    onValueChange?.(v, chosen);
+    onChange?.(v, chosen);
+  });
   const [text, setText] = useControllable(inputValue, '', onInputChange);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);

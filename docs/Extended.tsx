@@ -6,9 +6,9 @@ import {
 } from '@dionbm/papier';
 import { Example } from './Example';
 
-type Genre = 'jazz' | 'pop' | 'soul' | 'klassiek';
+type Genre = 'jazz' | 'pop' | 'soul' | 'classical';
 const genres: Array<{ value: Genre; label: string }> = [
-  { value: 'jazz', label: 'Jazz' }, { value: 'pop', label: 'Pop' }, { value: 'soul', label: 'Soul' }, { value: 'klassiek', label: 'Klassiek' },
+  { value: 'jazz', label: 'Jazz' }, { value: 'pop', label: 'Pop' }, { value: 'soul', label: 'Soul' }, { value: 'classical', label: 'Classical' },
 ];
 
 function PopoverDemo() {
@@ -17,26 +17,26 @@ function PopoverDemo() {
   return (
     <div className="doc-stack">
       <div className="doc-row">
-        <Popover title="Filter de bak" onOpenChange={(open) => { if (open) setDraft(applied); }}
+        <Popover title="Filter the crate" onOpenChange={(open) => { if (open) setDraft(applied); }}
           trigger={<Button variant="secondary" iconStart={<icons.Search />}>Filters{applied.genres.length > 0 && ` (${applied.genres.length})`}</Button>}>
           {({ close }) => (
             <div className="doc-stack">
               <CheckboxGroup legend="Genre" options={genres} value={draft.genres} onValueChange={(g) => setDraft({ ...draft, genres: g })} orientation="horizontal" />
-              <NumberField label="Uitgebracht vanaf" min={1900} max={2026} step={10} value={draft.from}
+              <NumberField label="Released from" min={1900} max={2026} step={10} value={draft.from}
                 onValueChange={(from) => setDraft({ ...draft, from })} formatOptions={{ useGrouping: false }} />
               <div className="doc-row">
-                <Button size="sm" onClick={() => { setApplied(draft); close(); }}>Toepassen</Button>
-                <Button size="sm" variant="ghost" onClick={() => setDraft({ genres: [], from: null })}>Wissen</Button>
+                <Button size="sm" onClick={() => { setApplied(draft); close(); }}>Apply</Button>
+                <Button size="sm" variant="ghost" onClick={() => setDraft({ genres: [], from: null })}>Clear</Button>
               </div>
             </div>
           )}
         </Popover>
-        <Popover label="Over de bak" side="right" trigger={<Button variant="ghost" iconStart={<icons.Info />}>Wat is dit?</Button>}>
-          <Text variant="small" as="p">De bak toont alleen platen die je zelf hebt. Uitgeleende platen staan grijs.</Text>
+        <Popover label="About the crate" side="right" trigger={<Button variant="ghost" iconStart={<icons.Info />}>What is this?</Button>}>
+          <Text variant="small" as="p">The crate only shows records you own. Records on loan are greyed out.</Text>
         </Popover>
       </div>
       <Text variant="small" tone="muted" role="status">
-        {applied.genres.length ? `Je ziet ${applied.genres.join(', ')}` : 'Je ziet alle genres'}{applied.from ? `, vanaf ${applied.from}.` : '.'}
+        {applied.genres.length ? `Showing ${applied.genres.join(', ')}` : 'Showing all genres'}{applied.from ? `, from ${applied.from}.` : '.'}
       </Text>
     </div>
   );
@@ -46,23 +46,23 @@ function MenuChoicesDemo() {
   const [sort, setSort] = useState<'artiest' | 'jaar' | 'recent'>('artiest');
   const [covers, setCovers] = useState(true);
   const [lent, setLent] = useState(false);
-  const label = { artiest: 'Artiest', jaar: 'Jaar', recent: 'Laatst gedraaid' };
+  const label = { artiest: 'Artist', jaar: 'Year', recent: 'Last played' };
   return (
     <div className="doc-stack">
       <div className="doc-row">
-        <Menu trigger={<>Weergave <icons.ChevronDown /></>} items={[
-          { type: 'label', label: 'Sorteren op' },
+        <Menu trigger={<>View <icons.ChevronDown /></>} items={[
+          { type: 'label', label: 'Sort by' },
           ...(['artiest', 'jaar', 'recent'] as const).map((k) => ({ type: 'radio' as const, label: label[k], checked: sort === k, onSelect: () => setSort(k) })),
           { type: 'separator' },
-          { type: 'label', label: 'Tonen' },
-          { type: 'checkbox', label: 'Hoezen', checked: covers, keepOpen: true, onSelect: () => setCovers((c) => !c) },
-          { type: 'checkbox', label: 'Uitgeleende platen', checked: lent, keepOpen: true, onSelect: () => setLent((c) => !c) },
+          { type: 'label', label: 'Show' },
+          { type: 'checkbox', label: 'Sleeves', checked: covers, keepOpen: true, onSelect: () => setCovers((c) => !c) },
+          { type: 'checkbox', label: 'Records on loan', checked: lent, keepOpen: true, onSelect: () => setLent((c) => !c) },
           { type: 'separator' },
-          { label: 'Bekijk op Discogs', icon: <icons.External />, href: 'https://www.discogs.com', target: '_blank' },
-          { label: 'Kopieer lijst', icon: <icons.Copy />, shortcut: 'Ctrl C', onSelect: () => {} },
+          { label: 'View on Discogs', icon: <icons.External />, href: 'https://www.discogs.com', target: '_blank' },
+          { label: 'Copy list', icon: <icons.Copy />, shortcut: 'Ctrl C', onSelect: () => {} },
         ]} />
       </div>
-      <Text variant="small" tone="muted" role="status">Gesorteerd op {label[sort].toLowerCase()}, hoezen {covers ? 'aan' : 'uit'}, uitgeleende platen {lent ? 'zichtbaar' : 'verborgen'}.</Text>
+      <Text variant="small" tone="muted" role="status">Sorted by {label[sort].toLowerCase()}, sleeves {covers ? 'on' : 'off'}, records on loan {lent ? 'shown' : 'hidden'}.</Text>
     </div>
   );
 }
@@ -74,23 +74,23 @@ function NumberDemo() {
   const total = (count ?? 0) * (price ?? 0) * (1 - (discount ?? 0));
   return (
     <div className="doc-stack doc-narrow">
-      <NumberField label="Aantal exemplaren" min={1} max={10} value={count} onValueChange={setCount} hint="Hoogstens tien per bestelling." />
-      <NumberField label="Prijs per plaat" min={0} step={0.5} value={price} onValueChange={setPrice} formatOptions={{ style: 'currency', currency: 'EUR' }} />
-      <NumberField label="Korting" min={0} max={0.5} step={0.05} value={discount} onValueChange={setDiscount} formatOptions={{ style: 'percent' }} hideStepper
-        hint="Typ een percentage, bijvoorbeeld 15." />
-      <Text variant="small" tone="muted" role="status">Totaal: {new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(total)}</Text>
+      <NumberField label="Number of copies" min={1} max={10} value={count} onValueChange={setCount} hint="At most ten per order." />
+      <NumberField label="Price per record" min={0} step={0.5} value={price} onValueChange={setPrice} formatOptions={{ style: 'currency', currency: 'EUR' }} />
+      <NumberField label="Discount" min={0} max={0.5} step={0.05} value={discount} onValueChange={setDiscount} formatOptions={{ style: 'percent' }} hideStepper
+        hint="Type a percentage, for example 15." />
+      <Text variant="small" tone="muted" role="status">Total: {new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR' }).format(total)}</Text>
     </div>
   );
 }
 
 const artists: ComboboxOption[] = [
-  { value: 'froukje', label: 'Froukje', description: 'Nederpop' },
+  { value: 'froukje', label: 'Froukje', description: 'Dutch pop' },
   { value: 'coltrane', label: 'John Coltrane', description: 'Jazz' },
-  { value: 'bjork', label: 'Björk', description: 'Elektronisch' },
+  { value: 'bjork', label: 'Björk', description: 'Electronic' },
   { value: 'davis', label: 'Miles Davis', description: 'Jazz' },
   { value: 'fleetwood', label: 'Fleetwood Mac', description: 'Rock' },
   { value: 'radiohead', label: 'Radiohead', description: 'Rock' },
-  { value: 'simone', label: 'Nina Simone', description: 'Soul en jazz' },
+  { value: 'simone', label: 'Nina Simone', description: 'Soul and jazz' },
   { value: 'franklin', label: 'Aretha Franklin', description: 'Soul' },
 ];
 
@@ -98,9 +98,9 @@ function MultiDemo() {
   const [chosen, setChosen] = useState<string[]>(['coltrane', 'simone']);
   return (
     <div className="doc-stack doc-narrow">
-      <MultiCombobox label="Artiesten in je mix" options={artists} value={chosen} onChange={setChosen} max={5}
-        placeholder="Zoek een artiest" hint="Hoogstens vijf. Backspace haalt de laatste weg." />
-      <Text variant="small" tone="muted" role="status">{chosen.length} van 5 gekozen.</Text>
+      <MultiCombobox label="Artists in your mix" options={artists} value={chosen} onValueChange={setChosen} max={5}
+        placeholder="Search for an artist" hint="At most five. Backspace removes the last one." />
+      <Text variant="small" tone="muted" role="status">{chosen.length} of 5 selected.</Text>
     </div>
   );
 }
@@ -108,12 +108,12 @@ function MultiDemo() {
 function RangeDemo() {
   const [years, setYears] = useState<[number, number]>([1957, 1977]);
   const [price, setPrice] = useState<[number, number]>([15, 40]);
-  const euro = (n: number) => new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+  const euro = (n: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
   return (
     <div className="doc-stack doc-narrow">
-      <RangeSlider label="Uitgebracht" min={1950} max={2025} value={years} onValueChange={setYears} minDistance={1}
+      <RangeSlider label="Released" min={1950} max={2025} value={years} onValueChange={setYears} minDistance={1}
         marks={[{ value: 1950, label: '1950' }, 1960, 1970, 1980, 1990, 2000, 2010, { value: 2025, label: '2025' }]} />
-      <RangeSlider label="Prijs" min={0} max={100} step={5} value={price} onValueChange={setPrice} formatValue={euro} minDistance={5} />
+      <RangeSlider label="Price" min={0} max={100} step={5} value={price} onValueChange={setPrice} formatValue={euro} minDistance={5} />
     </div>
   );
 }
@@ -128,10 +128,10 @@ function DateDemo() {
   return (
     <div className="doc-split">
       <div className="doc-stack">
-        <DatePicker label="Releasedatum" value={release} onValueChange={setRelease} hint="Typ bijvoorbeeld 15-9-1957 of kies in de kalender." />
-        <DatePicker label="Bezorgdatum" value={delivery} onValueChange={setDelivery} min={iso(today)} max={iso(max)} isDateUnavailable={weekend}
-          hint="Op werkdagen, binnen twee maanden." />
-        <Text variant="small" tone="muted" role="status">{release ? `Release: ${release}` : 'Geen releasedatum.'}</Text>
+        <DatePicker label="Release date" value={release} onValueChange={setRelease} hint="Type for example 15/9/1957 or pick a date in the calendar." />
+        <DatePicker label="Delivery date" value={delivery} onValueChange={setDelivery} min={iso(today)} max={iso(max)} isDateUnavailable={weekend}
+          hint="On weekdays, within two months." />
+        <Text variant="small" tone="muted" role="status">{release ? `Release: ${release}` : 'No release date.'}</Text>
       </div>
       <Calendar value={delivery} onValueChange={setDelivery} min={iso(today)} max={iso(max)} isDateUnavailable={weekend} />
     </div>
@@ -145,8 +145,8 @@ function PeriodDemo() {
   return (
     <div className="doc-split">
       <div className="doc-stack">
-        <DateRangePicker label="Platenbeurs, verblijf" value={stay} onValueChange={setStay} hint="Aankomst en vertrek." startName="aankomst" endName="vertrek" />
-        <Text variant="small" tone="muted" role="status">{stay?.end ? `${nights} ${nights === 1 ? 'nacht' : 'nachten'}.` : 'Kies ook een vertrekdatum.'}</Text>
+        <DateRangePicker label="Record fair, stay" value={stay} onValueChange={setStay} hint="Arrival and departure." startName="aankomst" endName="vertrek" />
+        <Text variant="small" tone="muted" role="status">{stay?.end ? `${nights} ${nights === 1 ? 'night' : 'nights'}.` : 'Also pick a departure date.'}</Text>
       </div>
       <RangeCalendar value={report} onValueChange={setReport} defaultMonth="2024-07-01" />
     </div>
@@ -158,9 +158,9 @@ function AccountDemo() {
   const short = password.length > 0 && password.length < 12;
   return (
     <div className="doc-stack doc-narrow">
-      <PasswordField label="Nieuw wachtwoord" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)}
-        hint="Minstens 12 tekens. Een zin werkt goed." error={short ? `Nog ${12 - password.length} tekens.` : undefined} />
-      <TextArea label="Over jouw collectie" autoResize rows={2} maxRows={8} placeholder="Het veld groeit mee terwijl je typt." />
+      <PasswordField label="New password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)}
+        hint="At least 12 characters. A sentence works well." error={short ? `${12 - password.length} more characters needed.` : undefined} />
+      <TextArea label="About your collection" autoResize rows={2} maxRows={8} placeholder="The field grows as you type." />
     </div>
   );
 }
@@ -169,7 +169,7 @@ function FileDemo() {
   const [files, setFiles] = useState<File[]>([]);
   return (
     <div className="doc-stack doc-narrow">
-      <FileField label="Foto's van de hoes" hint="JPG of PNG, hoogstens 5 MB per foto en vier foto's." accept="image/jpeg,image/png" multiple maxFiles={4}
+      <FileField label="Photos of the sleeve" hint="JPG or PNG, up to 5 MB per photo and four photos." accept="image/jpeg,image/png" multiple maxFiles={4}
         maxSize={5_000_000} value={files} onFilesChange={setFiles} />
     </div>
   );
@@ -181,15 +181,15 @@ function ChoicesDemo() {
   const all = ['lp', 'ep', 'single'];
   return (
     <div className="doc-stack doc-narrow">
-      <Checkbox label="Alle formaten" checked={formats.length === all.length} indeterminate={formats.length > 0 && formats.length < all.length}
+      <Checkbox label="All formats" checked={formats.length === all.length} indeterminate={formats.length > 0 && formats.length < all.length}
         onChange={(e) => setFormats(e.target.checked ? all : [])} />
-      <CheckboxGroup legend="Formaten" appearance="card" value={formats} onValueChange={setFormats} options={[
-        { value: 'lp', label: 'LP', description: 'Langspeler, 33 toeren' },
-        { value: 'ep', label: 'EP', description: 'Vier tot zes nummers' },
-        { value: 'single', label: 'Single', description: '7 inch, 45 toeren' },
-      ]} error={formats.length === 0 ? 'Kies minstens één formaat.' : undefined} />
+      <CheckboxGroup legend="Formats" appearance="card" value={formats} onValueChange={setFormats} options={[
+        { value: 'lp', label: 'LP', description: 'Long player, 33 rpm' },
+        { value: 'ep', label: 'EP', description: 'Four to six tracks' },
+        { value: 'single', label: 'Single', description: '7 inch, 45 rpm' },
+      ]} error={formats.length === 0 ? 'Pick at least one format.' : undefined} />
       <ToggleGroup label="Genres" options={genres} value={filters} onValueChange={setFilters} />
-      <Text variant="small" tone="muted" role="status">{filters.length ? `Genres: ${filters.join(', ')}.` : 'Geen genre gekozen.'}</Text>
+      <Text variant="small" tone="muted" role="status">{filters.length ? `Genres: ${filters.join(', ')}.` : 'No genre selected.'}</Text>
     </div>
   );
 }
@@ -198,19 +198,19 @@ function StructureDemo() {
   return (
     <div className="doc-stack">
       <Accordion type="single">
-        <Disclosure summary="Hoe lang duurt verzending?" defaultOpen><p>Binnen twee werkdagen, in een stevige platendoos.</p></Disclosure>
-        <Disclosure summary="Kan ik een plaat terugsturen?"><p>Binnen dertig dagen, zolang de plaat niet is gedraaid.</p></Disclosure>
-        <Disclosure summary="Hoe beoordelen jullie de staat?"><p>Volgens de Goldmine-schaal, van Mint tot Poor.</p></Disclosure>
+        <Disclosure summary="How long does shipping take?" defaultOpen><p>Within two working days, in a sturdy record mailer.</p></Disclosure>
+        <Disclosure summary="Can I return a record?"><p>Within thirty days, as long as the record has not been played.</p></Disclosure>
+        <Disclosure summary="How do you grade condition?"><p>On the Goldmine scale, from Mint to Poor.</p></Disclosure>
       </Accordion>
       <Tabs defaultValue="profiel" orientation="vertical">
-        <TabList label="Instellingen">
-          <Tab value="profiel">Profiel</Tab>
-          <Tab value="meldingen">Meldingen</Tab>
+        <TabList label="Settings">
+          <Tab value="profiel">Profile</Tab>
+          <Tab value="meldingen">Notifications</Tab>
           <Tab value="privacy">Privacy</Tab>
         </TabList>
-        <TabPanel value="profiel"><Text tone="muted">Je naam en hoe anderen je collectie zien.</Text></TabPanel>
-        <TabPanel value="meldingen"><Text tone="muted">Mails over nieuwe persingen en prijsdalingen.</Text></TabPanel>
-        <TabPanel value="privacy"><Text tone="muted">Wie je luistergeschiedenis mag zien.</Text></TabPanel>
+        <TabPanel value="profiel"><Text tone="muted">Your name and how others see your collection.</Text></TabPanel>
+        <TabPanel value="meldingen"><Text tone="muted">Emails about new pressings and price drops.</Text></TabPanel>
+        <TabPanel value="privacy"><Text tone="muted">Who can see your listening history.</Text></TabPanel>
       </Tabs>
     </div>
   );
@@ -234,31 +234,31 @@ function SortDemo() {
   const someChecked = rows.some((r) => selected.includes(r.titel));
   return (
     <div className="doc-stack">
-      <div className="doc-narrow"><TextField label="Zoek in de collectie" hideLabel type="search" placeholder="Zoek op titel of artiest" prefix={<icons.Search />}
+      <div className="doc-narrow"><TextField label="Search the collection" hideLabel type="search" placeholder="Search by title or artist" prefix={<icons.Search />}
         value={query} onChange={(e) => setQuery(e.target.value)} /></div>
       {rows.length === 0
-        ? <EmptyState title="Geen platen gevonden" description={`Niets in je collectie past bij "${query}". Controleer de spelling of zoek op de artiest.`}
-            icon={<icons.Search />} action={<Button variant="secondary" size="sm" onClick={() => setQuery('')}>Zoekopdracht wissen</Button>} />
+        ? <EmptyState title="No records found" description={`Nothing in your collection matches "${query}". Check the spelling or search by artist.`}
+            icon={<icons.Search />} action={<Button variant="secondary" size="sm" onClick={() => setQuery('')}>Clear search</Button>} />
         : (
-          <Table caption="Je collectie, sorteerbaar (voorbeelddata)" showCaption>
+          <Table caption="Your collection, sortable (sample data)" showCaption>
             <thead><tr>
-              <th scope="col" className="doc-select-cell"><Checkbox label={<span className="pp-visually-hidden">Selecteer alle zichtbare platen</span>} checked={allChecked}
+              <th scope="col" className="doc-select-cell"><Checkbox label={<span className="pp-visually-hidden">Select all visible records</span>} checked={allChecked}
                 indeterminate={someChecked && !allChecked} onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.titel) : [])} /></th>
-              <SortHeader {...sort.headerProps('titel')}>Titel</SortHeader>
-              <SortHeader {...sort.headerProps('artiest')}>Artiest</SortHeader>
-              <SortHeader {...sort.headerProps('jaar')} align="end">Jaar</SortHeader>
-              <SortHeader {...sort.headerProps('keer')} align="end">Gedraaid</SortHeader>
+              <SortHeader {...sort.headerProps('titel')}>Title</SortHeader>
+              <SortHeader {...sort.headerProps('artiest')}>Artist</SortHeader>
+              <SortHeader {...sort.headerProps('jaar')} align="end">Year</SortHeader>
+              <SortHeader {...sort.headerProps('keer')} align="end">Plays</SortHeader>
             </tr></thead>
             <tbody>{rows.map((r) => (
               <tr key={r.titel}>
-                <td className="doc-select-cell"><Checkbox label={<span className="pp-visually-hidden">Selecteer {r.titel}</span>} checked={selected.includes(r.titel)}
+                <td className="doc-select-cell"><Checkbox label={<span className="pp-visually-hidden">Select {r.titel}</span>} checked={selected.includes(r.titel)}
                   onChange={(e) => setSelected((s) => (e.target.checked ? [...s, r.titel] : s.filter((t) => t !== r.titel)))} /></td>
                 <th scope="row">{r.titel}</th><td>{r.artiest}</td><td className="pp-num">{r.jaar}</td><td className="pp-num">{r.keer}</td>
               </tr>
             ))}</tbody>
           </Table>
         )}
-      <Text variant="small" tone="muted" role="status">{selected.length ? `${selected.length} geselecteerd.` : 'Niets geselecteerd.'}</Text>
+      <Text variant="small" tone="muted" role="status">{selected.length ? `${selected.length} selected.` : 'Nothing selected.'}</Text>
     </div>
   );
 }
@@ -268,19 +268,19 @@ function ToastPromiseDemo() {
   const sync = (fail: boolean) => promise(
     new Promise<number>((done, reject) => window.setTimeout(() => (fail ? reject(new Error('offline')) : done(3)), 1400)),
     {
-      loading: { title: 'Discogs synchroniseren…' },
-      success: (n) => ({ title: 'Collectie bijgewerkt', description: `${n} nieuwe platen toegevoegd.` }),
-      error: { title: 'Synchronisatie mislukt', description: 'Er is geen verbinding met Discogs.' },
+      loading: { title: 'Syncing with Discogs…' },
+      success: (n) => ({ title: 'Collection updated', description: `${n} new records added.` }),
+      error: { title: 'Sync failed', description: 'Could not connect to Discogs.' },
     },
   ).catch(() => {});
   return (
     <div className="doc-row">
-      <Button onClick={() => sync(false)}>Synchroniseren</Button>
-      <Button variant="secondary" onClick={() => sync(true)}>Laat mislukken</Button>
+      <Button onClick={() => sync(false)}>Sync</Button>
+      <Button variant="secondary" onClick={() => sync(true)}>Make it fail</Button>
       <Button variant="ghost" onClick={() => {
-        const id = toast({ tone: 'info', title: 'Kant A speelt', duration: Infinity });
-        window.setTimeout(() => update(id, { tone: 'success', title: 'Kant A is klaar', description: 'Draai de plaat om voor kant B.', duration: 5000 }), 1800);
-      }}>Toon en wijzig</Button>
+        const id = toast({ tone: 'info', title: 'Side A is playing', duration: Infinity });
+        window.setTimeout(() => update(id, { tone: 'success', title: 'Side A has finished', description: 'Flip the record for side B.', duration: 5000 }), 1800);
+      }}>Show and update</Button>
     </div>
   );
 }
@@ -288,14 +288,14 @@ function ToastPromiseDemo() {
 function DetailsDemo() {
   return (
     <div className="doc-stack doc-narrow">
-      <Text>Zoek overal met <Kbd>Ctrl</Kbd> <Kbd>K</Kbd>, en spring naar de volgende plaat met <Kbd>J</Kbd>.</Text>
+      <Text>Search everywhere with <Kbd>Ctrl</Kbd> <Kbd>K</Kbd>, and jump to the next record with <Kbd>J</Kbd>.</Text>
       <Separator />
       <div className="doc-row"><Tag tone="sage">Jazz</Tag><Separator orientation="vertical" /><Tag tone="outline">1957</Tag><Separator orientation="vertical" /><Tag tone="outline">Blue Note</Tag></div>
-      <Button fullWidth variant="ink">Inloggen met je e-mailadres</Button>
-      <Separator label="of" />
-      <Button fullWidth variant="secondary">Inloggen met Discogs</Button>
-      <EmptyState size="sm" headingLevel={3} title="Nog geen luisterlijst" description="Bewaar platen die je nog wilt horen."
-        icon={<icons.Play />} action={<Button size="sm">Plaat bewaren</Button>} />
+      <Button fullWidth variant="ink">Sign in with your email address</Button>
+      <Separator label="or" />
+      <Button fullWidth variant="secondary">Sign in with Discogs</Button>
+      <EmptyState size="sm" headingLevel={3} title="No listening list yet" description="Save records you still want to hear."
+        icon={<icons.Play />} action={<Button size="sm">Save a record</Button>} />
     </div>
   );
 }
@@ -304,103 +304,103 @@ function DetailsDemo() {
 export function ExtendedExamples() {
   return (
     <>
-      <Example id="popover" api={['Popover']} name="Popover" intro="Een paneel naast de knop voor iets om in te werken: filters, een kort formulier, uitleg. Niet modaal: de rest van de pagina blijft bruikbaar."
-        code={`<Popover title="Filter de bak" trigger={<Button variant="secondary">Filters</Button>}>
+      <Example id="popover" api={['Popover']} name="Popover" intro="A panel next to the button for something to work in: filters, a short form, an explanation. Not modal: the rest of the page stays usable."
+        code={`<Popover title="Filter the crate" trigger={<Button variant="secondary">Filters</Button>}>
   {({ close }) => (
     <>
       <CheckboxGroup legend="Genre" options={genres} value={g} onValueChange={setG} />
-      <Button onClick={() => { apply(); close(); }}>Toepassen</Button>
+      <Button onClick={() => { apply(); close(); }}>Apply</Button>
     </>
   )}
 </Popover>`}
-        a11y={['De knop krijgt aria-haspopup="dialog", aria-expanded en aria-controls; het paneel is een benoemde dialog.', 'Bij openen gaat de focus naar het eerste veld, Escape sluit en zet de focus terug op de knop.', 'Een klik of focus buiten het paneel sluit het. Het paneel staat direct na de knop in de DOM, dus Tab loopt er vanzelf in.', 'Opent in de top layer en klapt om aan de rand van het scherm, net als Menu.']}>
+        a11y={['The button gets aria-haspopup="dialog", aria-expanded and aria-controls; the panel is a named dialog.', 'On opening, focus moves to the first field; Escape closes the panel and returns focus to the button.', 'A click or focus outside the panel closes it. The panel sits directly after the button in the DOM, so Tab moves into it naturally.', 'It opens in the top layer and flips at the edge of the screen, just like Menu.']}>
         <PopoverDemo />
       </Example>
 
-      <Example id="menu-keuzes" api={['Menu']} name="Menu met groepen en keuzes" intro="Hetzelfde actiemenu, nu met kopjes, scheidingslijnen, aanvinkbare keuzes, links en sneltoetsen. Bestaande menu's werken ongewijzigd."
-        code={`<Menu trigger="Weergave" items={[
-  { type: 'label', label: 'Sorteren op' },
-  { type: 'radio', label: 'Artiest', checked: sort === 'artiest', onSelect: () => setSort('artiest') },
+      <Example id="menu-keuzes" api={['Menu']} name="Menu with groups and choices" intro="The same action menu, now with headings, separators, checkable choices, links and shortcuts. Existing menus work unchanged."
+        code={`<Menu trigger="View" items={[
+  { type: 'label', label: 'Sort by' },
+  { type: 'radio', label: 'Artist', checked: sort === 'artiest', onSelect: () => setSort('artiest') },
   { type: 'separator' },
-  { type: 'checkbox', label: 'Hoezen', checked: covers, keepOpen: true, onSelect: toggle },
-  { label: 'Bekijk op Discogs', href: 'https://discogs.com', target: '_blank' },
-  { label: 'Kopieer lijst', shortcut: 'Ctrl C', onSelect: copy },
+  { type: 'checkbox', label: 'Sleeves', checked: covers, keepOpen: true, onSelect: toggle },
+  { label: 'View on Discogs', href: 'https://discogs.com', target: '_blank' },
+  { label: 'Copy list', shortcut: 'Ctrl C', onSelect: copy },
 ]} />`}
-        a11y={['Keuzes zijn menuitemradio en menuitemcheckbox met aria-checked; het vinkje is decoratief.', 'Een kopje benoemt zijn groep (role="group" met aria-labelledby).', 'Typ een letter om naar het volgende item te springen dat ermee begint.', 'Links zijn echte <a>-elementen: middelklik en "open in nieuw tabblad" werken.']}>
+        a11y={['Choices are menuitemradio and menuitemcheckbox with aria-checked; the check mark is decorative.', 'A heading names its group (role="group" with aria-labelledby).', 'Typing a letter jumps to the next item that starts with it.', 'Links are real <a> elements: middle-click and "open in new tab" work.']}>
         <MenuChoicesDemo />
       </Example>
 
-      <Example id="getallen" api={['NumberField']} name="NumberField" intro="Een getal met − en + ernaast. Leest wat je typt in het Nederlands (24,95) en maakt het op als bedrag of percentage zodra je het veld verlaat."
-        code={`<NumberField label="Aantal exemplaren" min={1} max={10} value={n} onValueChange={setN} />
-<NumberField label="Prijs per plaat" step={0.5}
+      <Example id="getallen" api={['NumberField']} name="NumberField" intro="A number with − and + beside it. Reads what you type in the app's locale (24.95) and formats it as an amount or percentage as soon as you leave the field."
+        code={`<NumberField label="Number of copies" min={1} max={10} value={n} onValueChange={setN} />
+<NumberField label="Price per record" step={0.5}
   formatOptions={{ style: 'currency', currency: 'EUR' }} />
-<NumberField label="Korting" max={0.5} formatOptions={{ style: 'percent' }} hideStepper />`}
-        a11y={['Het veld is een spinbutton met aria-valuenow, -min, -max en een leesbare aria-valuetext ("€ 24,95").', 'Pijl omhoog en omlaag stappen, PageUp en PageDown nemen tien stappen, Home en End gaan naar min en max.', 'De knoppen zitten niet in de tabvolgorde (het toetsenbord heeft de pijlen) maar zijn wel benoemd voor schermlezers. Ingedrukt houden blijft stappen.', 'Met name gaat de ruwe waarde mee in een formulier.']}>
+<NumberField label="Discount" max={0.5} formatOptions={{ style: 'percent' }} hideStepper />`}
+        a11y={['The field is a spinbutton with aria-valuenow, -min, -max and a readable aria-valuetext ("€24.95").', 'Arrow up and down step, PageUp and PageDown take ten steps, Home and End go to min and max.', 'The buttons are not in the tab order (the keyboard has the arrows) but are named for screen readers. Holding a button down keeps stepping.', 'With name, the raw value is submitted with a form.']}>
         <NumberDemo />
       </Example>
 
-      <Example id="meerdere" api={['MultiCombobox']} name="MultiCombobox" intro="Meerdere keuzes uit een lange lijst, met meezoeken. Gekozen items staan als labels in het veld; de lijst blijft open terwijl je kiest."
+      <Example id="meerdere" api={['MultiCombobox']} name="MultiCombobox" intro="Multiple choices from a long list, filtered as you type. Selected items appear as tags in the field; the list stays open while you choose."
         code={`<MultiCombobox
-  label="Artiesten in je mix"
+  label="Artists in your mix"
   options={artists}
   value={chosen}
-  onChange={setChosen}
+  onValueChange={setChosen}
   max={5}
 />`}
-        a11y={['Een combobox met een listbox die aria-multiselectable is; elke optie meldt aria-selected.', 'Enter zet de actieve optie aan of uit, Backspace in een leeg veld haalt het laatste label weg, Escape sluit en wist daarna de zoektekst.', 'De gekozen items worden met het veld voorgelezen ("Gekozen: John Coltrane, Nina Simone") en verwijderen wordt gemeld.', 'Met name gaat elke waarde mee in een formulier.']}>
+        a11y={['A combobox with a listbox that is aria-multiselectable; each option reports aria-selected.', 'Enter toggles the active option, Backspace in an empty field removes the last tag, Escape closes the list and then clears the search text.', 'The selected items are announced with the field ("Selected: John Coltrane, Nina Simone") and removals are announced.', 'With name, each value is submitted with a form.']}>
         <MultiDemo />
       </Example>
 
-      <Example id="bereik" api={['RangeSlider']} name="RangeSlider" intro="Een bereik met twee duimen, zoals jaren of een prijs. Streepjes eronder laten zien waar je zit."
+      <Example id="bereik" api={['RangeSlider']} name="RangeSlider" intro="A range with two thumbs, such as years or a price. Marks underneath show where you are."
         code={`<RangeSlider
-  label="Uitgebracht"
+  label="Released"
   min={1950}
   max={2025}
   value={years}
   onValueChange={setYears}
-  onValueCommit={search}   // pas zoeken bij loslaten
+  onValueCommit={search}   // only search on release
   marks={[{ value: 1950, label: '1950' }, 1960, 1970]}
 />`}
-        a11y={['Twee native range-inputs: pijltjes, Home, End en PageUp werken zoals de browser ze kent.', 'Elke duim heet naar het label: "Uitgebracht, van" en "Uitgebracht, tot", met een leesbare aria-valuetext.', 'De duimen kunnen elkaar niet passeren; minDistance houdt ruimte tussen ze.']}>
+        a11y={['Two native range inputs: arrows, Home, End and PageUp work the way the browser handles them.', 'Each thumb is named after the label: "Released, from" and "Released, to", with a readable aria-valuetext.', 'The thumbs cannot pass each other; minDistance keeps space between them.']}>
         <RangeDemo />
       </Example>
 
-      <Example id="datum" api={['DatePicker', 'Calendar']} name="DatePicker en Calendar" intro="Een datum typen zoals je hem zegt, of kiezen in een kalender. Werkdagen, een eerste en een laatste dag beperk je met min, max en isDateUnavailable."
+      <Example id="datum" api={['DatePicker', 'Calendar']} name="DatePicker and Calendar" intro="Type a date the way you say it, or pick one in a calendar. Limit it to weekdays, or to a first and last day, with min, max and isDateUnavailable."
         code={`<DatePicker
-  label="Bezorgdatum"
-  value={date}              // "2024-03-15", zoals <input type="date">
+  label="Delivery date"
+  value={date}              // "2024-03-15", like <input type="date">
   onValueChange={setDate}
   min={today}
   isDateUnavailable={isWeekend}
 />
 <Calendar value={date} onValueChange={setDate} />`}
-        a11y={['Typen werkt in de volgorde van de taal, met elk scheidingsteken: 15-9-1957, 15/09/57.', 'De kalenderknop opent een dialog; de focus gaat naar de gekozen of eerste dag, Escape zet hem terug op de knop, Alt + pijl omlaag opent hem vanuit het veld.', 'De kalender is een grid: pijltjes per dag en week, PageUp en PageDown per maand, met Shift per jaar. Elke dag heet voluit ("vrijdag 15 maart 2024").', 'Vandaag heeft aria-current="date"; onbeschikbare dagen aria-disabled en een doorhaling, dus niet alleen kleur.']}>
+        a11y={['Typing follows the order of the locale, with any separator: 15/9/1957, 15-09-57.', 'The calendar button opens a dialog; focus moves to the selected or first day, Escape returns it to the button, and Alt + arrow down opens it from the field.', 'The calendar is a grid: arrows move by day and week, PageUp and PageDown by month, and with Shift by year. Each day has its full name ("Friday 15 March 2024").', 'Today has aria-current="date"; unavailable days have aria-disabled and a strikethrough, so they do not rely on colour alone.']}>
         <DateDemo />
       </Example>
 
-      <Example id="periode" api={['DateRangePicker', 'RangeCalendar']} name="DateRangePicker en RangeCalendar" intro="Een periode, zoals een verblijf of een rapportmaand: twee velden die je kunt typen en één kalender waarin je het begin en het eind aanwijst."
+      <Example id="periode" api={['DateRangePicker', 'RangeCalendar']} name="DateRangePicker and RangeCalendar" intro="A period, such as a stay or a reporting month: two fields you can type in and one calendar where you point out the start and the end."
         code={`<DateRangePicker
-  label="Verblijf"
+  label="Stay"
   value={stay}              // { start: '2024-07-12', end: '2024-07-16' }
   onValueChange={setStay}
   startName="aankomst"
   endName="vertrek"
 />
 <RangeCalendar value={period} onValueChange={setPeriod} />`}
-        a11y={['De twee velden heten naar het label: "Verblijf, van" en "Verblijf, tot".', 'In de kalender is de eerste dag het begin en de tweede het eind, in welke volgorde ook; tijdens het kiezen tonen hover en pijltjes de periode al.', 'Elke dag in de periode is aria-selected; begin en eind zijn ook zonder kleur te herkennen aan hun vorm.', 'Een getypt eind voor het begin wordt omgedraaid in plaats van geweigerd.']}>
+        a11y={['The two fields are named after the label: "Stay, from" and "Stay, to".', 'In the calendar the first day picked is the start and the second the end, in either order; while choosing, hover and arrows already show the period.', 'Each day in the period is aria-selected; start and end can also be recognised by their shape, without colour.', 'A typed end before the start is swapped instead of rejected.']}>
         <PeriodDemo />
       </Example>
 
-      <Example id="account" api={['PasswordField', 'TextArea']} name="PasswordField en een meegroeiende TextArea" intro="Een wachtwoord dat je kunt laten zien in plaats van twee keer te typen, en een tekstveld dat meegroeit met wat je schrijft."
-        code={`<PasswordField label="Nieuw wachtwoord" autoComplete="new-password" hint="Minstens 12 tekens." />
-<TextArea label="Over jouw collectie" autoResize rows={2} maxRows={8} />`}
-        a11y={['De oogknop is een toggle met aria-pressed en blijft in de tabvolgorde.', 'Wachtwoordbeheerders blijven werken: het veld is een gewone input met autocomplete.', 'TextArea groeit tot maxRows en scrolt daarna; zonder JavaScript is het een gewone textarea.']}>
+      <Example id="account" api={['PasswordField', 'TextArea']} name="PasswordField and an auto-growing TextArea" intro="A password you can reveal instead of typing it twice, and a text field that grows with what you write."
+        code={`<PasswordField label="New password" autoComplete="new-password" hint="At least 12 characters." />
+<TextArea label="About your collection" autoResize rows={2} maxRows={8} />`}
+        a11y={['The eye button is a toggle with aria-pressed and stays in the tab order.', 'Password managers keep working: the field is a regular input with autocomplete.', 'TextArea grows up to maxRows and scrolls after that; without JavaScript it is a regular textarea.']}>
         <AccountDemo />
       </Example>
 
-      <Example id="bestanden" api={['FileField']} name="FileField" intro="Sleep foto's op het vlak of kies ze. Verkeerde typen, te grote bestanden en te veel tegelijk worden met een reden geweigerd; foto's krijgen een voorbeeld."
+      <Example id="bestanden" api={['FileField']} name="FileField" intro="Drag photos onto the area or choose them. Wrong types, files that are too large and too many at once are rejected with a reason; photos get a preview."
         code={`<FileField
-  label="Foto's van de hoes"
+  label="Photos of the sleeve"
   accept="image/jpeg,image/png"
   multiple
   maxFiles={4}
@@ -408,62 +408,62 @@ export function ExtendedExamples() {
   value={files}
   onFilesChange={setFiles}
 />`}
-        a11y={['Onder het vlak ligt een echte <input type="file">: klikken, het toetsenbord, schermlezers en formulieren werken zoals altijd.', 'Gesleepte en verwijderde bestanden worden teruggeschreven naar de input, dus een gewoon formulier stuurt precies wat je ziet.', 'Geweigerde bestanden worden voorgelezen met hun reden.', 'Na verwijderen gaat de focus naar het volgende bestand, of terug naar het veld.']}>
+        a11y={['A real <input type="file"> sits under the area: clicking, the keyboard, screen readers and forms work as always.', 'Dropped and removed files are written back to the input, so a plain form submits exactly what you see.', 'Rejected files are announced with their reason.', 'After a removal, focus moves to the next file, or back to the field.']}>
         <FileDemo />
       </Example>
 
-      <Example id="meerkeuze" api={['CheckboxGroup', 'Checkbox', 'ToggleGroup', 'Toggle']} name="CheckboxGroup, ToggleGroup en Alles selecteren" intro="Meerdere keuzes met een gedeelde hint en fout, een vak dat half aangevinkt kan zijn, en filters die je aan en uit zet."
-        code={`<Checkbox label="Alle formaten" checked={all} indeterminate={some && !all} />
-<CheckboxGroup legend="Formaten" appearance="card" value={v} onValueChange={setV} options={…} />
+      <Example id="meerkeuze" api={['CheckboxGroup', 'Checkbox', 'ToggleGroup', 'Toggle']} name="CheckboxGroup, ToggleGroup and Select all" intro="Multiple choices with a shared hint and error, a box that can be partly checked, and filters you switch on and off."
+        code={`<Checkbox label="All formats" checked={all} indeterminate={some && !all} />
+<CheckboxGroup legend="Formats" appearance="card" value={v} onValueChange={setV} options={…} />
 <ToggleGroup label="Genres" options={genres} value={g} onValueChange={setG} />`}
-        a11y={['indeterminate is de native eigenschap: schermlezers zeggen "half aangevinkt".', 'CheckboxGroup is een fieldset met legend; fout en hint hangen aan de groep.', 'ToggleGroup is één tabstop: pijltjes bewegen, Spatie of Enter drukt in (aria-pressed).', 'Ingedrukt krijgt een vinkje, dus de stand rust niet alleen op kleur.']}>
+        a11y={['indeterminate is the native property: screen readers announce it as "mixed" or "partially checked".', 'CheckboxGroup is a fieldset with a legend; the error and hint are attached to the group.', 'ToggleGroup is a single tab stop: arrows move, Space or Enter presses (aria-pressed).', 'A pressed toggle gets a check mark, so its state does not rely on colour alone.']}>
         <ChoicesDemo />
       </Example>
 
-      <Example id="structuur-plus" api={['Accordion', 'Tabs']} name="Accordion en verticale Tabs" intro="Vragen en antwoorden die elkaar dichtvouwen, en tabs in een kolom voor instellingen. Op smalle schermen staan de tabs boven het paneel."
+      <Example id="structuur-plus" api={['Accordion', 'Tabs']} name="Accordion and vertical Tabs" intro="Questions and answers that close each other, and tabs in a column for settings. On narrow screens the tabs sit above the panel."
         code={`<Accordion type="single">
-  <Disclosure summary="Hoe lang duurt verzending?" defaultOpen>…</Disclosure>
-  <Disclosure summary="Kan ik een plaat terugsturen?">…</Disclosure>
+  <Disclosure summary="How long does shipping take?" defaultOpen>…</Disclosure>
+  <Disclosure summary="Can I return a record?">…</Disclosure>
 </Accordion>
 
 <Tabs defaultValue="profiel" orientation="vertical" activation="manual">…</Tabs>`}
-        a11y={['Elke sectie blijft een native <details>: zoeken in de pagina opent hem gewoon.', 'In type="single" vouwt de open sectie dicht met dezelfde animatie als een klik.', 'Verticale tabs hebben aria-orientation="vertical" en gebruiken pijl omhoog en omlaag.', 'activation="manual": pijltjes verplaatsen alleen de focus en Enter opent, handig als een paneel traag laadt.']}>
+        a11y={['Each section stays a native <details>: find in page simply opens it.', 'In type="single" the open section closes with the same animation as a click.', 'Vertical tabs have aria-orientation="vertical" and use arrow up and down.', 'activation="manual": arrows only move focus and Enter opens, useful when a panel loads slowly.']}>
         <StructureDemo />
       </Example>
 
-      <Example id="sorteren" api={['SortHeader', 'EmptyState']} name="Sorteerbare tabel en EmptyState" intro="Kolommen die sorteren met een klik, een selectie met Alles selecteren, en een lege toestand met een uitweg als je zoekopdracht niets vindt."
+      <Example id="sorteren" api={['SortHeader', 'EmptyState']} name="Sortable table and EmptyState" intro="Columns that sort with a click, a selection with Select all, and an empty state with a way out when your search finds nothing."
         code={`const sort = useTableSort<'titel' | 'jaar'>();
 
 <thead><tr>
-  <SortHeader {...sort.headerProps('titel')}>Titel</SortHeader>
-  <SortHeader {...sort.headerProps('jaar')} align="end">Jaar</SortHeader>
+  <SortHeader {...sort.headerProps('titel')}>Title</SortHeader>
+  <SortHeader {...sort.headerProps('jaar')} align="end">Year</SortHeader>
 </tr></thead>
 <tbody>{sort.sortRows(rows, (row, key) => row[key]).map(…)}</tbody>
 
-<EmptyState title="Geen platen gevonden" action={<Button>Wissen</Button>} />`}
-        a11y={['De kolomkop houdt aria-sort; de knop erin draagt alleen de naam, dus de stand wordt met de kolom voorgelezen.', 'Tekst sorteert in de taal van de app, met getallen op volgorde (Album 2 voor Album 10).', 'EmptyState heeft een echte kop op het niveau dat je kiest (headingLevel).']}>
+<EmptyState title="No records found" action={<Button>Clear</Button>} />`}
+        a11y={['The column header holds aria-sort; the button inside carries only the name, so the sort state is announced with the column.', 'Text sorts in the language of the app, with numbers in order (Album 2 before Album 10).', 'EmptyState has a real heading at the level you choose (headingLevel).']}>
         <SortDemo />
       </Example>
 
-      <Example id="toast-voortgang" name="Toast met voortgang" intro="Een melding die laat zien dat iets loopt en op dezelfde plek verandert in het resultaat. Met update pas je een melding ook zelf aan."
+      <Example id="toast-voortgang" name="Toast with progress" intro="A notification that shows something is in progress and turns into the result in the same place. With update you can also change a notification yourself."
         code={`const { promise, update } = useToast();
 
 promise(syncDiscogs(), {
-  loading: { title: 'Discogs synchroniseren…' },
-  success: (n) => ({ title: 'Collectie bijgewerkt', description: \`\${n} nieuwe platen.\` }),
-  error: { title: 'Synchronisatie mislukt' },
+  loading: { title: 'Syncing with Discogs…' },
+  success: (n) => ({ title: 'Collection updated', description: \`\${n} new records.\` }),
+  error: { title: 'Sync failed' },
 });`}
-        a11y={['De live region meldt ook veranderde tekst, dus het resultaat wordt voorgelezen zonder een tweede melding.', 'Laden blijft staan tot de promise klaar is; een fout blijft staan tot je hem sluit.', 'Na update begint de tijd opnieuw, zodat een nieuw resultaat niet meteen verdwijnt.']}>
+        a11y={['The live region also announces changed text, so the result is read out without a second notification.', 'Loading stays until the promise settles; an error stays until you close it.', 'After update the timer restarts, so a new result does not disappear straight away.']}>
         <ToastPromiseDemo />
       </Example>
 
-      <Example id="details" api={['Separator']} name="Kbd, Separator en EmptyState" intro="Kleine onderdelen die op de server blijven: toetsen, lijnen tussen groepen en een lege toestand. Ze voegen geen JavaScript toe."
+      <Example id="details" api={['Separator']} name="Kbd, Separator and EmptyState" intro="Small parts that stay on the server: keys, lines between groups and an empty state. They add no JavaScript."
         code={`<Kbd>Ctrl</Kbd> <Kbd>K</Kbd>
 <Separator />
 <Separator orientation="vertical" />
-<Separator label="of" />
-<EmptyState title="Nog geen luisterlijst" action={<Button>Plaat bewaren</Button>} />`}
-        a11y={['Kbd is een native <kbd>.', 'Separator is standaard decoratief; met decorative={false} wordt het een echte separator met aria-orientation.', 'Het woord in een Separator met label wordt voorgelezen.']}>
+<Separator label="or" />
+<EmptyState title="No listening list yet" action={<Button>Save a record</Button>} />`}
+        a11y={['Kbd is a native <kbd>.', 'Separator is decorative by default; with decorative={false} it becomes a real separator with aria-orientation.', 'The word in a Separator with a label is read out.']}>
         <DetailsDemo />
       </Example>
     </>
