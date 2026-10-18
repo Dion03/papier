@@ -133,6 +133,10 @@ describe('NumberField', () => {
     expect(parseNumber('1.234,5', 'nl-NL')).toBe(1234.5);
     expect(parseNumber('24.95', 'nl-NL')).toBe(24.95);
     expect(parseNumber('1.234', 'nl-NL')).toBe(1234);
+    // A group never follows a leading zero or more than three digits, so these dots are decimals.
+    expect(parseNumber('0.125', 'nl-NL')).toBe(0.125);
+    expect(parseNumber('-0.125', 'nl-NL')).toBe(-0.125);
+    expect(parseNumber('1234.567', 'nl-NL')).toBe(1234.567);
     expect(parseNumber('€ 1.250,00', 'nl-NL')).toBe(1250);
     expect(parseNumber('1,234.5', 'en-US')).toBe(1234.5);
     expect(parseNumber('-3', 'en-US')).toBe(-3);

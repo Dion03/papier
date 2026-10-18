@@ -14,7 +14,7 @@ const genres = [
 describe('MultiCombobox', () => {
   it('kiest meerdere opties, de lijst blijft open en de keuzes staan als tags', async () => {
     const onChange = vi.fn();
-    render(<MultiCombobox label="Genres" options={genres} onChange={onChange} name="genre" />);
+    render(<MultiCombobox label="Genres" options={genres} onValueChange={onChange} name="genre" />);
     const input = screen.getByRole('combobox', { name: 'Genres' });
     await userEvent.type(input, 'ja');
     expect(screen.getByRole('listbox')).toHaveAttribute('aria-multiselectable', 'true');
@@ -32,7 +32,7 @@ describe('MultiCombobox', () => {
 
   it('Enter op een gekozen optie haalt hem weg; Backspace in een leeg veld ook', async () => {
     const onChange = vi.fn();
-    render(<MultiCombobox label="Genres" options={genres} defaultValue={['jazz', 'soul']} onChange={onChange} />);
+    render(<MultiCombobox label="Genres" options={genres} defaultValue={['jazz', 'soul']} onValueChange={onChange} />);
     const input = screen.getByRole('combobox');
     input.focus();
     await userEvent.keyboard('{ArrowDown}{Enter}');

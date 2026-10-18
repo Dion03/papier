@@ -11,7 +11,8 @@ const safe = (v: string) => v.replace(/[^a-zA-Z0-9_-]/g, '_');
 
 export interface TabsProps {
   value?: string;
-  defaultValue: string;
+  /** The tab that starts open when `value` is not set. */
+  defaultValue?: string;
   onValueChange?: (v: string) => void;
   children: ReactNode;
   className?: string;
@@ -25,7 +26,7 @@ export interface TabsProps {
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   { value, defaultValue, onValueChange, children, className, orientation = 'horizontal', activation = 'automatic' }, ref,
 ) {
-  const [current, select] = useControllable(value, defaultValue, onValueChange);
+  const [current, select] = useControllable(value, defaultValue ?? '', onValueChange);
   const base = useId();
   return (
     <Ctx.Provider value={{ value: current, select, base, orientation, activation }}>

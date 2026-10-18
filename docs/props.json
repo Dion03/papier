@@ -774,13 +774,6 @@
       "doc": ""
     },
     {
-      "name": "defaultValue",
-      "type": "string",
-      "required": true,
-      "default": null,
-      "doc": ""
-    },
-    {
       "name": "activation",
       "type": "'automatic' | 'manual'",
       "required": false,
@@ -793,6 +786,13 @@
       "required": false,
       "default": null,
       "doc": ""
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "required": false,
+      "default": null,
+      "doc": "The tab that starts open when `value` is not set."
     },
     {
       "name": "onValueChange",

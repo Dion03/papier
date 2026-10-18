@@ -75,12 +75,12 @@ const cases: Array<[string, ReactElement]> = [
 ];
 
 describe('axe: geen toegankelijkheidsfouten', () => {
-  for (const theme of ['light', 'dark'] as const) {
-    it.each(cases)(`%s (${theme})`, async (_name, ui) => {
-      const { container } = render(<Papier theme={theme}><main>{ui}</main></Papier>);
-      expect(await axe(container)).toHaveNoViolations();
-    });
-  }
+  // One theme is enough here: the markup is the same in both and colour-contrast is off in jsdom.
+  // Dark-theme contrast is covered by scripts/contrast.mjs and the axe run in e2e/docs.spec.ts.
+  it.each(cases)('%s', async (_name, ui) => {
+    const { container } = render(<Papier><main>{ui}</main></Papier>);
+    expect(await axe(container)).toHaveNoViolations();
+  });
 
   it('Sheet (open)', async () => {
     render(<Papier><Sheet open onClose={() => {}} title="Navigatie" hideTitle><nav aria-label="Hoofd"><a href="#a">Werk</a></nav></Sheet></Papier>);

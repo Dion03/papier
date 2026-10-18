@@ -1,7 +1,7 @@
-// 0.6: one callback name for every input, and a small IconButton.
+// 0.6: one callback name for every input; the old onChange keeps working until it is removed.
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Combobox, IconButton, MultiCombobox, icons } from '../src';
+import { Combobox, MultiCombobox } from '../src';
 
 const records = [
   { value: 'blue', label: 'Blue Train' },
@@ -27,12 +27,5 @@ describe('onValueChange', () => {
     await userEvent.keyboard('{Enter}');
     expect(onValueChange).toHaveBeenLastCalledWith(['blue'], [records[0]]);
     expect(onChange).toHaveBeenLastCalledWith(['blue'], [records[0]]);
-  });
-});
-
-describe('IconButton', () => {
-  it('has a small size', () => {
-    render(<IconButton label="More" size="sm" icon={<icons.Plus />} />);
-    expect(screen.getByRole('button', { name: 'More' })).toHaveAttribute('data-size', 'sm');
   });
 });

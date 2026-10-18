@@ -51,8 +51,11 @@ export function parseNumber(text: string, locale: string, options: Intl.NumberFo
   const decimal = parts.find((p) => p.type === 'decimal')?.value ?? '.';
   let t = text.trim().replace(DASHES, '-').replace(SPACES, '');
   if (!t) return null;
-  // A dot typed in a comma locale: 24.95 is a decimal, 1.234 a thousand.
-  if (decimal !== '.' && !t.includes(decimal) && (t.match(/\./g) ?? []).length === 1 && /\.(\d{1,2}|\d{4,})\D*$/.test(t)) t = t.replace('.', decimal);
+  // A dot typed in a comma locale: 24.95 is a decimal, 1.234 a thousand. A group never
+  // follows a leading zero or more than three digits, so 0.125 and 1234.567 are decimals too.
+  const dot = /(\d*)\.(\d+)\D*$/.exec(t);
+  if (decimal !== '.' && !t.includes(decimal) && (t.match(/\./g) ?? []).length === 1 && dot
+    && (dot[2].length !== 3 || /^0*$/.test(dot[1]) || dot[1].length > 3)) t = t.replace('.', decimal);
   t = t.split(group).join('').split(decimal).join('.').replace(/[^\d.-]/g, '');
   const negative = t.startsWith('-');
   t = t.replace(/-/g, '');
