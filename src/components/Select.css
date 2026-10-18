@@ -21,6 +21,8 @@
   transition: border-color var(--papier-dur-color) var(--papier-ease-arrive), background-color var(--papier-dur-color) var(--papier-ease-arrive); }
 .pp-radio-group[data-appearance="card"] .pp-radio[data-checked] { border-color: var(--papier-color-action); background: var(--papier-color-sage-soft); }
 .pp-radio-group[data-appearance="card"] .pp-radio .pp-check__label::after { content: ''; position: absolute; inset: 0; }
+/* The stretched label makes the whole tile clickable; the input stays on top so it is still the hit target. */
+.pp-radio__input { position: relative; z-index: 1; }
 .pp-radio-group[aria-invalid="true"] .pp-radio__input { border-color: var(--papier-color-danger); }
 
 /* Customizable select (Chromium 135+): same native element, keyboard and phone picker,
