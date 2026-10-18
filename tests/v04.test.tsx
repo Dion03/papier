@@ -13,7 +13,7 @@ const platen = [
 describe('Combobox', () => {
   it('filtert op typen, zonder accenten, en Enter kiest de eerste treffer', async () => {
     const onChange = vi.fn();
-    render(<Combobox label="Plaat" options={platen} onChange={onChange} />);
+    render(<Combobox label="Plaat" options={platen} onValueChange={onChange} />);
     const input = screen.getByRole('combobox', { name: 'Plaat' });
     await userEvent.type(input, 'cafe');
     expect(input).toHaveAttribute('aria-expanded', 'true');
@@ -46,7 +46,7 @@ describe('Combobox', () => {
 
   it('Escape sluit en zet de tekst terug, een tweede Escape wist de keuze', async () => {
     const onChange = vi.fn();
-    render(<Combobox label="Plaat" options={platen} defaultValue="blue" onChange={onChange} />);
+    render(<Combobox label="Plaat" options={platen} defaultValue="blue" onValueChange={onChange} />);
     const input = screen.getByRole('combobox');
     expect(input).toHaveValue('Blue Train');
     await userEvent.clear(input);
@@ -61,7 +61,7 @@ describe('Combobox', () => {
 
   it('bij verlaten telt een exacte naam als keuze, anders keert de vorige terug', async () => {
     const onChange = vi.fn();
-    render(<><Combobox label="Plaat" options={platen} onChange={onChange} /><button>Verder</button></>);
+    render(<><Combobox label="Plaat" options={platen} onValueChange={onChange} /><button>Verder</button></>);
     const input = screen.getByRole('combobox');
     await userEvent.type(input, 'blue train');
     await userEvent.tab();

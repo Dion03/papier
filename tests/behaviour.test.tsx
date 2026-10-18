@@ -1,7 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { Button, Switch, SegmentedControl, Tabs, TabList, Tab, TabPanel, Slider, TextField, Dialog, Disclosure, Link, Progress, Checkbox } from '../src';
+import { AlertDialog, Button, Switch, SegmentedControl, Tabs, TabList, Tab, TabPanel, Slider, TextField, Dialog, Disclosure, Link, Progress, Checkbox } from '../src';
 
 describe('Button', () => {
   it('blokkeert klikken tijdens laden maar blijft focusbaar', async () => {
@@ -114,6 +114,48 @@ describe('Dialog', () => {
     expect(dialog).toHaveAttribute('open');
     await userEvent.click(screen.getByRole('button', { name: 'Sluiten' }));
     expect(dialog).not.toHaveAttribute('open');
+  });
+
+  it('een klik op de achtergrond sluit, tenzij dismissOnBackdrop uit staat; een klik in het paneel nooit', async () => {
+    const onClose = vi.fn();
+    const { rerender } = render(<Dialog open onClose={onClose} title="Filters"><p>Inhoud</p></Dialog>);
+    await userEvent.click(screen.getByText('Inhoud'));
+    expect(onClose).not.toHaveBeenCalled();
+    // The <dialog> element itself is the backdrop; the panel sits inside it.
+    await userEvent.click(screen.getByRole('dialog'));
+    expect(onClose).toHaveBeenCalledOnce();
+    rerender(<Dialog open onClose={onClose} title="Filters" dismissOnBackdrop={false}><p>Inhoud</p></Dialog>);
+    await userEvent.click(screen.getByRole('dialog'));
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it('sluit de browser hem (Escape, form method="dialog"), dan volgt onClose en keert de focus terug', async () => {
+    render(<Demo />);
+    const opener = screen.getByRole('button', { name: 'Open' });
+    await userEvent.click(opener);
+    const dialog = screen.getByRole('dialog') as HTMLDialogElement;
+    act(() => dialog.close());
+    expect(opener).toHaveFocus();
+    // onClose set open to false, so the app state agrees and a second click opens it again.
+    await userEvent.click(opener);
+    expect(dialog).toHaveAttribute('open');
+  });
+});
+
+describe('AlertDialog', () => {
+  it('Escape sluit niet terwijl de bevestiging nog loopt', async () => {
+    const onClose = vi.fn();
+    let finish!: () => void;
+    render(<AlertDialog open onClose={onClose} onConfirm={() => new Promise<void>((r) => { finish = r; })} title="Weg?" confirmLabel="Verwijderen" />);
+    const dialog = screen.getByRole('alertdialog');
+    const escape = () => { const e = new Event('cancel', { cancelable: true }); act(() => { dialog.dispatchEvent(e); }); return e; };
+    await userEvent.click(screen.getByRole('button', { name: 'Verwijderen' }));
+    expect(escape().defaultPrevented).toBe(true);
+    expect(onClose).not.toHaveBeenCalled();
+    await act(async () => { finish(); });
+    expect(onClose).toHaveBeenCalledOnce();
+    escape();
+    expect(onClose).toHaveBeenCalledTimes(2);
   });
 });
 
