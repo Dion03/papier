@@ -391,6 +391,20 @@ test('checkboxes: a real click on the box works, also in a table and a popover',
   await page.getByRole('dialog', { name: 'Filter the crate' }).getByRole('checkbox', { name: 'Soul' }).check();
 });
 
+test('card radios and checkboxes: the input itself is under the pointer', async ({ page }) => {
+  for (const [example, role] of [['select', 'radio'], ['meerkeuze', 'checkbox']] as const) {
+    await open(page, 'light', component(example));
+    const inputs = page.locator(`#${example} .pp-radio-group[data-appearance="card"], #${example} .pp-checkbox-group[data-appearance="card"]`).getByRole(role);
+    expect(await inputs.count(), example).toBeGreaterThan(0);
+    for (const input of await inputs.all()) {
+      await input.scrollIntoViewIfNeeded();
+      const b = (await input.boundingBox())!;
+      const hit = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.getAttribute('class'), [b.x + b.width / 2, b.y + b.height / 2]);
+      expect(hit, example).toMatch(/pp-(radio|check)__input/);
+    }
+  }
+});
+
 test('command and pin code: searching inline, and a code via autofill in the boxes', async ({ page }) => {
   await open(page, 'light', component('command'));
   const inline = page.locator('#command .doc-command-inline').getByRole('combobox');

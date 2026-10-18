@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Children, cloneElement, forwardRef, isValidElement, useMemo, version,
   type MutableRefObject, type ReactElement, type ReactNode, type Ref,
@@ -5,6 +6,23 @@ import {
 import { cx } from './cx';
 
 type AnyProps = Record<string, unknown>;
+
+const LAZY = Symbol.for('react.lazy');
+interface LazyNode { $$typeof: symbol; _payload: unknown; _init: (payload: unknown) => ReactNode }
+/** `use` exists from React 19; React 18 has no server components, so it never needs it. */
+const use = (React as { use?: (usable: unknown) => ReactNode }).use;
+
+/**
+ * A server component's child arrives in a client component as a lazy node, not an element,
+ * so `Children.only` would throw. Resolve it the way React does (and suspend while it loads).
+ */
+export function resolveChild(node: ReactNode): ReactNode {
+  const lazy = node as unknown as LazyNode | null;
+  if (!lazy || typeof lazy !== 'object' || lazy.$$typeof !== LAZY) return node;
+  const payload = lazy._payload as { then?: unknown } | null;
+  if (use && payload && typeof payload.then === 'function') return resolveChild(use(payload));
+  return resolveChild(lazy._init(lazy._payload));
+}
 
 /** Calls every ref with the same node. */
 export function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
@@ -54,13 +72,13 @@ function mergeProps(slot: AnyProps, child: AnyProps): AnyProps {
  * uses, so a Button or Link can be a Next.js or React Router link.
  */
 export const Slot = forwardRef<HTMLElement, AnyProps & { children?: ReactNode }>(function Slot({ children, ...props }, ref) {
-  const child = Children.only(children);
+  const child = Children.only(resolveChild(children as ReactNode));
   if (!isValidElement(child)) return null;
   return cloneElement(child, { ...mergeProps(props, child.props as AnyProps), ref: mergeRefs(ref, elementRef(child)) } as AnyProps);
 });
 
 /** The single child of an `asChild` component, with its children replaced by `render(children)`. */
 export function slotChild(children: ReactNode, render: (inner: ReactNode) => ReactNode): ReactElement {
-  const child = Children.only(children) as ReactElement<{ children?: ReactNode }>;
+  const child = Children.only(resolveChild(children)) as ReactElement<{ children?: ReactNode }>;
   return cloneElement(child, undefined, render(child.props.children));
 }

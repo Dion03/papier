@@ -1,5 +1,6 @@
 import { cloneElement, isValidElement, useEffect, useId, useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { cx } from '../lib/cx';
+import { resolveChild } from '../lib/slot';
 import { supportsPopover, useAnchoredPopover, type Side } from '../lib/position';
 
 export interface TooltipProps {
@@ -36,11 +37,13 @@ export function Tooltip({ content, children, placement = 'top', delay = 400 }: T
   }, [open]);
   useAnchoredPopover(open, wrap, tip, placement, 'center', 8);
 
-  if (!isValidElement(children)) return children;
-  const described = cx(children.props['aria-describedby'] as string | undefined, open && `${id}-tip`) || undefined;
+  // From a server component the child arrives as a lazy node.
+  const child = resolveChild(children);
+  if (!isValidElement<Record<string, unknown>>(child)) return child;
+  const described = cx(child.props['aria-describedby'] as string | undefined, open && `${id}-tip`) || undefined;
   return (
     <span ref={wrap} className="pp-tooltip" onPointerEnter={() => show(delay)} onPointerLeave={hide} onFocus={() => show(0)} onBlur={hide}>
-      {cloneElement(children, { 'aria-describedby': described })}
+      {cloneElement(child, { 'aria-describedby': described })}
       {open && <span ref={tip} id={`${id}-tip`} role="tooltip" className="pp-tooltip__bubble" popover={supportsPopover() ? 'manual' : undefined}>{content}</span>}
     </span>
   );

@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- `NumberField` and `parseNumber` in a comma locale read `0.125` as 0.125 and `1234.567` as
+  1234.567. A dot with three digits after it was always taken as a thousands separator, so a
+  Dutch user typing `0.125` got 125.
+- Controlled `Tabs` no longer needs a `defaultValue` next to `value` to type-check.
+- `asChild` works when the parent is a server component. Next.js hands a server component's
+  child to Button, IconButton, Link and BreadcrumbItem as a lazy node, which threw "expected
+  a single React element child"; a wrapper `'use client'` component was the only way round it.
+  Tooltip and Popover had the same problem: from a server component, Tooltip showed no tip and
+  Popover rendered nothing.
+- In `RadioGroup appearance="card"`, the label stretched over the card covered the radio
+  itself, so a click on the circle (or Playwright's `check()`) hit the label. The radio now
+  sits on top, as the checkbox already did.
+
 ## 0.6.0 (2026-10-17)
 
 The project is now in English: the documentation site, README, changelog and examples. The

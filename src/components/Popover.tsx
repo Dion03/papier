@@ -3,6 +3,7 @@ import {
   type MouseEvent, type ReactElement, type ReactNode, type RefObject,
 } from 'react';
 import { cx } from '../lib/cx';
+import { resolveChild } from '../lib/slot';
 import { useLabels } from '../lib/labels';
 import { useControllable } from '../lib/useControllable';
 import { supportsPopover, useAnchoredPopover, type Align, type Side } from '../lib/position';
@@ -72,8 +73,10 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
     return () => document.removeEventListener('pointerdown', onDown);
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!isValidElement(trigger)) return null;
-  const own = trigger.props.onClick as ((e: MouseEvent) => void) | undefined;
+  // From a server component the trigger arrives as a lazy node.
+  const button = resolveChild(trigger);
+  if (!isValidElement<Record<string, unknown>>(button)) return null;
+  const own = button.props.onClick as ((e: MouseEvent) => void) | undefined;
   const titleId = `${id}-title`;
   const content = typeof children === 'function' ? children({ close: () => close() }) : children;
 
@@ -83,7 +86,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
       className="pp-popover"
       onBlur={(e) => { if (open && e.relatedTarget && !wrap.current?.contains(e.relatedTarget as Node)) close(false); }}
     >
-      {cloneElement(trigger, {
+      {cloneElement(button, {
         'aria-haspopup': 'dialog',
         'aria-expanded': open,
         'aria-controls': open ? `${id}-panel` : undefined,
