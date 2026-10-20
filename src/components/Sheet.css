@@ -17,6 +17,17 @@
 @keyframes pp-sheet-left { from { transform: translateX(-100%); } }
 @keyframes pp-sheet-bottom { from { transform: translateY(100%); } }
 @keyframes pp-sheet-top { from { transform: translateY(-100%); } }
+/* Closing: the panel leaves the way it came, faster, and the backdrop fades with it. */
+.pp-sheet[data-closing] { animation: pp-sheet-right-out var(--papier-dur-close) var(--papier-ease-leave) forwards; }
+.pp-sheet[data-side="left"][data-closing] { animation-name: pp-sheet-left-out; }
+.pp-sheet[data-side="bottom"][data-closing] { animation-name: pp-sheet-bottom-out; }
+.pp-sheet[data-side="top"][data-closing] { animation-name: pp-sheet-top-out; }
+.pp-sheet[data-closing]::backdrop { animation: pp-fade-out var(--papier-dur-close) var(--papier-ease-leave) forwards; }
+@keyframes pp-sheet-right-out { to { transform: translateX(100%); } }
+@keyframes pp-sheet-left-out { to { transform: translateX(-100%); } }
+@keyframes pp-sheet-bottom-out { to { transform: translateY(100%); } }
+@keyframes pp-sheet-top-out { to { transform: translateY(-100%); } }
+@keyframes pp-fade-out { to { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .pp-sheet[open], .pp-sheet[open]::backdrop { animation: none; } }
 .pp-sheet__panel { display: flex; flex-direction: column; height: 100%; padding: var(--papier-space-5) var(--papier-space-5) max(var(--papier-space-5), env(safe-area-inset-bottom)); }
 .pp-sheet__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: var(--papier-hit-target); }
