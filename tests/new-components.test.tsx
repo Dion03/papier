@@ -84,6 +84,32 @@ describe('Sheet', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Sluiten' }));
     expect(sheet).not.toHaveAttribute('open');
   });
+  it('blijft open tot de sluitanimatie klaar is, en gaat dan met focus terug naar de knop', async () => {
+    // jsdom runs no animations; stand in for the slide-out that data-closing starts.
+    let done!: () => void;
+    const exit = { effect: { target: null as Element | null, getComputedTiming: () => ({ endTime: 290 }) }, finished: new Promise<void>((r) => { done = r; }) };
+    const proto = HTMLElement.prototype as unknown as { getAnimations?: unknown };
+    proto.getAnimations = function (this: HTMLElement) {
+      if (!this.dataset.closing) return [];
+      exit.effect.target = this;
+      return [exit];
+    };
+    try {
+      render(<Demo />);
+      const trigger = screen.getByRole('button', { name: 'Menu' });
+      await userEvent.click(trigger);
+      const sheet = screen.getByRole('dialog', { name: 'Navigatie' });
+      await userEvent.click(screen.getByRole('button', { name: 'Sluiten' }));
+      expect(sheet).toHaveAttribute('open');
+      expect(sheet).toHaveAttribute('data-closing');
+      await act(async () => { done(); await exit.finished; });
+      expect(sheet).not.toHaveAttribute('open');
+      expect(sheet).not.toHaveAttribute('data-closing');
+      expect(trigger).toHaveFocus();
+    } finally {
+      delete proto.getAnimations;
+    }
+  });
 });
 
 describe('Avatar', () => {

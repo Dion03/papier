@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.2 (2026-10-20)
+
+### Changed
+
+- `Sheet` slides out when it closes, the way it came in, and the backdrop fades with it. It
+  used to vanish at once. The exit uses `--papier-dur-close` and `--papier-ease-leave`, so
+  reduced motion closes it immediately. The dialog stays modal until the animation ends;
+  focus then returns as before. Calling `close()` on the element directly still closes it
+  at once.
+
 ## 0.6.1 (2026-10-18)
 
 ### Fixed
