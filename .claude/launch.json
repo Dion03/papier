@@ -1,0 +1,8 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "docs", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 4330 },
+    { "name": "portfolio", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "../dion-portfolio", "run", "dev", "--", "-p", "3100"], "port": 3100 },
+    { "name": "portfolio-papier", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "../dion-portfolio-papier", "run", "dev", "--", "-p", "3120"], "port": 3120 }
+  ]
+}
